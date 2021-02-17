@@ -179,9 +179,11 @@ then
 fi
 
 # if shell opened from vim :shell
-if [ -n $VIM ]
+if grep -q vim /proc/$PPID/comm
 then
 	zf_promptstr ZP_VIM 002 "* "
+else
+	ZP_VIM=
 fi
 
 # zf_promptstr ZP_JOBS 118 "%%%j"

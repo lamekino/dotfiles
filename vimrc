@@ -74,6 +74,7 @@ endif
 syntax on
 set t_Co=256
 set background=dark
+
 " try to use gruvbox, if installed
 try
 	colorscheme gruvbox
@@ -90,11 +91,12 @@ if has("gui_running")
 	set guifont=IBM\ Plex\ Mono\ Medium\ 11
 	set guioptions-=m  " menu bar
 	set guioptions-=T  " toolbar
-	set guioptions-=r  " scrollbar
+	set guioptions-=r  " right scrollbar
+	set guioptions-=L  " left scrollbar
 	hi Comment gui=bold
 else
 	" enable transparency
-	" hi Normal guibg=NONE ctermbg=NONE
+	hi Normal guibg=NONE ctermbg=NONE
 endif
 
 if has("nvim")
@@ -172,9 +174,18 @@ function! ToggleFoldMarker()
 	endif
 endfunction
 
+function! Shell()
+	if has("gui_running")
+		!st
+	else
+		shell
+	endif
+endfunction
+
 command! SetColor call SetColor()
 command! ToggleColumn call ToggleColumn()
 command! ToggleFoldMarker call ToggleFoldMarker()
+command! Shell call Shell()
 " }}}
 " Keybindings {{{
 " Unmap
@@ -186,7 +197,10 @@ nnoremap <Leader>W :w !sudo tee %<CR>
 nnoremap <Leader>d "_d
 " File browsing
 nnoremap <Leader>fs :Lex ~<CR>
-nnoremap <Leader>gs :GFiles? .<CR>
+nnoremap <Leader>ff :cd \| pwd<CR>
+nnoremap <Leader>f. :cd .. \| pwd<CR>
+nnoremap <Leader>fc :cd
+nnoremap <Leader>fg :GFiles? .<CR>
 " System clipboard
 nnoremap <Leader>Y "+y$
 nnoremap <Leader>D "+d$
@@ -203,7 +217,7 @@ nnoremap <Leader>tc :ToggleColumn<CR>
 nnoremap <Leader>ts :set spell!<CR>
 nnoremap <Leader>tf :ToggleFoldMarker<CR>
 " Function keys
-nnoremap <F1>  :shell<CR>
+nnoremap <F1>  :Shell<CR>
 nnoremap <F2>  :bprev!<CR>
 nnoremap <F3>  :bnext!<CR>
 nnoremap <F4>  :bdelete<CR>

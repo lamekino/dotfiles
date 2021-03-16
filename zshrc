@@ -131,74 +131,59 @@ case "$(uname -s)" in
 esac
 # }}}
 # Setting the prompt {{{
-function zf_promptstr()
+function promptstr() { local var=$1 rgb=$2 str=$3; eval "$var='%F{$rgb}$str%f'" }
+promptstr ZP_SEP  243 "\\"
+
+function precmd_errorcode()
 {
-	local var="$1"
-	local rgb="$2"
-	local sym="$3"
-	eval "$var='%F{$rgb}$sym%f'"
+	local fmt=`printf "0x%02X" $?`
+	[ $[fmt] -ne 0 ] && promptstr ZP_ERR 202 $fmt
 }
 
-zf_promptstr ZP_SEP  243 "\\"
-
-function zfpre_dircount()
+# TODO: Make this less hacky
+function precmd_dircount()
 {
-	local dircount=$(( `dirs -v | wc -l` - 1))
-	if [ $dircount -gt 0 ]
-	then
-		zf_promptstr ZP_DIRS 177 "~$dircount"
-		ZP_DIRS="$ZP_SEP$ZP_DIRS"
-	else
+	local dircount=`dirs -v | wc -l`
+	promptstr ZP_DIRS 177 "$(( dircount - 1 ))"
+
+	[ $dircount -gt 1 ] && \
+		# there's no way (that i know of) to check
+		# dircount with the ternary operator, so the
+		# separator has to be concatenated here
+		ZP_DIRS="$ZP_SEP$ZP_DIRS" || \
 		ZP_DIRS=
-	fi
 }
 
-function zfpre_errorcode()
-{
-	local c=$?
-	if [ $c -ne 0 ]
-	then
-		local code=`printf "%02X" $c`
-		zf_promptstr ZP_ERR  202 "0x$code"
-	fi
-}
+promptstr ZP_JOBS 172 "%%%j"
+promptstr ZP_HIST 060 "!%h"
+# show hostname if connected through ssh
+[ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && \
+	promptstr ZP_SSH 214 "@%m"
+# if shell opened from vim :shell
+grep -q vim /proc/$PPID/comm && \
+	promptstr ZP_VIM 002 "* "
 
 if [ `id -u` -ne 0 ]
 then
-	# zf_promptstr ZP_USER 110 "%n"
-	# zf_promptstr ZP_CWD  172 "%~"
-	zf_promptstr ZP_CWD  110 "%~"
+	promptstr ZP_USER 158 "%n"
+	promptstr ZP_CWD  110 "%~"
 else
-	# zf_promptstr ZP_USER 001 "*%n*"
-	zf_promptstr ZP_CWD  001 "%/"
+	promptstr ZP_USER 001 "*%n*"
+	promptstr ZP_CWD  009 "%/"
 fi
 
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
-then
-	ZP_SSH="@%F{172}%m%f"
-fi
 
-# if shell opened from vim :shell
-if grep -q vim /proc/$PPID/comm
-then
-	zf_promptstr ZP_VIM 002 "* "
-fi
-
-# zf_promptstr ZP_JOBS 118 "%%%j"
-zf_promptstr ZP_JOBS 172 "%%%j"
-zf_promptstr ZP_HIST 060 "!%h"
-
-function zfpre_reloadprompt()
+function precmd_reloadprompt()
 {
-	PROMPT="$ZP_VIM$ZP_USER$ZP_SSH<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>%# "
+	PROMPT="$ZP_VIM$ZP_USER$ZP_SSH:<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>%# "
 	RPROMPT=$ZP_HIST
 }
 
 # make the function run before prompt redraw
 precmd_functions=(
-	zfpre_dircount
-	zfpre_errorcode
-	zfpre_reloadprompt
+	precmd_dircount
+	precmd_errorcode
+	precmd_reloadprompt
 )
 # }}}
 # and finally...

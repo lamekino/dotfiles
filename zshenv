@@ -15,7 +15,6 @@ export FZF_DEFAULT_OPTS="\
 	'bat --color=always --style plain --line-range :16 {}'"
 export PATH="\
 $PATH:\
-.:\
 $HOME/bin:\
 $HOME/.local/bin:\
 $GOPATH/bin:\

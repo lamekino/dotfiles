@@ -3,6 +3,7 @@ HISTORY_IGNORE='([bf]g *|cd *|l[alsh]#( *)#|less *|vim# *|pwd)'
 HISTFILE=~/.zhistory
 HISTSIZE=50000
 SAVEHIST=50000
+KEYTIMEOUT=5
 
 export EDITOR="/usr/bin/env vim"
 export VISUAL="/usr/bin/env vim"

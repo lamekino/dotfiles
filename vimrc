@@ -57,7 +57,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	Plug 'morhetz/gruvbox'
 	call plug#end()
 	" Plugin options
-	let g:airline#extensions#tabline#enabled = 1
+	" let g:airline#extensions#tabline#enabled = 1
 	let g:airline#extensions#tabline#formatter = 'unique_tail'
 	let g:airline#extensions#tabline#left_sep = ' '
 	let g:airline#extensions#tabline#left_alt_sep = '|'
@@ -65,7 +65,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	let g:airline_powerline_fonts = 0
 	let g:airline_symbols_ascii   = 1
 	let g:gruvbox_contrast_dark   = 'hard'
-	let g:gruvbox_contrast_light  = 'hard'
+	let g:gruvbox_contrast_light  = 'soft'
 	" Set a better update command
 	command! PlugIn PlugUpdate | PlugUpgrade
 endif
@@ -109,14 +109,6 @@ if has("autocmd")
 	" automatically mkview/loadview
 	" au BufWinLeave *.* mkview
 	" au BufWinEnter *.* silent loadview
-
-	" use tabs over spaces in python files
-	" ftype/python.vim overwrites this
-	" should remove this because of pep standards -_-
-	aug python
-		au!
-		au FileType python setlocal ts=4 sts=4 sw=4 noexpandtab
-	aug end
 
 	aug haskell
 		au FileType haskell setlocal ts=2 sts=2 sw=2 expandtab

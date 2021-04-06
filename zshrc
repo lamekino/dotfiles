@@ -20,7 +20,8 @@
 #================================================================#
 
 # ZSH options {{{
-bindkey -e
+bindkey -v                  # Vi keybinds
+bindkey '^R' history-incremental-search-backward
 setopt INTERACTIVE_COMMENTS # Comments in shell
 setopt COMPLETE_ALIASES     # Preserves aliases in autocomplete
 setopt PROMPT_SUBST         # Allow variables &c in prompt
@@ -63,6 +64,7 @@ alias ppath='sed "s/:/\n/g" <<< $PATH'
 alias rln='ln -r'
 alias fr='rm -frIv'
 alias screen='TERM=xterm-256color screen'
+alias py="PAGER=less bpython"
 # Python
 alias python="python3"
 alias pip="pip3"
@@ -100,7 +102,6 @@ case "$(uname -s)" in
 					alias aura="aura --hotedit --unsuppress"
 				fi
 				alias hd="hexdump -C"
-				alias autoremove='pacman -Rncs `pacman -Qdtq`'
 				alias pacpurge='pacman -Rncs'
 				;;
 			'Ubuntu')
@@ -144,7 +145,7 @@ function precmd_errorcode()
 function precmd_dircount()
 {
 	local dircount=`dirs -v | wc -l`
-	promptstr ZP_DIRS 177 "$(( dircount - 1 ))"
+	promptstr ZP_DIRS 177 "~$(( dircount - 1 ))"
 
 	[ $dircount -gt 1 ] && \
 		# there's no way (that i know of) to check
@@ -158,24 +159,23 @@ promptstr ZP_JOBS 172 "%%%j"
 promptstr ZP_HIST 060 "!%h"
 # show hostname if connected through ssh
 [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && \
-	promptstr ZP_SSH 214 "@%m"
+	promptstr ZP_HOST 214 "@%m"
 # if shell opened from vim :shell
 grep -q vim /proc/$PPID/comm && \
 	promptstr ZP_VIM 002 "* "
 
 if [ `id -u` -ne 0 ]
 then
-	promptstr ZP_USER 158 "%n"
-	promptstr ZP_CWD  110 "%~"
+	promptstr ZP_USER 013 "%n"
+	promptstr ZP_CWD  012 "%~"
 else
 	promptstr ZP_USER 001 "*%n*"
 	promptstr ZP_CWD  009 "%/"
 fi
 
-
 function precmd_reloadprompt()
 {
-	PROMPT="$ZP_VIM$ZP_USER$ZP_SSH:<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>%# "
+	P="$ZP_VIM$ZP_USER$ZP_HOST:<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
 	RPROMPT=$ZP_HIST
 }
 
@@ -185,6 +185,22 @@ precmd_functions=(
 	precmd_errorcode
 	precmd_reloadprompt
 )
+
+# and... here is where the actual prompt is set
+function zle-line-init zle-keymap-select {
+	case $KEYMAP in
+		vicmd) # normal mode
+			PROMPT="${P}| "
+			;;
+		viins|main) # insert mode
+			PROMPT="${P}%# "
+			;;
+	esac
+	zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
 # }}}
 # and finally...
 [ -z $TMUX ] && [ -z $VIM ] && \

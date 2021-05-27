@@ -1,16 +1,21 @@
 #!/bin/sh
 
+# FIXME: this only works with gnu tools
 [ -z "$1" ]       && cmd="ln -svi"
 [ "$1" = "link" ] && cmd="ln -svi"
 [ "$1" = "copy" ] && cmd="cp -rvi"
 
-for i in *; do
+for dir in ./config/*; do
+	eval "$cmd $dir $HOME/.config/$(basename $dir)"
+done
+
+for file in ./*; do
 	case "$i" in
 		"install.sh")
 			continue
 			;;
 		*)
-			eval "$cmd $PWD/$i $HOME/.$i"
+			eval "$cmd $PWD/$file $HOME/.$file"
 			;;
 	esac
 done

@@ -32,6 +32,7 @@ set splitright      " Make :vsp go to the right
 set showcmd         " Shows current normal mode command/key press
 set autochdir       " Automatically :cd into open file directory
 set cursorline      " Highlight current line
+set tws="10*0"      " Terminal window size N*0 -> use full terminal width
 let g:netrw_winsize = 20    " set windows such as :lex use 20% of screen
 filetype plugin indent on   " use filetype based indentation
 " }}}
@@ -57,7 +58,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	Plug 'morhetz/gruvbox'
 	call plug#end()
 	" Plugin options
-	" let g:airline#extensions#tabline#enabled = 1
+	let g:airline#extensions#tabline#enabled = 1
 	let g:airline#extensions#tabline#formatter = 'unique_tail'
 	let g:airline#extensions#tabline#left_sep = ' '
 	let g:airline#extensions#tabline#left_alt_sep = '|'
@@ -110,8 +111,23 @@ if has("autocmd")
 	" au BufWinLeave *.* mkview
 	" au BufWinEnter *.* silent loadview
 
+	aug c
+		au FileType c    nnoremap <F2> :!cc % -fsyntax-only -Wall -Wextra -pedantic<CR>
+		au FileType cpp  nnoremap <F2> :!c++ % -fsyntax-only -Wall -Wextra -pedantic<CR>
+		au FileType make nnoremap <F2> :!make<CR>
+	aug end
+
+	aug sh
+		au FileType sh nnoremap <F2> :!shellcheck %<CR>
+	aug end
+
+	aug python
+		au FileType python nnoremap <F2> :!python -i %<CR>
+	aug end
+
 	aug haskell
 		au FileType haskell setlocal ts=2 sts=2 sw=2 expandtab
+		au FileType haskell nnoremap <F2>  :!ghci %<CR>
 	aug end
 
 	aug markdown
@@ -168,7 +184,7 @@ endfunction
 
 function! Shell()
 	if has("gui_running")
-		!st
+		term
 	else
 		shell
 	endif
@@ -191,7 +207,7 @@ nnoremap <Leader>d "_d
 nnoremap <Leader>fs :Lex ~<CR>
 nnoremap <Leader>ff :cd \| pwd<CR>
 nnoremap <Leader>f. :cd .. \| pwd<CR>
-nnoremap <Leader>fc :cd
+nnoremap <Leader>fc :cd 
 nnoremap <Leader>fg :GFiles? .<CR>
 " System clipboard
 nnoremap <Leader>Y "+y$
@@ -210,10 +226,12 @@ nnoremap <Leader>ts :set spell!<CR>
 nnoremap <Leader>tf :ToggleFoldMarker<CR>
 " Function keys
 nnoremap <F1>  :Shell<CR>
-nnoremap <F2>  :bprev!<CR>
-nnoremap <F3>  :bnext!<CR>
-nnoremap <F4>  :bdelete<CR>
+nnoremap <F3>  :bprev!<CR>
+nnoremap <F4>  :bnext!<CR>
 nnoremap <F5>  :so ~/.vimrc<CR>
+nnoremap <F6>  :bdelete<CR>
+nnoremap <F8>  :!make<CR>
+nnoremap <F9>  :!python<CR>
 nnoremap <expr> <F10> &foldlevel ? 'zM' : 'zR'
 nnoremap <F11> :SetColor<CR>
 nnoremap <F12> :PlugIn<CR>

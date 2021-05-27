@@ -30,6 +30,17 @@ setopt HIST_IGNORE_ALL_DUPS # ignore duplicate commands in history
 setopt SHARE_HISTORY        # Share history among terminals
 # }}}
 # Imports {{{
+# files to source
+source_files()
+{
+	local file
+	for file in ~/.zsources.d/*
+	do
+		[ -r $file ] && builtin source $file
+	done
+	unfunction source_files
+}; source_files
+
 [ -e $HOME/.dircolors ] && eval $(dircolors -b $HOME/.dircolors)
 
 # Use ZSH tab completion
@@ -65,6 +76,7 @@ alias rln='ln -r'
 alias fr='rm -frIv'
 alias screen='TERM=xterm-256color screen'
 alias py="PAGER=less bpython"
+touchx() { touch $1 && chmod +x $1 }
 # Python
 alias python="python3"
 alias pip="pip3"
@@ -137,8 +149,9 @@ promptstr ZP_SEP  243 "\\"
 
 function precmd_errorcode()
 {
-	local fmt=`printf "0x%02X" $?`
-	[ $[fmt] -ne 0 ] && promptstr ZP_ERR 202 $fmt
+	local fmt=`printf "x%02X" $?`
+	# $[x] converts hex to decimal in the format $[0xN]
+	[ $[0${fmt}] -ne 0 ] && promptstr ZP_ERR 202 $fmt
 }
 
 # TODO: Make this less hacky
@@ -155,8 +168,11 @@ function precmd_dircount()
 		ZP_DIRS=
 }
 
+
 promptstr ZP_JOBS 172 "%%%j"
-promptstr ZP_HIST 060 "!%h"
+promptstr ZP_HIST 068 "!%h"
+promptstr ZP_TIME 060 "%D{%H:%M:%S}"
+# promptstr ZP_TIME 240 "%D{%s}"
 # show hostname if connected through ssh
 [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && \
 	promptstr ZP_HOST 214 "@%m"
@@ -175,8 +191,8 @@ fi
 
 function precmd_reloadprompt()
 {
-	P="$ZP_VIM$ZP_USER$ZP_HOST:<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
-	RPROMPT=$ZP_HIST
+	ZP_PROMPT="$ZP_VIM$ZP_USER$ZP_HOST:<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
+	RPROMPT="$ZP_HIST $ZP_TIME"
 }
 
 # make the function run before prompt redraw
@@ -185,15 +201,18 @@ precmd_functions=(
 	precmd_errorcode
 	precmd_reloadprompt
 )
+# if z is installed add it to precmd_functions
+# $_Z_RESOLVE_SYMLINKS is defined by z.sh
+[ -n $_Z_RESOLVE_SYMLINKS ] && precmd_functions+=_z_precmd
 
 # and... here is where the actual prompt is set
 function zle-line-init zle-keymap-select {
 	case $KEYMAP in
 		vicmd) # normal mode
-			PROMPT="${P}| "
+			PROMPT="${ZP_PROMPT}| "
 			;;
 		viins|main) # insert mode
-			PROMPT="${P}%# "
+			PROMPT="${ZP_PROMPT}%# "
 			;;
 	esac
 	zle reset-prompt
@@ -203,5 +222,7 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 # }}}
 # and finally...
-[ -z $TMUX ] && [ -z $VIM ] && \
-	command -v fortune &> /dev/null && fortune || true
+[ -z $TMUX ] && [ -z $VIM ] \
+	&& command -v fortune cowsay &> /dev/null \
+	&& fortune | cowsay -n -f dragon \
+	|| true

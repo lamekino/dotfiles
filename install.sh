@@ -5,11 +5,11 @@
 [ "$1" = "link" ] && cmd="ln -svi"
 [ "$1" = "copy" ] && cmd="cp -rvi"
 
-for dir in ./config/*; do
+for dir in config/*; do
 	eval "$cmd $dir $HOME/.config/$(basename $dir)"
 done
 
-for file in ./*; do
+for file in *; do
 	case "$i" in
 		"install.sh")
 			continue

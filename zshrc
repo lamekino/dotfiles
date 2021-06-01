@@ -51,9 +51,20 @@ autoload -Uz compinit && compinit -u || echo "[$0] compinit failed" 1>&2
 autoload run-help
 alias help="run-help"
 # }}}
-# Aliases {{{
-# ZSH functions
-alias todo="zf_todo"
+# Aliases/Functions {{{
+# Functions
+# search history
+function hgrep()
+{
+	args=".*$@.*"
+	args="${args// /.*}"
+	history 1 | grep -E "$args"
+}
+# touch and make executable
+function touchx()
+{
+	touch $1 && chmod +x $1
+}
 # Shadowing
 alias sudo='sudo ' # so aliases can be run with sudo
 alias dirs='dirs -v'
@@ -61,7 +72,6 @@ alias jobs='jobs -l'
 alias pgrep='pgrep -l'
 alias vi='vim'
 alias info="info --vi-keys"
-alias hgrep="history 1 | egrep --color=never"
 alias veracrypt="veracrypt -t"
 alias vim="vim -X" # fixes slow startup time
 # Short hand
@@ -72,11 +82,10 @@ alias stop='kill -STOP'
 alias deps='gcc -MM'
 alias deps++='g++ -MM' # is this necessary?
 alias ppath='sed "s/:/\n/g" <<< $PATH'
-alias rln='ln -r'
+alias rln='ln -r' # GNU only
 alias fr='rm -frIv'
 alias screen='TERM=xterm-256color screen'
 alias py="PAGER=less bpython"
-touchx() { touch $1 && chmod +x $1 }
 # Python
 alias python="python3"
 alias pip="pip3"
@@ -116,16 +125,14 @@ case "$(uname -s)" in
 				alias hd="hexdump -C"
 				alias pacpurge='pacman -Rncs'
 				;;
-			'Ubuntu')
-				;;
-			'Debian')
-				;;
-			*)
+			'Ubuntu'|'Debian')
+				alias aptup="sudo apt update && sudo apt upgrade"
 				;;
 		esac
 
 		alias grep='grep --color=auto'
 		alias lablk="lsblk -o name,label,size,ro,type,mountpoint,uuid"
+		alias l='ls -pk --color=auto --group-directories-first'
 		alias ls='ls -pk --color=auto --group-directories-first'
 		alias ll='ls -pklh --color=auto --group-directories-first'
 		alias la='ls -pklah --color=auto --group-directories-first'
@@ -172,13 +179,14 @@ function precmd_dircount()
 promptstr ZP_JOBS 172 "%%%j"
 promptstr ZP_HIST 068 "!%h"
 promptstr ZP_TIME 060 "%D{%H:%M:%S}"
-# promptstr ZP_TIME 240 "%D{%s}"
-# show hostname if connected through ssh
-[ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && \
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] # ssh hostname
+then
 	promptstr ZP_HOST 214 "@%m"
-# if shell opened from vim :shell
-grep -q vim /proc/$PPID/comm && \
+fi
+if grep -q vim /proc/$PPID/comm # if shell opened from vim :shell
+then
 	promptstr ZP_VIM 002 "* "
+fi
 
 if [ `id -u` -ne 0 ]
 then

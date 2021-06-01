@@ -126,7 +126,7 @@ case "$(uname -s)" in
 				alias pacpurge='pacman -Rncs'
 				;;
 			'Ubuntu'|'Debian')
-				alias aptup="sudo apt update && sduo apt upgrade"
+				alias aptup="sudo apt update && sudo apt upgrade"
 				;;
 		esac
 

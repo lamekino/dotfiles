@@ -24,7 +24,7 @@ bindkey -v                  # Vi keybinds
 bindkey '^R' history-incremental-search-backward
 setopt INTERACTIVE_COMMENTS # Comments in shell
 setopt COMPLETE_ALIASES     # Preserves aliases in autocomplete
-setopt PROMPT_SUBST         # Allow variables &c in prompt
+setopt PROMPT_SUBST         # Allow variables in prompt
 setopt INC_APPEND_HISTORY   # Append to ~/.zhistory as soon as command is entered
 setopt HIST_IGNORE_ALL_DUPS # ignore duplicate commands in history
 setopt SHARE_HISTORY        # Share history among terminals
@@ -33,6 +33,10 @@ setopt SHARE_HISTORY        # Share history among terminals
 # files to source
 source_files()
 {
+	! [ -d ~/.zsources.d ] \
+		&& unfunction source_files \
+		&& return
+
 	local file
 	for file in ~/.zsources.d/*
 	do
@@ -40,6 +44,10 @@ source_files()
 	done
 	unfunction source_files
 }; source_files
+
+# this makes comments *actually* readable in Alacritty
+[ -n ZSH_HIGHLIGHT_STYLES ] \
+	&& ZSH_HIGHLIGHT_STYLES[comment]=fg=white
 
 [ -e $HOME/.dircolors ] && eval $(dircolors -b $HOME/.dircolors)
 
@@ -53,15 +61,21 @@ alias help="run-help"
 # }}}
 # Aliases/Functions {{{
 # Functions
-# search history
-function hgrep()
+function j() # jump up n directories
+{
+	if [ -z $1 ]; then
+		cd ..
+	elif [ $1 -gt 1 ]; then
+		cd $(printf "../%.0s" {1.."$1"})
+	fi
+}
+function hgrep() # search history
 {
 	args=".*$@.*"
 	args="${args// /.*}"
 	history 1 | grep -E "$args"
 }
-# touch and make executable
-function touchx()
+function touchx() # touch and make executable
 {
 	touch $1 && chmod +x $1
 }
@@ -165,7 +179,7 @@ function precmd_errorcode()
 function precmd_dircount()
 {
 	local dircount=`dirs -v | wc -l`
-	promptstr ZP_DIRS 177 "~$(( dircount - 1 ))"
+	promptstr ZP_DIRS 225 "~$(( dircount - 1 ))"
 
 	[ $dircount -gt 1 ] && \
 		# there's no way (that i know of) to check
@@ -190,8 +204,8 @@ fi
 
 if [ `id -u` -ne 0 ]
 then
-	promptstr ZP_USER 013 "%n"
-	promptstr ZP_CWD  012 "%~"
+	promptstr ZP_USER 183 "%n"
+	promptstr ZP_CWD  159 "%~"
 else
 	promptstr ZP_USER 001 "*%n*"
 	promptstr ZP_CWD  009 "%/"

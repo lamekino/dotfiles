@@ -32,7 +32,6 @@ set splitright      " Make :vsp go to the right
 set showcmd         " Shows current normal mode command/key press
 set autochdir       " Automatically :cd into open file directory
 set cursorline      " Highlight current line
-set tws="10*0"      " Terminal window size N*0 -> use full terminal width
 let g:netrw_winsize = 20    " set windows such as :lex use 20% of screen
 filetype plugin indent on   " use filetype based indentation
 " }}}
@@ -48,6 +47,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	Plug 'junegunn/fzf'                    " Fuzzy finder
 	Plug 'junegunn/fzf.vim'                " Scripts for fzf
 	Plug 'danro/rename.vim'                " Rename files from buffer
+	Plug 'bling/vim-bufferline'            " Buffer list at bottom
 	" Language support
 	Plug 'rust-lang/rust.vim'             " Rust
 	Plug 'neovimhaskell/haskell-vim'      " Haskell
@@ -58,15 +58,16 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	Plug 'morhetz/gruvbox'
 	call plug#end()
 	" Plugin options
-	let g:airline#extensions#tabline#enabled = 1
-	let g:airline#extensions#tabline#formatter = 'unique_tail'
-	let g:airline#extensions#tabline#left_sep = ' '
-	let g:airline#extensions#tabline#left_alt_sep = '|'
-	let g:airline#extensions#tabline#buffers_label = ''
+	" Airline
 	let g:airline_powerline_fonts = 0
 	let g:airline_symbols_ascii   = 1
-	let g:gruvbox_contrast_dark   = 'hard'
-	let g:gruvbox_contrast_light  = 'soft'
+	" Bufferline
+	let g:bufferline_echo        = 0
+	let g:bufferline_pathshorten = 1
+	let g:bufferline_fname_mod   = ':~'
+	" Gruvbox
+	let g:gruvbox_contrast_dark  = 'hard'
+	let g:gruvbox_contrast_light = 'soft'
 	" Set a better update command
 	command! PlugIn PlugUpdate | PlugUpgrade
 endif

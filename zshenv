@@ -10,7 +10,7 @@ export VISUAL="/usr/bin/env vim"
 export GOPATH="$HOME/.go"
 export BAT_PAGER="less"
 # export PAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma nornu' -\""
-export PAGER="sh -c 'sed -e s/.\\\\x08//g | bat -l man -p'"
+# export PAGER="sh -c 'sed -e s/.\\\\x08//g | bat -l man -p'"
 # export MANPAGER="sh -c 'sed -e s/.\\\\x08//g | bat -l man -p'"
 export FZF_DEFAULT_COMMAND="find ."
 export FZF_DEFAULT_OPTS="\

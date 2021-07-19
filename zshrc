@@ -46,8 +46,7 @@ source_files()
 }; source_files
 
 # this makes comments *actually* readable in Alacritty
-[ -n ZSH_HIGHLIGHT_STYLES ] \
-	&& ZSH_HIGHLIGHT_STYLES[comment]=fg=white
+[ -v ZSH_HIGHLIGHT_STYLES ] && ZSH_HIGHLIGHT_STYLES[comment]=fg=white
 
 [ -e $HOME/.dircolors ] && eval $(dircolors -b $HOME/.dircolors)
 
@@ -61,12 +60,12 @@ alias help="run-help"
 # }}}
 # Aliases/Functions {{{
 # Functions
-function j() # jump up n directories
+function ..() # jump up n directories
 {
 	if [ -z $1 ]; then
-		cd ..
+		builtin cd ..
 	elif [ $1 -gt 1 ]; then
-		cd $(printf "../%.0s" {1.."$1"})
+		builtin cd $(printf "../%.0s" {1.."$1"})
 	fi
 }
 function hgrep() # search history
@@ -170,7 +169,7 @@ promptstr ZP_SEP  243 "\\"
 
 function precmd_errorcode()
 {
-	local fmt=`printf "x%02X" $?`
+	local fmt=$(printf "x%02X" $?)
 	# $[x] converts hex to decimal in the format $[0xN]
 	[ $[0${fmt}] -ne 0 ] && promptstr ZP_ERR 202 $fmt
 }
@@ -181,39 +180,40 @@ function precmd_dircount()
 	local dircount=`dirs -v | wc -l`
 	promptstr ZP_DIRS 225 "~$(( dircount - 1 ))"
 
-	[ $dircount -gt 1 ] && \
+	if [ $dircount -gt 1 ]; then
 		# there's no way (that i know of) to check
 		# dircount with the ternary operator, so the
 		# separator has to be concatenated here
-		ZP_DIRS="$ZP_SEP$ZP_DIRS" || \
+		ZP_DIRS="$ZP_SEP$ZP_DIRS"
+	else
 		ZP_DIRS=
+	fi
 }
 
 
-promptstr ZP_JOBS 172 "%%%j"
-promptstr ZP_HIST 068 "!%h"
-promptstr ZP_TIME 060 "%D{%H:%M:%S}"
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] # ssh hostname
-then
-	promptstr ZP_HOST 214 "@%m"
-fi
 if grep -q vim /proc/$PPID/comm # if shell opened from vim :shell
 then
-	promptstr ZP_VIM 002 "* "
+	promptstr ZP_VIM 2 "* "
 fi
+
+promptstr ZP_JOBS 172 "%%%j"
+promptstr ZP_HIST  68 "!%h"
+promptstr ZP_TIME  60 "%D{%H:%M:%S}"
 
 if [ `id -u` -ne 0 ]
 then
-	promptstr ZP_USER 183 "%n"
-	promptstr ZP_CWD  159 "%~"
+	promptstr ZP_USER 13 "%n"
+	promptstr ZP_HOST 12 "%m"
+	promptstr ZP_CWD  14 "%~"
 else
-	promptstr ZP_USER 001 "*%n*"
-	promptstr ZP_CWD  009 "%/"
+	promptstr ZP_USER   9 "%n"
+	promptstr ZP_HOST 124 "%m"
+	promptstr ZP_CWD    1 "%/"
 fi
 
 function precmd_reloadprompt()
 {
-	ZP_PROMPT="$ZP_VIM$ZP_USER$ZP_HOST:<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
+	ZP_PROMPT="$ZP_VIM$ZP_USER:$ZP_HOST<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
 	RPROMPT="$ZP_HIST $ZP_TIME"
 }
 
@@ -245,6 +245,6 @@ zle -N zle-keymap-select
 # }}}
 # and finally...
 [ -z $TMUX ] && [ -z $VIM ] \
-	&& command -v fortune cowsay &> /dev/null \
-	&& fortune | cowsay -n -f dragon \
+	&& command -v fortune &> /dev/null \
+	&& fortune \
 	|| true

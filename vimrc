@@ -56,9 +56,11 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 	Plug 'PProvost/vim-ps1'               " Powershell
 	" Colorschemes
 	Plug 'morhetz/gruvbox'
+	Plug 'nanotech/jellybeans.vim'
 	call plug#end()
 	" Plugin options
 	" Airline
+	let g:airline_theme           = "minimalist"
 	let g:airline_powerline_fonts = 0
 	let g:airline_symbols_ascii   = 1
 	" Bufferline
@@ -77,9 +79,9 @@ syntax on
 set t_Co=256
 set background=dark
 
-" try to use gruvbox, if installed
+" try to use theme, if installed
 try
-	colorscheme gruvbox
+	colorscheme jellybeans
 " otherwise, use a basic colorscheme
 catch /^Vim\%((\a\+)\)\=:E185/
 	hi clear
@@ -136,11 +138,12 @@ if has("autocmd")
 	aug end
 
 	" use marker folds in these files
-	aug vim
-		au FileType vim  setlocal foldmethod=marker " vim scripts
-		au FileType zsh  setlocal foldmethod=marker " zsh scripts
-		au FileType tmux setlocal foldmethod=marker " tmux confs
-		au BufRead,BufNewFile config.h setlocal foldmethod=marker " st config
+	aug autofolds
+		au FileType vim  setlocal foldmethod=marker
+		au FileType zsh  setlocal foldmethod=marker
+		au FileType tmux setlocal foldmethod=marker
+		au BufRead,BufNewFile config.h setlocal foldmethod=marker
+		au BufRead,BufNewFile alacritty.yml setlocal foldmethod=marker
 	aug end
 
 	" automatically reload vimrc

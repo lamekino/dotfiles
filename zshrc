@@ -203,12 +203,14 @@ promptstr ZP_TIME  60 "%D{%H:%M:%S}"
 if [ `id -u` -ne 0 ]
 then
 	promptstr ZP_USER 13 "%n"
-	promptstr ZP_HOST 12 "%m"
 	promptstr ZP_CWD  14 "%~"
+	[ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] \
+		&& promptstr ZP_HOST  12 "%m" \
+		|| promptstr ZP_HOST 214 "%m"
 else
 	promptstr ZP_USER   9 "%n"
-	promptstr ZP_HOST 124 "%m"
 	promptstr ZP_CWD    1 "%/"
+	promptstr ZP_HOST 124 "%m"
 fi
 
 function precmd_reloadprompt()

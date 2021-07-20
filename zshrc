@@ -205,8 +205,8 @@ then
 	promptstr ZP_USER 13 "%n"
 	promptstr ZP_CWD  14 "%~"
 	[ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] \
-		&& promptstr ZP_HOST  12 "%m" \
-		|| promptstr ZP_HOST 214 "%m"
+		&& promptstr ZP_HOST 214 "%m" \
+		|| promptstr ZP_HOST  12 "%m"
 else
 	promptstr ZP_USER   9 "%n"
 	promptstr ZP_CWD    1 "%/"

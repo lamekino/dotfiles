@@ -148,7 +148,7 @@ case "$(uname -s)" in
 		alias l='ls -pk --color=auto --group-directories-first'
 		alias ls='ls -pk --color=auto --group-directories-first'
 		alias ll='ls -pklh --color=auto --group-directories-first'
-		alias la='ls -pklah --color=auto --group-directories-first'
+		alias la='ls -pkah --color=auto --group-directories-first'
 		alias feh='feh -x --scale-down'
 		alias feh-svg="feh --magick-timeout 1 $1"
 		;;

@@ -113,7 +113,7 @@ case "$(uname -s)" in
 		if grep -qi Microsoft /proc/version
 		then
 			export DISPLAY=:0 # for xorg applications FIXME: broken in WSL2
-			export USERPROFILE=/mnt/c/Users/`whoami`
+			export USERPROFILE=/mnt/c/Users/$(whoami)
 			alias wsl-explorer="explorer.exe"
 			alias mpv="mpv.exe"
 			alias wsl-ahk="cmd.exe /c start AutoHotKey"
@@ -126,7 +126,8 @@ case "$(uname -s)" in
 
 		# Distro specific
 		# https://unix.stackexchange.com/a/25131
-		case `lsb_release -is` in
+		# this doesn't work out of the box for most distros :/
+		case $(lsb_release -is) in
 			'Arch')
 				# https://fosskers.github.io/aura/usage.html
 				# https://github.com/fosskers/aura
@@ -136,7 +137,6 @@ case "$(uname -s)" in
 					alias aura="aura --hotedit --unsuppress"
 				fi
 				alias hd="hexdump -C"
-				alias pacpurge='pacman -Rncs'
 				;;
 			'Ubuntu'|'Debian')
 				alias aptup="sudo apt update && sudo apt upgrade"
@@ -177,7 +177,7 @@ function precmd_errorcode()
 # TODO: Make this less hacky
 function precmd_dircount()
 {
-	local dircount=`dirs -v | wc -l`
+	local dircount=$(dirs -v | wc -l)
 	promptstr ZP_DIRS 225 "~$(( dircount - 1 ))"
 
 	if [ $dircount -gt 1 ]; then
@@ -200,13 +200,15 @@ promptstr ZP_JOBS 172 "%%%j"
 promptstr ZP_HIST  68 "!%h"
 promptstr ZP_TIME  60 "%D{%H:%M:%S}"
 
-if [ `id -u` -ne 0 ]
+if [ $(id -u) -ne 0 ]
 then
 	promptstr ZP_USER 13 "%n"
 	promptstr ZP_CWD  14 "%~"
-	[ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] \
-		&& promptstr ZP_HOST 214 "%m" \
-		|| promptstr ZP_HOST  12 "%m"
+	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+		promptstr ZP_HOST 214 "%m"
+	else
+		promptstr ZP_HOST  12 "%m"
+	fi
 else
 	promptstr ZP_USER   9 "%n"
 	promptstr ZP_CWD    1 "%/"

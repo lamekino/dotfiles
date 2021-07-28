@@ -1,5 +1,5 @@
 ## Environment Variables ##
-HISTORY_IGNORE='([bf]g *|cd *|l[alsh]#( *)#|less *|vim# *|pwd|z *|.. *)'
+HISTORY_IGNORE='([bf]g *|cd *|l[alsh]#( *)#|less *|vim# *|pwd|z *|..*)'
 HISTFILE=~/.zhistory
 HISTSIZE=50000
 SAVEHIST=50000

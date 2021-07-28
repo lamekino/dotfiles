@@ -142,8 +142,9 @@ if has("autocmd")
 		au FileType vim  setlocal foldmethod=marker
 		au FileType zsh  setlocal foldmethod=marker
 		au FileType tmux setlocal foldmethod=marker
-		au BufRead,BufNewFile config.h setlocal foldmethod=marker
-		au BufRead,BufNewFile alacritty.yml setlocal foldmethod=marker
+		au BufRead,BufNewFile rc.lua        setlocal foldmethod=marker " awesome wm
+		au BufRead,BufNewFile config.h      setlocal foldmethod=marker " suckless programs
+		au BufRead,BufNewFile alacritty.yml setlocal foldmethod=marker " alacritty
 	aug end
 
 	" automatically reload vimrc

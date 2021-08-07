@@ -199,6 +199,5 @@ vmap     <C-c> "*y
 " Normal Mode {{{
 nnoremap H ^
 nnoremap L $
-nnoremap ; :
 " }}}
 " }}}

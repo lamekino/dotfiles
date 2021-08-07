@@ -14,8 +14,8 @@ export BAT_PAGER="less"
 # export MANPAGER="sh -c 'sed -e s/.\\\\x08//g | bat -l man -p'"
 export FZF_DEFAULT_COMMAND="find ."
 export FZF_DEFAULT_OPTS="\
-	--height 40% --layout=reverse --border --preview \
-	'bat --color=always --style plain --line-range :16 {}'"
+    --height 40% --layout=reverse --border --preview \
+    'bat --color=always --style plain --line-range :16 {}'"
 
 export PATH="\
 $PATH:\

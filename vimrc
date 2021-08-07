@@ -41,49 +41,49 @@ set expandtab     " Expand tabs into spaces
 
 " GVim
 if has("gui_running")
-	set guifont=IBM\ Plex\ Mono\ Medium\ 11
-	set guioptions-=m  " menu bar
-	set guioptions-=T  " toolbar
-	set guioptions-=r  " right scrollbar
-	set guioptions-=L  " left scrollbar
-	hi Comment gui=bold
+    set guifont=IBM\ Plex\ Mono\ Medium\ 11
+    set guioptions-=m  " menu bar
+    set guioptions-=T  " toolbar
+    set guioptions-=r  " right scrollbar
+    set guioptions-=L  " left scrollbar
+    hi Comment gui=bold
 endif
 " }}}
 " Plugins {{{
 if filereadable(expand("~/.vim/autoload/plug.vim"))
-	call plug#begin("~/.vim/plugged")
-	" Useful Plugins
-	Plug 'tpope/vim-commentary'    " Treat comments like text objects
-	Plug 'tpope/vim-surround'      " Modify surrounding characters
-	Plug 'ap/vim-css-color'        " Previews hex colors, eg #00FFFF
-	Plug 'danro/rename.vim'        " Rename files from buffer
-	Plug 'bling/vim-bufferline'    " Buffer list at bottom
-	Plug 'vim-airline/vim-airline' " The bar at the bottom
-	Plug 'vim-airline/vim-airline-themes'
-	" Language support
-	Plug 'rust-lang/rust.vim'        " Rust
-	Plug 'neovimhaskell/haskell-vim' " Haskell
-	Plug 'alx741/vim-hindent'        " Haskell indentation
-	Plug 'mmikeww/autohotkey.vim'    " AutoHotKey
-	Plug 'PProvost/vim-ps1'          " Powershell
-	" Colorschemes
-	Plug 'morhetz/gruvbox'
-	Plug 'nanotech/jellybeans.vim'
-	call plug#end()
-	" Plugin options
-	" Airline
-	let g:airline_theme           = "minimalist"
-	let g:airline_powerline_fonts = 0
-	let g:airline_symbols_ascii   = 1
-	" Bufferline
-	let g:bufferline_echo        = 0
-	let g:bufferline_pathshorten = 1
-	let g:bufferline_fname_mod   = ':.:~'
-	" Gruvbox
-	let g:gruvbox_contrast_dark  = 'hard'
-	let g:gruvbox_contrast_light = 'soft'
-	" Set a better update command
-	command! PlugIn PlugUpdate | PlugUpgrade
+    call plug#begin("~/.vim/plugged")
+    " Useful Plugins
+    Plug 'tpope/vim-commentary'    " Treat comments like text objects
+    Plug 'tpope/vim-surround'      " Modify surrounding characters
+    Plug 'ap/vim-css-color'        " Previews hex colors, eg #00FFFF
+    Plug 'danro/rename.vim'        " Rename files from buffer
+    Plug 'bling/vim-bufferline'    " Buffer list at bottom
+    Plug 'vim-airline/vim-airline' " The bar at the bottom
+    Plug 'vim-airline/vim-airline-themes'
+    " Language support
+    Plug 'rust-lang/rust.vim'        " Rust
+    Plug 'neovimhaskell/haskell-vim' " Haskell
+    Plug 'alx741/vim-hindent'        " Haskell indentation
+    Plug 'mmikeww/autohotkey.vim'    " AutoHotKey
+    Plug 'PProvost/vim-ps1'          " Powershell
+    " Colorschemes
+    Plug 'morhetz/gruvbox'
+    Plug 'nanotech/jellybeans.vim'
+    call plug#end()
+    " Plugin options
+    " Airline
+    let g:airline_theme           = "minimalist"
+    let g:airline_powerline_fonts = 0
+    let g:airline_symbols_ascii   = 1
+    " Bufferline
+    let g:bufferline_echo        = 0
+    let g:bufferline_pathshorten = 1
+    let g:bufferline_fname_mod   = ':.:~'
+    " Gruvbox
+    let g:gruvbox_contrast_dark  = 'hard'
+    let g:gruvbox_contrast_light = 'soft'
+    " Set a better update command
+    command! PlugIn PlugUpdate | PlugUpgrade
 endif
 " }}}
 " Appearence {{{
@@ -93,58 +93,58 @@ set background=dark
 hi Normal ctermbg=NONE
 
 try
-	colorscheme jellybeans
+    colorscheme jellybeans
 catch /^Vim\%((\a\+)\)\=:E185/ " error if colorscheme not found
-	hi clear
-	hi LineNr     cterm=none    ctermfg=8
-	hi Comment    cterm=none    ctermfg=8
-	hi cComment   cterm=none    ctermfg=8
-	hi StatusLine cterm=reverse ctermfg=8
+    hi clear
+    hi LineNr     cterm=none    ctermfg=8
+    hi Comment    cterm=none    ctermfg=8
+    hi cComment   cterm=none    ctermfg=8
+    hi StatusLine cterm=reverse ctermfg=8
 endtry
 " }}}
 " File types {{{
 " C {{{
 " Make
 aug c
-	au FileType c    nnoremap <F2> :!cc % -fsyntax-only -Wall -Wextra -pedantic<CR>
-	au FileType cpp  nnoremap <F2> :!c++ % -fsyntax-only -Wall -Wextra -pedantic<CR>
-	au FileType make nnoremap <F2> :!make<CR>
+    au FileType c    nnoremap <F2> :!cc % -fsyntax-only -Wall -Wextra -pedantic<CR>
+    au FileType cpp  nnoremap <F2> :!c++ % -fsyntax-only -Wall -Wextra -pedantic<CR>
+    au FileType make nnoremap <F2> :!make<CR>
 aug end
 " }}}
 " Shell {{{
 aug sh
-	au FileType sh nnoremap <F2> :!shellcheck %<CR>
+    au FileType sh nnoremap <F2> :!shellcheck %<CR>
 aug end
 " }}}
 " Python {{{
 aug python
-	au FileType python nnoremap <F2> :!python -i %<CR>
+    au FileType python nnoremap <F2> :!python -i %<CR>
 aug end
 " }}}
 " Haskell {{{
 aug haskell
-	au FileType haskell setlocal ts=2 sts=2 sw=2 expandtab
-	au FileType haskell nnoremap <F2>  :!ghci %<CR>
+    au FileType haskell setlocal ts=2 sts=2 sw=2 expandtab
+    au FileType haskell nnoremap <F2>  :!ghci %<CR>
 aug end
 " }}}
 " Markdown {{{
 aug markdown
-	au FileType markdown setlocal ts=2 sw=2 sts=2 expandtab spell
+    au FileType markdown setlocal ts=2 sw=2 sts=2 expandtab spell
 aug end
 " }}}
 " Special files {{{
 " use marker folds in these files
 aug vim
-	au FileType vim  setlocal foldmethod=marker " vim scripts
-	au FileType zsh  setlocal foldmethod=marker " zsh scripts
-	au FileType tmux setlocal foldmethod=marker " tmux confs
-	au BufRead,BufNewFile config.h setlocal foldmethod=marker " st config
+    au FileType vim  setlocal foldmethod=marker " vim scripts
+    au FileType zsh  setlocal foldmethod=marker " zsh scripts
+    au FileType tmux setlocal foldmethod=marker " tmux confs
+    au BufRead,BufNewFile config.h setlocal foldmethod=marker " st config
 aug end
 " }}}
 " Vim {{{
 " open help to the right
 aug vim_help
-	au FileType help wincmd L
+    au FileType help wincmd L
 aug end
 " }}}
 " }}}

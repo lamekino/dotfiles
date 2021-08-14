@@ -132,15 +132,6 @@ aug markdown
     au FileType markdown setlocal ts=2 sw=2 sts=2 expandtab spell
 aug end
 " }}}
-" Special files {{{
-" use marker folds in these files
-aug vim
-    au FileType vim  setlocal foldmethod=marker " vim scripts
-    au FileType zsh  setlocal foldmethod=marker " zsh scripts
-    au FileType tmux setlocal foldmethod=marker " tmux confs
-    au BufRead,BufNewFile config.h setlocal foldmethod=marker " st config
-aug end
-" }}}
 " Vim {{{
 " open help to the right
 aug vim_help
@@ -201,3 +192,4 @@ nnoremap H ^
 nnoremap L $
 " }}}
 " }}}
+" vim:foldmethod=marker

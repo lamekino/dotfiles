@@ -130,3 +130,4 @@ mouse:
 mouse_bindings:
   - { mouse: Middle, action: PasteSelection }
 # }}}
+# vim:foldmethod=marker

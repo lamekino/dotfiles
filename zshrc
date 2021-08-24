@@ -1,4 +1,4 @@
-# vim:foldmethod=marker =========================================#
+#================================================================#
 #                                                                #
 #                            ██                                  #
 #                            ██                                  #
@@ -64,8 +64,10 @@ function ..() # jump up n directories
 {
     if [ -z $1 ]; then
         builtin cd ..
-    elif [ $1 -gt 1 ]; then
+    elif [ $1 -gt 0 ]; then
         builtin cd $(printf "../%.0s" {1.."$1"})
+    else
+        echo "usage: .. [n > 0]"
     fi
 }
 function hgrep() # search history
@@ -190,9 +192,8 @@ function precmd_dircount()
     fi
 }
 
-
-if grep -q vim /proc/$PPID/comm # if shell opened from vim :shell
-then
+# if shell opened from vim :shell
+if [ -r /proc/$PPID ] && grep -q vim /proc/$PPID/comm; then
     promptstr ZP_VIM 2 "* "
 fi
 
@@ -200,8 +201,7 @@ promptstr ZP_JOBS 172 "%%%j"
 promptstr ZP_HIST  68 "!%h"
 promptstr ZP_TIME  60 "%D{%H:%M:%S}"
 
-if [ $(id -u) -ne 0 ]
-then
+if [ $UID -ne 0 ]; then
     promptstr ZP_USER 13 "%n"
     promptstr ZP_CWD  14 "%~"
     if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
@@ -222,15 +222,6 @@ function precmd_reloadprompt()
 }
 
 # make the function run before prompt redraw
-precmd_functions=(
-    precmd_dircount
-    precmd_errorcode
-    precmd_reloadprompt
-)
-# if z is installed add it to precmd_functions
-# $_Z_RESOLVE_SYMLINKS is defined by z.sh
-[ -n $_Z_RESOLVE_SYMLINKS ] && precmd_functions+=_z_precmd
-
 # and... here is where the actual prompt is set
 function zle-line-init zle-keymap-select {
     case $KEYMAP in
@@ -247,8 +238,20 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 # }}}
-# and finally...
-[ -z $TMUX ] && [ -z $VIM ] \
-    && command -v fortune &> /dev/null \
-    && fortune \
-    || true
+# Precmds {{{
+# sets terminal title
+function precmd_term_title()
+{
+    print -Pn "\e]0;%~\a"
+}
+precmd_functions=(
+    precmd_term_title
+    precmd_dircount
+    precmd_errorcode
+    precmd_reloadprompt
+)
+# if z is installed add it to precmd_functions
+# $_Z_RESOLVE_SYMLINKS is defined by z.sh
+[ -n $_Z_RESOLVE_SYMLINKS ] && precmd_functions+=_z_precmd
+# }}}
+# vim:foldmethod=marker

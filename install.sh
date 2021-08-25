@@ -10,7 +10,7 @@ for dir in config/*; do
 done
 
 for file in *; do
-    case "$i" in
+    case "$file" in
         "install.sh")
             continue
             ;;

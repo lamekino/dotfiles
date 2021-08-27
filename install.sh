@@ -35,7 +35,6 @@ find "$PWD" \
 while IFS= read -r REPLY; do
     src="$REPLY"
     dest=$(echo "$src" | sed "s|^$PWD\/|$HOME\/\.|g")
-    echo $dest
     if [ ! -e "$dest" ]; then
         [ -d "$src" ] && mkdir -pv "$dest"
         [ -f "$src" ] && create "$src" "$dest"

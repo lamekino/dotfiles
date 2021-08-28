@@ -53,13 +53,14 @@ endif
 if filereadable(expand("~/.vim/autoload/plug.vim"))
     call plug#begin("~/.vim/plugged")
     " Useful Plugins
-    Plug 'tpope/vim-commentary'    " Treat comments like text objects
-    Plug 'tpope/vim-surround'      " Modify surrounding characters
-    Plug 'ap/vim-css-color'        " Previews hex colors, eg #00FFFF
-    Plug 'danro/rename.vim'        " Rename files from buffer
-    Plug 'bling/vim-bufferline'    " Buffer list at bottom
-    Plug 'vim-airline/vim-airline' " The bar at the bottom
-    Plug 'vim-airline/vim-airline-themes'
+    Plug 'ap/vim-css-color'               " Previews hex colors, eg #00FFFF
+    Plug 'bling/vim-bufferline'           " Buffer list at bottom
+    Plug 'danro/rename.vim'               " Rename files from buffer
+    Plug 'ntpeters/vim-better-whitespace' " Highlight unneeded whitespace
+    Plug 'tpope/vim-commentary'           " Treat comments like text objects
+    Plug 'tpope/vim-surround'             " Modify surrounding characters
+    Plug 'vim-airline/vim-airline'        " The bar at the bottom
+    Plug 'vim-airline/vim-airline-themes' " ^ themes
     " Language support
     Plug 'rust-lang/rust.vim'        " Rust
     Plug 'neovimhaskell/haskell-vim' " Haskell
@@ -69,6 +70,10 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     " Colorschemes
     Plug 'morhetz/gruvbox'
     Plug 'nanotech/jellybeans.vim'
+    " NeoVim only
+    if has("nvim")
+        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    endif
     call plug#end()
     " Plugin options
     " Airline
@@ -81,7 +86,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     let g:bufferline_fname_mod   = ':.:~'
     " Gruvbox
     let g:gruvbox_contrast_dark  = 'hard'
-    let g:gruvbox_contrast_light = 'soft'
+    let g:gruvbox_contrast_light = 'hard'
     " Set a better update command
     command! PlugIn PlugUpdate | PlugUpgrade
 endif

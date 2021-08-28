@@ -88,7 +88,11 @@ alias pgrep='pgrep -l'
 alias vi='vim'
 alias info="info --vi-keys"
 alias veracrypt="veracrypt -t"
-alias vim="vim -X" # fixes slow startup time
+if command -v nvim >/dev/null; then
+    alias vim='nvim'
+else
+    alias vim="vim -X" # fixes slow startup time
+fi
 # Short hand
 alias cite="source ~/.zshrc && source ~/.zshenv" # cite your sources!
 alias xres="xrdb ~/.Xresources"
@@ -151,6 +155,7 @@ case "$(uname -s)" in
         alias ls='ls -pk --color=auto --group-directories-first'
         alias ll='ls -pklh --color=auto --group-directories-first'
         alias la='ls -pkah --color=auto --group-directories-first'
+        alias diff='diff --color=always'
         alias feh='feh -x --scale-down'
         alias feh-svg="feh --magick-timeout 1 $1"
         ;;
@@ -242,7 +247,13 @@ zle -N zle-keymap-select
 # sets terminal title
 function precmd_term_title()
 {
-    print -Pn "\e]0;%~\a"
+    cwd=$(print -Pn "%~")
+    cutoff=32
+    if [ ${#cwd} -lt $cutoff ]; then
+        printf "\e]0;%s\a" "$cwd"
+    else
+        printf "\e]0;%.*s...\a" $(( cutoff - 3 )) "${PWD/#$HOME/~}"
+    fi
 }
 precmd_functions=(
     precmd_term_title

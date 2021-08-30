@@ -1,7 +1,7 @@
 background_opacity 1.00
 
 # Background/foreground
-background #121212
+background #151515
 foreground #e4e4e4
 
 # Selection
@@ -35,6 +35,6 @@ inactive_border_color #222222
 # Tab colors
 active_tab_font_style   none
 active_tab_foreground   #feffff
-active_tab_background   #121212
+active_tab_background   #151515
 inactive_tab_foreground #535551
-inactive_tab_background #121212
+inactive_tab_background #151515

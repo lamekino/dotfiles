@@ -11,6 +11,7 @@
 "| Vim tips wiki:    https://vim.fandom.com/wiki/Vim_Tips_Wiki                 |
 "| Online help.txt:  http://vimdoc.sourceforge.net/htmldoc/                    |
 "+-----------------------------------------------------------------------------+
+" TODO: Migrate this to nvim/init.vim
 " Settings {{{
 " Vim settings
 set nocp
@@ -23,6 +24,7 @@ set showcmd    " Shows current normal mode command/key press
 set path+=**   " https://youtu.be/XA2WjJbmmoM?t=408
 set spelllang=en_us
 set encoding=utf-8
+set termguicolors
 filetype plugin indent on " use filetype based indentation
 
 " Display settings
@@ -56,6 +58,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'ap/vim-css-color'               " Previews hex colors, eg #00FFFF
     Plug 'bling/vim-bufferline'           " Buffer list at bottom
     Plug 'danro/rename.vim'               " Rename files from buffer
+    Plug 'vim-scripts/Align'              " Aligns whitespace
     Plug 'ntpeters/vim-better-whitespace' " Highlight unneeded whitespace
     Plug 'tpope/vim-commentary'           " Treat comments like text objects
     Plug 'tpope/vim-surround'             " Modify surrounding characters
@@ -73,6 +76,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     " NeoVim only
     if has("nvim")
         Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+        Plug 'norcalli/nvim-colorizer.lua'
     endif
     call plug#end()
     " Plugin options
@@ -96,6 +100,7 @@ syntax on
 set t_Co=256
 set background=dark
 hi Normal ctermbg=NONE
+hi NonText ctermbg=none
 
 try
     colorscheme jellybeans
@@ -104,6 +109,7 @@ catch /^Vim\%((\a\+)\)\=:E185/ " error if colorscheme not found
     hi LineNr     cterm=none    ctermfg=8
     hi Comment    cterm=none    ctermfg=8
     hi cComment   cterm=none    ctermfg=8
+    hi Folded     cterm=none    ctermfg=8
     hi StatusLine cterm=reverse ctermfg=8
 endtry
 " }}}
@@ -175,7 +181,11 @@ nnoremap <Leader>ts :set spell!<CR>
 nnoremap <Leader>tf :ToggleFoldMarker<CR>
 " }}}
 " Function keys {{{
-nnoremap <F1>  :shell<CR>
+if !has("nvim")
+    nnoremap <F1>  :shell<CR>
+else
+    nnoremap <F1>  :sp term://zsh<CR>:res -12<CR>
+endif
 nnoremap <F3>  :bprev!<CR>
 nnoremap <F4>  :bnext!<CR>
 nnoremap <F5>  :so ~/.vimrc<CR>
@@ -196,5 +206,11 @@ vmap     <C-c> "*y
 nnoremap H ^
 nnoremap L $
 " }}}
+" Terminal Mode {{{
+if has("nvim")
+    tnoremap <C-w> <C-\><C-N><C-w>
+    tnoremap <F1> <C-\><C-N>
+endif
 " }}}
-" vim:foldmethod=marker
+" }}}
+" vim:foldmethod=marker:ts=4

@@ -9,4 +9,5 @@ require'nvim-treesitter.configs'.setup {
     enable = true,              -- false will disable the whole extension
   },
 }
+require'colorizer'.setup()
 EOF

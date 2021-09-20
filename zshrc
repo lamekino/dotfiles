@@ -60,26 +60,15 @@ alias help="run-help"
 # }}}
 # Aliases/Functions {{{
 # Functions
-function ..() # jump up n directories
-{
-    if [ -z $1 ]; then
-        builtin cd ..
-    elif [ $1 -gt 0 ]; then
-        builtin cd $(printf "../%.0s" {1.."$1"})
-    else
-        echo "usage: .. [n > 0]"
-    fi
-}
-function hgrep() # search history
-{
-    args=".*$@.*"
-    args="${args// /.*}"
-    history 1 | grep -E "$args"
-}
-function touchx() # touch and make executable
-{
-    touch $1 && chmod +x $1
-}
+# jumps back N dirs if $1 exists 1 otherwise
+function ..()     { builtin cd $(printf "../%.0s" $(seq 1 $1)) }
+# uses regex to search history uses the whole argv and basically globs it
+function hgrep()  { history 1 | grep -E $(sed 's/ /.*/g' <<< ".*$@.*") }
+# touch and make executable
+function touchx() { touch $1 && chmod +x $1 }
+# copy file into backup
+function bak()    { cp -r "$1" "$1.bak" && [ ! -d "$1" ] && rm -i "$1" }
+
 # Shadowing
 alias sudo='sudo ' # so aliases can be run with sudo
 alias dirs='dirs -v'
@@ -88,11 +77,8 @@ alias pgrep='pgrep -l'
 alias vi='vim'
 alias info="info --vi-keys"
 alias veracrypt="veracrypt -t"
-if command -v nvim >/dev/null; then
-    alias vim='nvim'
-else
-    alias vim="vim -X" # fixes slow startup time
-fi
+alias vim="vim -X" # fixes slow startup time
+
 # Short hand
 alias cite="source ~/.zshrc && source ~/.zshenv" # cite your sources!
 alias xres="xrdb ~/.Xresources"
@@ -101,13 +87,16 @@ alias stop='kill -STOP'
 alias deps='gcc -MM'
 alias deps++='g++ -MM' # is this necessary?
 alias ppath='sed "s/:/\n/g" <<< $PATH'
-alias rln='ln -r' # GNU only
 alias fr='rm -frIv'
 alias screen='TERM=xterm-256color screen'
-alias py="PAGER=less bpython"
+alias bpy="PAGER=less bpython"
+alias md="mkdir"
+alias pwpls="pwgen -1Bsy 20"
+
 # Python
 alias python="python3"
 alias pip="pip3"
+
 # Curl Utils
 alias wttr='curl -s http://wttr.in'
 alias ipecho='curl http://ipecho.net/plain; printf "\n"'
@@ -131,9 +120,7 @@ case "$(uname -s)" in
         fi
 
         # Distro specific
-        # https://unix.stackexchange.com/a/25131
-        # this doesn't work out of the box for most distros :/
-        case $(lsb_release -is) in
+        case $(cut -d" " -f1 /etc/issue) in
             'Arch')
                 # https://fosskers.github.io/aura/usage.html
                 # https://github.com/fosskers/aura
@@ -145,7 +132,11 @@ case "$(uname -s)" in
                 alias hd="hexdump -C"
                 ;;
             'Ubuntu'|'Debian')
-                alias aptup="sudo apt update && sudo apt upgrade"
+                # this is hacky but it has behavior i want
+                # mainly not having sudo in an alias
+                alias aptup="sh <<< 'apt update && apt upgrade'"
+                ;;
+            *)
                 ;;
         esac
 
@@ -158,6 +149,7 @@ case "$(uname -s)" in
         alias diff='diff --color=always'
         alias feh='feh -x --scale-down'
         alias feh-svg="feh --magick-timeout 1 $1"
+        alias open='xdg-open'
         ;;
     "Darwin")
         # For macOS. I don't use macs very often, so this is quite barren

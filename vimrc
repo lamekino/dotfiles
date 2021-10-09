@@ -11,7 +11,7 @@
 "| Vim tips wiki:    https://vim.fandom.com/wiki/Vim_Tips_Wiki                 |
 "| Online help.txt:  http://vimdoc.sourceforge.net/htmldoc/                    |
 "+-----------------------------------------------------------------------------+
-" TODO: Migrate this to nvim/init.vim
+
 " Settings {{{
 " Vim settings
 set nocp
@@ -55,29 +55,24 @@ endif
 if filereadable(expand("~/.vim/autoload/plug.vim"))
     call plug#begin("~/.vim/plugged")
     " Useful Plugins
-    Plug 'ap/vim-css-color'               " Previews hex colors, eg #00FFFF
-    Plug 'bling/vim-bufferline'           " Buffer list at bottom
+    " Plug 'ap/vim-css-color'               " Previews hex colors, eg #00FFFF
+    " Plug 'ntpeters/vim-better-whitespace' " Highlight unneeded whitespace
+    " Plug 'vim-scripts/Align'              " Aligns whitespace
     Plug 'danro/rename.vim'               " Rename files from buffer
-    Plug 'vim-scripts/Align'              " Aligns whitespace
-    Plug 'ntpeters/vim-better-whitespace' " Highlight unneeded whitespace
     Plug 'tpope/vim-commentary'           " Treat comments like text objects
     Plug 'tpope/vim-surround'             " Modify surrounding characters
+    " Language support
+    Plug 'sheerun/vim-polyglot'
+    Plug 'alx741/vim-hindent'
+    Plug 'uiiaoo/java-syntax.vim'
+    " Appearance
     Plug 'vim-airline/vim-airline'        " The bar at the bottom
     Plug 'vim-airline/vim-airline-themes' " ^ themes
-    " Language support
-    Plug 'rust-lang/rust.vim'        " Rust
-    Plug 'neovimhaskell/haskell-vim' " Haskell
-    Plug 'alx741/vim-hindent'        " Haskell indentation
-    Plug 'mmikeww/autohotkey.vim'    " AutoHotKey
-    Plug 'PProvost/vim-ps1'          " Powershell
+    Plug 'bling/vim-bufferline'           " Show buffers in airline
     " Colorschemes
     Plug 'morhetz/gruvbox'
     Plug 'nanotech/jellybeans.vim'
-    " NeoVim only
-    if has("nvim")
-        Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-        Plug 'norcalli/nvim-colorizer.lua'
-    endif
+    Plug 'tomasiser/vim-code-dark'
     call plug#end()
     " Plugin options
     " Airline
@@ -99,19 +94,7 @@ endif
 syntax on
 set t_Co=256
 set background=dark
-hi Normal ctermbg=NONE
-hi NonText ctermbg=none
-
-try
-    colorscheme jellybeans
-catch /^Vim\%((\a\+)\)\=:E185/ " error if colorscheme not found
-    hi clear
-    hi LineNr     cterm=none    ctermfg=8
-    hi Comment    cterm=none    ctermfg=8
-    hi cComment   cterm=none    ctermfg=8
-    hi Folded     cterm=none    ctermfg=8
-    hi StatusLine cterm=reverse ctermfg=8
-endtry
+colorscheme gruvbox
 " }}}
 " File types {{{
 " C {{{
@@ -181,11 +164,7 @@ nnoremap <Leader>ts :set spell!<CR>
 nnoremap <Leader>tf :ToggleFoldMarker<CR>
 " }}}
 " Function keys {{{
-if !has("nvim")
-    nnoremap <F1>  :shell<CR>
-else
-    nnoremap <F1>  :sp term://zsh<CR>:res -12<CR>
-endif
+nnoremap <F1>  :shell<CR>
 nnoremap <F3>  :bprev!<CR>
 nnoremap <F4>  :bnext!<CR>
 nnoremap <F5>  :so ~/.vimrc<CR>
@@ -205,12 +184,6 @@ vmap     <C-c> "*y
 " Normal Mode {{{
 nnoremap H ^
 nnoremap L $
-" }}}
-" Terminal Mode {{{
-if has("nvim")
-    tnoremap <C-w> <C-\><C-N><C-w>
-    tnoremap <F1> <C-\><C-N>
-endif
 " }}}
 " }}}
 " vim:foldmethod=marker:ts=4

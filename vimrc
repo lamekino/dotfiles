@@ -76,9 +76,11 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     call plug#end()
     " Plugin options
     " Airline
-    let g:airline_theme           = "minimalist"
+    "let g:airline_theme           = "minimalist"
     let g:airline_powerline_fonts = 0
     let g:airline_symbols_ascii   = 1
+    let g:airline_highlighting_cache = 1
+    let g:airline_extensions      = [ 'bufferline' ]
     " Bufferline
     let g:bufferline_echo        = 0
     let g:bufferline_pathshorten = 1

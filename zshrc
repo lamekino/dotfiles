@@ -215,7 +215,7 @@ fi
 function precmd_reloadprompt()
 {
     ZP_PROMPT="$ZP_VIM$ZP_USER:$ZP_HOST<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
-    RPROMPT="$ZP_HIST $ZP_TIME"
+    #RPROMPT="$ZP_HIST $ZP_TIME"
 }
 
 # make the function run before prompt redraw

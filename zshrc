@@ -61,13 +61,30 @@ alias help="run-help"
 # Aliases/Functions {{{
 # Functions
 # jumps back N dirs if $1 exists 1 otherwise
-function ..()     { builtin cd $(printf "../%.0s" $(seq 1 $1)) }
+function ..() {
+    if [ -z $1 ]; then
+        builtin cd ..
+    elif [ $1 -gt 0 ]; then
+        builtin cd $(printf "../%.0s" $(seq 1 $1))
+    fi
+}
 # uses regex to search history uses the whole argv and basically globs it
-function hgrep()  { history 1 | grep -E $(sed 's/ /.*/g' <<< ".*$@.*") }
+function hgrep()  {
+    args=$(sed 's/ /.*/g' <<< ".*$@.*")
+    history 1 | grep -E "$args"
+}
 # touch and make executable
-function touchx() { touch $1 && chmod +x $1 }
-# copy file into backup
-function bak()    { cp -r "$1" "$1.bak" && [ ! -d "$1" ] && rm -i "$1" }
+function touchx() {
+    touch $1 && chmod +x $1
+}
+# mkdir and cd into it
+function md() {
+    mkdir $1 && builtin cd $1
+}
+# pushd using z
+function pz() {
+    builtin pushd $(z -e "$@")
+}
 
 # Shadowing
 alias sudo='sudo ' # so aliases can be run with sudo
@@ -77,8 +94,6 @@ alias pgrep='pgrep -l'
 alias vi='vim'
 alias info="info --vi-keys"
 alias veracrypt="veracrypt -t"
-alias vim="vim -X" # fixes slow startup time
-
 # Short hand
 alias cite="source ~/.zshrc && source ~/.zshenv" # cite your sources!
 alias xres="xrdb ~/.Xresources"
@@ -90,9 +105,7 @@ alias ppath='sed "s/:/\n/g" <<< $PATH'
 alias fr='rm -frIv'
 alias screen='TERM=xterm-256color screen'
 alias bpy="PAGER=less bpython"
-alias md="mkdir"
 alias pwpls="pwgen -1Bsy 20"
-
 # Python
 alias python="python3"
 alias pip="pip3"

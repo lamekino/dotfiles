@@ -57,7 +57,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     " Useful Plugins
     " Plug 'ap/vim-css-color'               " Previews hex colors, eg #00FFFF
     " Plug 'ntpeters/vim-better-whitespace' " Highlight unneeded whitespace
-    " Plug 'vim-scripts/Align'              " Aligns whitespace
+    Plug 'vim-scripts/Align'              " Aligns whitespace
     Plug 'danro/rename.vim'               " Rename files from buffer
     Plug 'tpope/vim-commentary'           " Treat comments like text objects
     Plug 'tpope/vim-surround'             " Modify surrounding characters
@@ -177,11 +177,7 @@ nnoremap <expr> <F10> &foldlevel ? 'zM' : 'zR'
 nnoremap <F12> :PlugIn<CR>
 " }}}
 " Control keys {{{
-nnoremap <C-q> :enew<CR>
-nnoremap <C-g> :GFiles .<CR>
-nmap     <C-p> "+pa
-vmap     <C-x> "*d
-vmap     <C-c> "*y
+nnoremap <C-k> :make<cr>:cwindow<cr>
 " }}}
 " Normal Mode {{{
 nnoremap H ^

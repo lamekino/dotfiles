@@ -68,6 +68,9 @@ function ..() {
         builtin cd $(printf "../%.0s" $(seq 1 $1))
     fi
 }
+for i in {1..5}; do
+    function ..${i}() { .. $i }
+done
 # uses regex to search history uses the whole argv and basically globs it
 function hgrep()  {
     args=$(sed 's/ /.*/g' <<< ".*$@.*")
@@ -94,6 +97,7 @@ alias pgrep='pgrep -l'
 alias vi='vim'
 alias info="info --vi-keys"
 alias veracrypt="veracrypt -t"
+alias tmux="tmux -2"
 # Short hand
 alias cite="source ~/.zshrc && source ~/.zshenv" # cite your sources!
 alias xres="xrdb ~/.Xresources"
@@ -104,7 +108,7 @@ alias deps++='g++ -MM' # is this necessary?
 alias ppath='sed "s/:/\n/g" <<< $PATH'
 alias fr='rm -frIv'
 alias screen='TERM=xterm-256color screen'
-alias bpy="PAGER=less bpython"
+alias ipy="PAGER=less ipython"
 alias pwpls="pwgen -1Bsy 20"
 # Python
 alias python="python3"
@@ -155,10 +159,10 @@ case "$(uname -s)" in
 
         alias grep='grep --color=auto'
         alias lablk="lsblk -o name,label,size,ro,type,mountpoint,uuid"
-        alias l='ls -pk --color=auto --group-directories-first'
         alias ls='ls -pk --color=auto --group-directories-first'
         alias ll='ls -pklh --color=auto --group-directories-first'
         alias la='ls -pkah --color=auto --group-directories-first'
+        alias lla='ls -pkalh --color=auto --group-directories-first'
         alias diff='diff --color=always'
         alias feh='feh -x --scale-down'
         alias feh-svg="feh --magick-timeout 1 $1"
@@ -202,11 +206,6 @@ function precmd_dircount()
     fi
 }
 
-# if shell opened from vim :shell
-if [ -r /proc/$PPID ] && grep -q vim /proc/$PPID/comm; then
-    promptstr ZP_VIM 2 "* "
-fi
-
 promptstr ZP_JOBS 172 "%%%j"
 promptstr ZP_HIST  68 "!%h"
 promptstr ZP_TIME  60 "%D{%H:%M:%S}"
@@ -227,8 +226,8 @@ fi
 
 function precmd_reloadprompt()
 {
-    ZP_PROMPT="$ZP_VIM$ZP_USER:$ZP_HOST<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
-    #RPROMPT="$ZP_HIST $ZP_TIME"
+    ZP_PROMPT="$ZP_USER:$ZP_HOST<$ZP_CWD$ZP_DIRS%(1j.$ZP_SEP$ZP_JOBS.)%(?..$ZP_SEP$ZP_ERR)>"
+    # RPROMPT="$ZP_HIST $ZP_TIME"
 }
 
 # make the function run before prompt redraw

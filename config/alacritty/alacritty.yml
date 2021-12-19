@@ -12,11 +12,11 @@
 # * My dotfiles:    https://github.com/lamekino/dotfiles         #
 ##################################################################
 # Appearance {{{
-#background_opacity: 0.95
+# background_opacity: 0.95
 color-schemes:
   gruvbox-dark: &gruvbox-dark
     primary:
-      background: '#1c1c1c'
+      background: '#1d2021'
       foreground: '#ebdbb2'
     cursor:
       cursor:     '#ebdbb2'
@@ -42,6 +42,32 @@ color-schemes:
     selection:
       background: '#83a598'
       text:       '#ebdbb2'
+
+  gruvbox-light: &gruvbox-light
+    primary:
+      background: '#f9f5d7'
+      foreground: '#1c1c1c'
+    cursor:
+      cursor:     '#3c3836'
+      text:       '#928374'
+    normal:
+      black:      '#f9f5d7'
+      red:        '#cc241d'
+      green:      '#98971a'
+      yellow:     '#d79921'
+      blue:       '#458588'
+      magenta:    '#b16286'
+      cyan:       '#689d6a'
+      white:      '#7c6f64'
+    bright:
+      black:      '#928374'
+      red:        '#9d0006'
+      green:      '#78740e'
+      yellow:     '#b57614'
+      blue:       '#076678'
+      magenta:    '#8f3f71'
+      cyan:       '#427b58'
+      white:      '#3c3836'
 
   jellybeans: &jellybeans
     primary:
@@ -72,7 +98,7 @@ color-schemes:
       cyan:       '#32dddd'
       white:      '#e9e9e7'
 
-colors: *jellybeans
+colors: *gruvbox-dark
 # }}}
 # Fonts {{{
 fonts:
@@ -108,10 +134,10 @@ env:
 window:
   title: Alacritty
   padding:
-    x: 4
-    y: 4
+    x: 6
+    y: 6
   decorations: none
-  # startup_mode: Maximized
+  startup_mode: Maximized
 
 scrolling:
   history: 8192

@@ -5,11 +5,11 @@ filetype plugin indent on
 if filereadable(expand("~/.vim/autoload/plug.vim"))
     call plug#begin("~/.vim/plugged")
     " Useful Plugins
-    Plug 'vim-scripts/Align'              " Aligns whitespace
-    Plug 'danro/rename.vim'               " Rename files from buffer
-    Plug 'tpope/vim-commentary'           " Treat comments like text objects
-    Plug 'tpope/vim-surround'             " Modify surrounding characters
-    Plug 'ap/vim-css-color'
+    Plug 'vim-scripts/Align'      " Aligns whitespace
+    Plug 'danro/rename.vim'       " Rename files from buffer
+    Plug 'tpope/vim-commentary'   " Treat comments like text objects
+    Plug 'tpope/vim-surround'     " Modify surrounding characters
+    Plug 'ap/vim-css-color'       " Show hex colors #000000
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     " Language support
@@ -66,63 +66,82 @@ set spelllang=en_us
 "-- Appearance
 syntax on
 set notitle
-set background=dark
 set laststatus=2
 set list
-let &listchars="space:·,trail:×,nbsp:*"
+let &listchars="tab:| ,space:·,trail:×,nbsp:*"
+"-- File Browser
+let g:netrw_winsize = 15
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
 
-if has("termguicolors")
-    set termguicolors
-else
-    colorscheme industry
-endif
-
+set background=dark
 if has("gui_running")
+    set title
     set guifont=IBM\ Plex\ Mono\ Medium\ 11
     set guioptions-=m  " menu bar
     set guioptions-=T  " toolbar
     set guioptions-=r  " right scrollbar
     set guioptions-=L  " left scrollbar
 endif
+
+if has("termguicolors")
+    " https://github.com/tmux/tmux/issues/1246#issue-292083184
+    if exists("$TMUX")
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    endif
+    set termguicolors
+else
+    set t_Co=256
+endif
 " }}}
 " Keybinds: {{{
 if has("mouse")
     set mouse=vn
 endif
-"" Function keys
-imap     <F1> <C-o>:echo<CR>
-noremap  <F1> :bnext!<cr>
-noremap  <F2> :bprev!<cr>
-nnoremap <F3> :GFiles .<cr>
 
-"" Control keys
-nnoremap <C-Q> :bd<cr>
-nnoremap <C-K> :w<cr>:make<cr>
-nnoremap <C-S> :so $MYVIMRC<cr>
-nnoremap <C-@> :Files .<cr>
+" Hide highlight
+nnoremap ; :noh<cr>
+" Delete to void
+nnoremap _ "_d
+" Yank to end like D
+nnoremap Y y$
+" Move blocks of text around
+vnoremap <C-j> :m '>+1<cr>gv=gv
+vnoremap <C-k> :m '<-2<cr>gv=gv
+
+" Function keys
+imap     <F1> <C-o>:echo<CR>
+nnoremap <F1> :Buffers<cr>
+nnoremap <F2> :Files .<cr>
+nnoremap <F3> :cwindow<cr>
+nnoremap <F4> :set paste!<cr>
+nnoremap <F5> gg=G
+nnoremap <F6> :set spell!<cr>
+nnoremap <F11> :set wrap!<cr>
+nnoremap <F12> :set ro!<cr>
+
+" Leader keys
+let mapleader=" "
+nnoremap <Leader><Leader> :Lex<cr>
+nnoremap <Leader>j :cnext<cr>
+nnoremap <Leader>k :cprev<cr>
+nnoremap <Leader>J :lnext<cr>
+nnoremap <Leader>K :lprev<cr>
+
+" Control keys
+nnoremap <C-q> :bd<cr>
+nnoremap <C-k> :w<cr>:make<cr>
+nnoremap <C-s> :so $MYVIMRC<cr>
+nnoremap <C-@> :GFiles .<cr>
+
+" Splits/Buffers
+nnoremap <C-h> :bprev!<cr>
+nnoremap <C-l> :bnext!<cr>
 
 " Copy/paste
-noremap <C-Y><C-Y> "+y$
-noremap <C-Y> "+y
-noremap <C-P> "+p
-
-"" Quick keys
-nnoremap ; :noh<cr>
-nnoremap _ "_d
-nnoremap H ^
-nnoremap L $
-
-"" Splits
-map <left>  <C-w>h
-map <down>  <C-w>j
-map <up>    <C-w>k
-map <right> <C-w>l
-
-"" Leader keys
-let mapleader=" "
-nnoremap <Leader>tp :set paste!<cr>
-nnoremap <Leader>tr :set ro!<cr>
-nnoremap <Leader>tw :set wrap!<cr>
-nnoremap <Leader>ts :set spell!<cr>
+noremap <C-y><C-y> "+y$
+noremap <C-y> "+y
+noremap <C-p> "+p
 " }}}
 " vim:foldmethod=marker:ts=4

@@ -1,0 +1,2 @@
+## Dotfiles
+Requires GNU stow.

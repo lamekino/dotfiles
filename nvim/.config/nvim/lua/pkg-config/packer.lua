@@ -70,15 +70,15 @@ return packer.startup(function(use)
 
     -- colorscheme hoarding
     use { "drewtempelmeyer/palenight.vim",
-        disable = false }
+        disable = true }
     use { "folke/tokyonight.nvim",
         disable = false }
     use { "morhetz/gruvbox",
-        disable = false }
+        disable = true }
     use { "catppuccin/nvim", as = "catppuccin",
-        disable = false }
+        disable = true }
     use { "joshdick/onedark.vim",
-        disable = false }
+        disable = true }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

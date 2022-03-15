@@ -1,6 +1,7 @@
 -- init.lua --
 local set    = vim.o
 local global = vim.g
+local has    = vim.fn.has
 
 -- idk why this has to be right here but it does
 set.termguicolors  = true
@@ -12,6 +13,7 @@ require("lsp-config")
 -- basic editor options
 set.nu             = true
 set.rnu            = true
+set.nuw            = 6
 set.confirm        = true
 set.ignorecase     = true
 set.lazyredraw     = true
@@ -30,3 +32,7 @@ set.path           = set.path .. "**"
 global.netrw_winsize   = 15
 global.netrw_liststyle = 3
 global.netrw_banner    = false
+
+if has("mouse") then
+    set.mouse = "vn"
+end

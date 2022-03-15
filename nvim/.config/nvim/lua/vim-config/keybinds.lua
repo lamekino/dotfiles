@@ -1,98 +1,79 @@
--- set the keymaps
-local set    = vim.o
-local global = vim.g
-local api    = vim.api
-local fn     = vim.fn
+-- sets the keymaps
 
-local key = {
-    norm = function(from, to)
-        api.nvim_set_keymap("n", from, to, { noremap = true })
-    end,
-    visual = function(from, to)
-        api.nvim_set_keymap("v", from, to, { noremap = true })
-    end,
-    insert = function(from, to)
-        api.nvim_set_keymap("i", from, to, { noremap = true })
-    end,
-}
-
-
-if fn.has("mouse") then
-    set.mouse = "vn"
+local function mapper(mode, opts)
+    return function (from, to, bufnr)
+        bufnr = bufnr or 0
+        vim.api.nvim_buf_set_keymap(bufnr, mode, from, to, opts)
+    end
 end
 
+local K = {
+    nnoremap   = mapper("n", { noremap = true }),
+    inoremap   = mapper("i", { noremap = true }),
+    vnoremap   = mapper("v", { noremap = true }),
+    map = mapper("", { silent = true }),
+    imap = mapper("i", { silent = true })
+}
+
 -- Hide highlight
-key.norm(";", ":noh<cr>")
+K.nnoremap(";", ":noh<cr>")
 -- Delete to void
-key.norm("_", "\"_d")
+K.nnoremap("_", "\"_d")
 -- Yank to end like D
-key.norm("Y", "y$")
+K.nnoremap("Y", "y$")
 
 -- Function keys
 -- TODO: Make this pure lua
-vim.cmd [[
-imap     <F1> <C-o>:echo<CR>
-" https://vim.fandom.com/wiki/Remove_unwanted_spaces
-nnoremap <F1>
-            \ m0
-            \ :let _s=@/ <Bar>
-            \ :%s/\s\+$//e <Bar>
-            \ : let @/=_s <Bar>
-            \ :nohl <Bar>
-            \ :unlet _s <CR>
-            \ '0
-            \ :echo "Trailing spaces removed"<cr>
-nnoremap <F2>
-            \ m0
-            \ gg=G
-            \ '0
-            \ :echo "Fixed indentation"<cr>
-]]
-key.norm("<F5>", ":so $MYVIMRC<cr>")
+-- disable the F1 for help
+K.imap("<F1>", "<C-o>:echo<CR>")
+K.nnoremap("<F5>", ":so $MYVIMRC<cr>")
 
 -- Leader keys
--- vim.cmd[[nnoremap <Space> <Nop>]]
-api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
-global.mapleader = " "
-key.norm("<Leader><Leader>", ":bd<cr>")
-key.norm("<Leader>a", ":copen<cr>")
-key.norm("<Leader>s", ":Telescope buffers<cr>")
-key.norm("<Leader>d", ":Lex<cr>")
-key.norm("<Leader>f", ":Telescope find_files<cr>")
+K.map('<Space>', '<Nop>')
+vim.g.mapleader = " "
+K.nnoremap("<Leader><Leader>", ":bd<cr>")
+K.nnoremap("<Leader>a", ":copen<cr>")
+K.nnoremap("<Leader>s", ":Telescope buffers<cr>")
+K.nnoremap("<Leader>d", ":Lex<cr>")
+K.nnoremap("<Leader>f", ":Telescope find_files<cr>")
 
 -- Moving through quickfix
-key.norm("<Leader>j", ":cnext<cr>")
-key.norm("<Leader>k", ":cprev<cr>")
+K.nnoremap("<Leader>j", ":cnext<cr>")
+K.nnoremap("<Leader>k", ":cprev<cr>")
 
 -- Git
-key.norm("<Leader>gg", ":Git ")
-key.norm("<Leader>ga", ":Git commit % -m ''<Left>")
-key.norm("<Leader>gs", ":Git status<cr>")
-key.norm("<Leader>gd", ":Git diff ORIG_HEAD HEAD<cr>")
-key.norm("<Leader>gl", ":Git log<cr>")
-key.norm("<Leader>gp", ":Git pull<cr>")
-key.norm("<Leader>gP", ":Git push<cr>")
+K.nnoremap("<Leader>gg", ":Git ")
+-- Commits
+K.nnoremap("<Leader>ga", ":Git commit % -m ''<Left>")
+-- Staging
+K.nnoremap("<Leader>gs", ":Git status<cr>")
+K.nnoremap("<Leader>gd", ":Git diff<cr>")
+K.nnoremap("<Leader>g;", ":Git diff ORIG_HEAD HEAD<cr>")
+-- Remote
+K.nnoremap("<Leader>gl", ":Git log<cr>")
+K.nnoremap("<Leader>gp", ":Git pull<cr>")
+K.nnoremap("<Leader>gP", ":Git push<cr>")
 
 -- Toggle options
-key.norm("<Leader>tr", ":set ro!<cr>")
-key.norm("<Leader>tw", ":set wrap!<cr>")
-key.norm("<Leader>tp", ":set paste!<cr>")
-key.norm("<Leader>ts", ":set spell!<cr>")
+K.nnoremap("<Leader>tr", ":set ro!<cr>")
+K.nnoremap("<Leader>tw", ":set wrap!<cr>")
+K.nnoremap("<Leader>tp", ":set paste!<cr>")
+K.nnoremap("<Leader>ts", ":set spell!<cr>")
 
 -- Build
-key.norm("<Leader>1", ":w<cr>:make<cr>")
+K.nnoremap("<Leader>1", ":w<cr>:make<cr>")
 
 -- Control keys
 -- Move blocks of text around
-key.visual("<C-j>", ":m '>+1<cr>gv=gv")
-key.visual("<C-k>", ":m '<-2<cr>gv=gv")
+K.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
+K.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
 
 
 -- Splits/Buffers
-key.norm("<C-h>", ":bprev!<cr>")
-key.norm("<C-l>", ":bnext!<cr>")
+K.nnoremap("<C-h>", ":bprev!<cr>")
+K.nnoremap("<C-l>", ":bnext!<cr>")
 
 -- Copy/paste
-key.norm("<C-y><C-y>", "\"+y$")
-key.norm("<C-y>", "\"+y")
-key.norm("<C-p>", "\"+p")
+K.nnoremap("<C-y><C-y>", "\"+y$")
+K.nnoremap("<C-y>", "\"+y")
+K.nnoremap("<C-p>", "\"+p")

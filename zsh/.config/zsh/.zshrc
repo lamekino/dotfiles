@@ -17,6 +17,7 @@ setopt HIST_IGNORE_ALL_DUPS # ignore duplicate commands in history
 [ -e "$HOME/.dircolors" ] && eval $(dircolors -b $HOME/.dircolors)
 
 # this makes comments *actually* readable in Alacritty
+# NOTE: idk if this is actually needed anymore
 [ -v ZSH_HIGHLIGHT_STYLES ] && ZSH_HIGHLIGHT_STYLES[comment]=fg=white
 
 
@@ -52,7 +53,7 @@ function touchx() {
 }
 # mkdir and cd into it
 function md() {
-    mkdir $1 && builtin cd $1
+    mkdir -p $1 && builtin cd $1
 }
 # pushd using z
 function pz() {
@@ -69,18 +70,14 @@ alias vim='nvim'
 alias info="info --vi-keys"
 alias veracrypt="veracrypt -t"
 alias tmux="tmux -2"
-alias t~="tmux new-session -c $HOME"
 alias cls="clear"
 alias tree="tree -a"
 # Short hand
-alias cite="source $ZDOTDIR/.zshrc && source $ZDOTDIR/.zshenv" # cite your sources!
+alias cite="source $ZDOTDIR/.zshenv && source $ZDOTDIR/.zshrc" # cite your sources!
 alias xres="xrdb ~/.Xresources"
-alias bulkdl='wget -np -nd -r --reject html'
+alias wgetbulk='wget -np -nd -r --reject html'
 alias stop='kill -STOP'
-alias deps='gcc -MM'
-alias deps++='g++ -MM' # is this necessary?
 alias ppath='sed "s/:/\n/g" <<< $PATH'
-alias fr='rm -frIv'
 alias screen='TERM=xterm-256color screen'
 alias ipy="PAGER=less ipython"
 alias pwpls="pwgen -1Bsy 20"

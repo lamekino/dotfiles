@@ -6,4 +6,4 @@ end
 require("lsp-config.nvim-lsp-installer")
 require("lsp-config.config").setup()
 require("lsp-config.nvim-cmp")
-require("lsp-config.luasnips")
+require("lsp-config.luasnip")

@@ -1,6 +1,6 @@
 -- sets the keymaps
 
-local function mapper(mode, opts)
+local function create_mapper(mode, opts)
     return function (from, to, bufnr)
         bufnr = bufnr or 0
         vim.api.nvim_buf_set_keymap(bufnr, mode, from, to, opts)
@@ -8,11 +8,11 @@ local function mapper(mode, opts)
 end
 
 local K = {
-    nnoremap   = mapper("n", { noremap = true }),
-    inoremap   = mapper("i", { noremap = true }),
-    vnoremap   = mapper("v", { noremap = true }),
-    map = mapper("", { silent = true }),
-    imap = mapper("i", { silent = true })
+    map  = create_mapper("", { silent = true }),
+    imap = create_mapper("i", { silent = true }),
+    nnoremap = create_mapper("n", { noremap = true }),
+    inoremap = create_mapper("i", { noremap = true }),
+    vnoremap = create_mapper("v", { noremap = true })
 }
 
 -- Hide highlight
@@ -43,16 +43,18 @@ K.nnoremap("<Leader>k", ":cprev<cr>")
 
 -- Git
 K.nnoremap("<Leader>gg", ":Git ")
+K.nnoremap("<Leader>gf", ":Telescope git_files<cr>")
 -- Commits
-K.nnoremap("<Leader>ga", ":Git commit % -m ''<Left>")
+K.nnoremap("<Leader>ga", ":Git commit<cr>") -- commit what is staged
+K.nnoremap("<Leader>gs", ":Git<cr>")        -- git status & stager
+K.nnoremap("<Leader>gc", ":Git commit %")   -- commit working file
 -- Staging
-K.nnoremap("<Leader>gs", ":Git status<cr>")
-K.nnoremap("<Leader>gd", ":Git diff<cr>")
+K.nnoremap("<Leader>gd", ":Git diff %<cr>")
+K.nnoremap("<Leader>gD", ":Git diff<cr>")
 K.nnoremap("<Leader>g;", ":Git diff ORIG_HEAD HEAD<cr>")
 -- Remote
 K.nnoremap("<Leader>gl", ":Git log<cr>")
 K.nnoremap("<Leader>gp", ":Git pull<cr>")
-K.nnoremap("<Leader>gP", ":Git push<cr>")
 
 -- Toggle options
 K.nnoremap("<Leader>tr", ":set ro!<cr>")
@@ -61,12 +63,14 @@ K.nnoremap("<Leader>tp", ":set paste!<cr>")
 K.nnoremap("<Leader>ts", ":set spell!<cr>")
 
 -- Build
-K.nnoremap("<Leader>1", ":w<cr>:make<cr>")
+K.nnoremap("<F1>", ":w<cr>:make<cr>")
 
 -- Control keys
 -- Move blocks of text around
 K.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
 K.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
+-- Window exit
+K.nnoremap("<C-q>", "<C-w>q")
 
 
 -- Splits/Buffers

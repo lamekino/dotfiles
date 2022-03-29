@@ -1,1 +1,1 @@
-CompilerSet makeprg=javac\ -g\ %
+CompilerSet makeprg=javac\ -Xlint:all\ -g\ %

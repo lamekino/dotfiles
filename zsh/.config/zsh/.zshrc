@@ -27,6 +27,11 @@ autoload -Uz compinit && compinit || echo "[$0] compinit failed" 1>&2
 # Documentation
 autoload run-help
 alias help="run-help"
+
+# Command line editing
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
 # }}}
 # ZStyle {{{
 # set completion to show file attributes
@@ -82,13 +87,13 @@ alias screen='TERM=xterm-256color screen'
 alias ipy="PAGER=less ipython"
 alias pwpls="pwgen -1Bsy 20"
 # Python
-alias python="python3"
-alias pip="pip3"
+# alias python="python3"
+# alias pip="pip3"
 
 # Curl Utils
 alias wttr='curl -s http://wttr.in'
 alias ipecho='curl http://ipecho.net/plain; printf "\n"'
-# 
+#
 # }}}
 # OS Specific {{{
 case "$(uname -s)" in
@@ -122,6 +127,7 @@ case "$(uname -s)" in
                     alias pacman="aura --hotedit --unsuppress"
                     alias aura="aura --hotedit --unsuppress"
                 fi
+
                 alias hd="hexdump -C"
                 ;;
             'Ubuntu'|'Debian')

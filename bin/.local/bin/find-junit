@@ -1,0 +1,45 @@
+#!/bin/sh
+# Hacked together script to find a Junit file for an eclipse workspace in vim
+
+junit() {
+    if [ -n $TMUX ]; then
+        tmux neww -n "[junit]" \
+            "java -ea org.junit.runner.JUnitCore $1 | less"
+    else
+        java -ea org.junit.runner.JUnitCore $1
+    fi
+}
+
+[ -z $1 ] && exit 1
+
+class="$1"
+unit="${class}Test"
+
+if ! [ -e "./$class.class" ]; then
+    echo "javac ${class}.java"
+    if ! javac "${class}.java"; then
+        exit 1
+    fi
+fi
+
+if [ -e "./$unit.class" ]; then
+    junit "$unit"
+elif [ -e "./$unit.java" ]; then
+    echo "javac $unit.java"
+    javac "$unit.java"
+    junit "$unit"
+elif [ -e "../test/$unit.java" ]; then
+    #I HATE JAVA I HATE IT!!!!!!!!
+    classpath="$CLASSPATH:$PWD"
+
+    pushd "../test" > /dev/null
+    echo "javac -cp $classpath *.java"
+    javac -cp $classpath *.java
+    cp *.class ~1
+    popd > /dev/null
+
+    junit "$unit"
+else
+    echo "No JUnit files found!" 2>1
+    exit 2
+fi

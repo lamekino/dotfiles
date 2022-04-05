@@ -1,19 +1,24 @@
 -- sets the keymaps
 
 local function create_mapper(mode, opts)
-    return function (from, to, bufnr)
-        bufnr = bufnr or 0
-        vim.api.nvim_buf_set_keymap(bufnr, mode, from, to, opts)
+    return function (from, to)
+        vim.api.nvim_set_keymap(mode, from, to, opts)
     end
 end
 
-local K = {
-    map  = create_mapper("", { silent = true }),
-    imap = create_mapper("i", { silent = true }),
-    nnoremap = create_mapper("n", { noremap = true }),
-    inoremap = create_mapper("i", { noremap = true }),
-    vnoremap = create_mapper("v", { noremap = true })
-}
+local function maps()
+    local opts = { noremap = true, silent = true }
+
+    return {
+        map  = create_mapper("", { silent = true }),
+        imap = create_mapper("i", { silent = true }),
+        nnoremap = create_mapper("n", opts),
+        inoremap = create_mapper("i", opts),
+        vnoremap = create_mapper("v", opts)
+    }
+end
+
+local K = maps()
 
 -- Hide highlight
 K.nnoremap(";", ":noh<cr>")
@@ -22,8 +27,20 @@ K.nnoremap("_", "\"_d")
 -- Yank to end like D
 K.nnoremap("Y", "y$")
 
+-- Splits
+K.map("<C-w>", "<nop>") -- for now!!!
+K.map("s", "<nop>")
+K.nnoremap("sq", ":<C-w>q<CR>")
+K.nnoremap("ss", ":vsp<CR>")
+K.nnoremap("sa", ":sp<CR>")
+K.nnoremap("sh", "<C-w>h")
+K.nnoremap("sj", "<C-w>j")
+K.nnoremap("sk", "<C-w>k")
+K.nnoremap("sl", "<C-w>l")
+K.nnoremap("sp", ":bprev!<cr>")
+K.nnoremap("sn", ":bnext!<cr>")
+
 -- Function keys
--- TODO: Make this pure lua
 -- disable the F1 for help
 K.imap("<F1>", "<C-o>:echo<CR>")
 K.nnoremap("<F5>", ":so $MYVIMRC<cr>")
@@ -69,13 +86,6 @@ K.nnoremap("<F1>", ":w<cr>:make<cr>")
 -- Move blocks of text around
 K.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
 K.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
--- Window exit
-K.nnoremap("<C-q>", "<C-w>q")
-
-
--- Splits/Buffers
-K.nnoremap("<C-h>", ":bprev!<cr>")
-K.nnoremap("<C-l>", ":bnext!<cr>")
 
 -- Copy/paste
 K.nnoremap("<C-y><C-y>", "\"+y$")

@@ -1,10 +1,11 @@
-vim.g.tokyonight_style = "night"
-vim.g.tokyonight_italic_keywords = false
-vim.g.tokyonight_italic_comments = false
-vim.g.tokyonight_transparent     = true 
+-- vim.g.tokyonight_style = "night"
+-- vim.g.tokyonight_italic_keywords = false
+-- vim.g.tokyonight_italic_comments = false
+-- vim.g.tokyonight_transparent     = true
 -- vim.o.background = "light"
-vim.cmd [[colorscheme tokyonight]]
-
+vim.g.gruvbox_transparent_bg = 1
+vim.g.gruvbox_contrast_dark = "hard"
+vim.cmd [[colorscheme gruvbox]]
 
 -- configure dignostic sign on line number
 vim.cmd [[
@@ -17,12 +18,4 @@ vim.cmd [[
     sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn linehl= numhl=DiagnosticLineNrWarn
     sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo linehl= numhl=DiagnosticLineNrInfo
     sign define DiagnosticSignHint text= texthl=DiagnosticSignHint linehl= numhl=DiagnosticLineNrHint
-]]
-
--- highlight on yank
-vim.cmd [[
-    augroup YankHighlight
-        autocmd!
-        autocmd TextYankPost * silent! lua vim.highlight.on_yank()
-    augroup end
 ]]

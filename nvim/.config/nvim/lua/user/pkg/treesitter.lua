@@ -1,10 +1,4 @@
-local okay, config = pcall(require, "nvim-treesitter.configs")
-
-if not okay then
-    return
-end
-
-config.setup {
+require("nvim-treesitter.configs").setup {
     ensure_installed = {
         "java", "c", "cpp", "bash", "python", "haskell", "rust", "lua","vim"
     },

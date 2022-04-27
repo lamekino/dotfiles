@@ -1,8 +1,5 @@
 -- Useful Plugins
-local okay, packer = pcall(require, "packer")
-if not okay then
-    return
-end
+local packer = require("packer")
 
 -- Bootstrap on a clean install
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
@@ -41,6 +38,7 @@ return packer.startup(function(use)
     -- lsp
     use { "williamboman/nvim-lsp-installer" }
     use { "neovim/nvim-lspconfig" }
+    use { "ray-x/lsp_signature.nvim" }
 
     -- completion
     use { "hrsh7th/nvim-cmp" }
@@ -72,10 +70,10 @@ return packer.startup(function(use)
         disable = true }
     use { "folke/tokyonight.nvim",
         disable = false }
-    use { "morhetz/gruvbox",
-        disable = true }
     use { "catppuccin/nvim", as = "catppuccin",
         disable = true }
+    use { "ellisonleao/gruvbox.nvim",
+        disable = false }
     use { "joshdick/onedark.vim",
         disable = true }
 

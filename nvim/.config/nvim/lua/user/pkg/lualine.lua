@@ -1,10 +1,5 @@
 -- https://github.com/nvim-lualine/lualine.nvim
-local okay, lualine = pcall(require, "lualine")
-if not okay then
-    return
-end
-
-lualine.setup {
+require("lualine").setup {
     options = {
         section_separators = "",
         component_separators = "|"
@@ -12,7 +7,16 @@ lualine.setup {
     sections = {
         lualine_a = { "mode" },
         lualine_b = { },
-        lualine_c = { { "buffers", mode = 2 } },
+        lualine_c = {
+            {
+                "buffers",
+                mode = 2,
+                buffers_color = {
+                    -- inactive = 'lualine_{section}_normal',
+                    active = 'StatusLine',
+                },
+            }
+        },
         lualine_x = {
             "encoding",
             {

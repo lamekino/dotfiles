@@ -1,13 +1,12 @@
 -- sets the keymaps
-
 local function create_mapper(mode, opts)
-    return function (from, to)
-        vim.api.nvim_set_keymap(mode, from, to, opts)
+    return function (keys, func)
+        vim.keymap.set(mode, keys, func, opts)
     end
 end
 
 local function maps()
-    local opts = { noremap = true, silent = true }
+    local opts = { noremap = true }
 
     return {
         map  = create_mapper("", { silent = true }),
@@ -20,45 +19,44 @@ end
 
 local K = maps()
 
--- Hide highlight
-K.nnoremap(";", ":noh<cr>")
--- Delete to void
-K.nnoremap("_", "\"_d")
--- Yank to end like D
-K.nnoremap("Y", "y$")
-
--- Splits
-K.map("<C-w>", "<nop>") -- for now!!!
+-- Normal mode {{{
 K.map("s", "<nop>")
-K.nnoremap("sq", ":<C-w>q<CR>")
+K.nnoremap("sc", "<C-w>q")
 K.nnoremap("ss", ":vsp<CR>")
 K.nnoremap("sa", ":sp<CR>")
 K.nnoremap("sh", "<C-w>h")
 K.nnoremap("sj", "<C-w>j")
 K.nnoremap("sk", "<C-w>k")
 K.nnoremap("sl", "<C-w>l")
+K.nnoremap("sf", "<C-w>o")
 K.nnoremap("sp", ":bprev!<cr>")
 K.nnoremap("sn", ":bnext!<cr>")
 
--- Function keys
+-- Delete to void
+K.nnoremap("_", "\"_d")
+-- Yank to end like D
+K.nnoremap("Y", "y$")
+-- }}}
+-- Function keys {{{
 -- disable the F1 for help
-K.imap("<F1>", "<C-o>:echo<CR>")
-K.nnoremap("<F5>", ":so $MYVIMRC<cr>")
-
--- Leader keys
+K.imap("<F1>", "")
+K.nnoremap("<F1>", ":w<cr>:make<cr>")
+-- }}}
+-- Leader keys {{{
 K.map('<Space>', '<Nop>')
 vim.g.mapleader = " "
-K.nnoremap("<Leader><Leader>", ":bd<cr>")
+K.nnoremap("<Leader><Leader>", ":echo 'put something good here'")
 K.nnoremap("<Leader>a", ":copen<cr>")
 K.nnoremap("<Leader>s", ":Telescope buffers<cr>")
 K.nnoremap("<Leader>d", ":Lex<cr>")
 K.nnoremap("<Leader>f", ":Telescope find_files<cr>")
+K.nnoremap("<Leader>q", ":Telescope help_tags<cr>")
 
 -- Moving through quickfix
 K.nnoremap("<Leader>j", ":cnext<cr>")
 K.nnoremap("<Leader>k", ":cprev<cr>")
-
--- Git
+-- }}}
+-- Git {{{
 K.nnoremap("<Leader>gg", ":Git ")
 K.nnoremap("<Leader>gf", ":Telescope git_files<cr>")
 -- Commits
@@ -72,22 +70,36 @@ K.nnoremap("<Leader>g;", ":Git diff ORIG_HEAD HEAD<cr>")
 -- Remote
 K.nnoremap("<Leader>gl", ":Git log<cr>")
 K.nnoremap("<Leader>gp", ":Git pull<cr>")
-
--- Toggle options
-K.nnoremap("<Leader>tr", ":set ro!<cr>")
+-- }}}
+-- Toggle options {{{
+K.nnoremap("<Leader>;", ":noh<cr>")
+K.nnoremap("<Leader>tr", function ()
+    if vim.o.colorcolumn ~= 0 then
+        vim.o.colorcolumn = 80
+    else
+        vim.o.colorcolumn = 0
+    end
+end)
 K.nnoremap("<Leader>tw", ":set wrap!<cr>")
 K.nnoremap("<Leader>tp", ":set paste!<cr>")
 K.nnoremap("<Leader>ts", ":set spell!<cr>")
-
--- Build
-K.nnoremap("<F1>", ":w<cr>:make<cr>")
-
--- Control keys
+-- }}}
+-- Control keys {{{
 -- Move blocks of text around
 K.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
 K.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
 
 -- Copy/paste
-K.nnoremap("<C-y><C-y>", "\"+y$")
-K.nnoremap("<C-y>", "\"+y")
-K.nnoremap("<C-p>", "\"+p")
+if vim.fn.has("wsl") then
+    -- this is a botch job
+    local clip = "/mnt/c/Windows/System32/clip.exe"
+    K.nnoremap("<C-y>", "V:w !" .. clip .. "<cr><cr>")
+    K.vnoremap("<C-y>", ":w !" .. clip .. "<cr><cr>")
+else
+    K.nnoremap("<C-y><C-y>", "\"+y$")
+    K.nnoremap("<C-y>", "\"+y")
+    K.vnoremap("<C-y>", "\"+y")
+    K.nnoremap("<C-p>", "\"+p")
+end
+-- }}}
+-- vim:foldmethod=marker

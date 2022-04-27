@@ -1,8 +1,5 @@
 -- https://github.com/hrsh7th/nvim-cmp
-local okay, cmp = pcall(require, "cmp")
-if not okay then
-    return
-end
+local cmp = require("cmp")
 
 local luasnip = require("luasnip")
 
@@ -80,5 +77,8 @@ cmp.setup.cmdline("/", {
 
 -- Use cmdline & path source for ":" (if you enabled `native_menu`, this won"t work anymore).
 cmp.setup.cmdline(":",
-    { sources = cmp.config.sources { { name = "path" } } }
-)
+    { sources = cmp.config.sources {
+        { name = "cmdline" },
+        { name = "path" }
+    }
+})

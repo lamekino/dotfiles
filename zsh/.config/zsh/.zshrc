@@ -12,7 +12,9 @@ setopt HIST_IGNORE_ALL_DUPS # ignore duplicate commands in history
 # personal stuff
 [ -e "$XDG_CONFIG_HOME/personal/zsh" ] && source $XDG_CONFIG_HOME/personal/zsh
 # for zsh packages installed to system
-[ -e "$ZDOTDIR/sources" ] && source $ZDOTDIR/sources
+[ -e "$ZDOTDIR/local" ] \
+    && source "$ZDOTDIR"/local/*.zsh \
+    && source "$ZDOTDIR"/local/*.sh
 # dircolors if exists
 [ -e "$HOME/.dircolors" ] && eval $(dircolors -b $HOME/.dircolors)
 
@@ -98,55 +100,17 @@ alias ipecho='curl http://ipecho.net/plain; printf "\n"'
 # OS Specific {{{
 case "$(uname -s)" in
     "Linux")
-        alias grep='grep --color=auto'
-        alias lablk="lsblk -o name,label,size,ro,type,mountpoint,uuid"
-        alias ls='ls -pk --color=auto --group-directories-first'
-        alias ll='ls -pklh --color=auto --group-directories-first'
-        alias la='ls -pkah --color=auto --group-directories-first'
-        alias lla='ls -pkalh --color=auto --group-directories-first'
-        alias diff='diff --color=always'
-        alias feh='feh -x --scale-down'
-        alias feh-svg="feh --magick-timeout 1 $1"
-        alias open='xdg-open'
+        source "$ZDOTDIR/sources/linux.zsh"
+        grep -qi Microsoft /proc/version && \
+            source "$ZDOTDIR/sources/wsl.zsh"
 
-        # Windows Subsystem for Linux
-        if grep -qi Microsoft /proc/version
-        then
-            export DISPLAY=:0 # for xorg applications FIXME: broken in WSL2
-            export USERPROFILE=/mnt/c/Users/$(whoami)
-            alias open="/mnt/c/Windows/explorer.exe"
-        fi
-
-        # Distro specific
+        # FIXME: find a better way of doing this
         case $(cut -d" " -f1 /etc/issue) in
-            'Arch')
-                # https://fosskers.github.io/aura/usage.html
-                # https://github.com/fosskers/aura
-                if command -v aura &>/dev/null
-                then
-                    alias pacman="aura --hotedit --unsuppress"
-                    alias aura="aura --hotedit --unsuppress"
-                fi
-
-                alias hd="hexdump -C"
-                ;;
-            'Ubuntu'|'Debian')
-                # this is hacky but it has behavior i want
-                # mainly not having sudo in an alias
-                alias aptup="sh <<< 'apt update && apt upgrade'"
-                ;;
-            *)
-                ;;
+            'Arch') source "$ZDOTDIR/sources/arch-linux.zsh";;
+            'Ubuntu'|'Debian') source "$ZDOTDIR/sources/debian.zsh";;
         esac
         ;;
-    "Darwin")
-        # For macOS. I don't use macs very often, so this is quite barren
-        # and maybe even out of date.
-        export CLICOLOR=1
-        alias ls='ls -pk'
-        alias ll='ls -pkl'
-        alias la='ls -pkla'
-        alias lsblk='diskutil list'
+    "Darwin") source "$ZDOTDIR/sources/mac.zsh"
         ;;
 esac
 # }}}

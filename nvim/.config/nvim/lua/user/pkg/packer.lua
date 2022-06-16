@@ -71,11 +71,12 @@ return packer.startup(function(use)
     use { "folke/tokyonight.nvim",
         disable = false }
     use { "catppuccin/nvim", as = "catppuccin",
-        disable = true }
+        disable = false }
     use { "ellisonleao/gruvbox.nvim",
         disable = false }
     use { "joshdick/onedark.vim",
         disable = true }
+    use { "overcache/NeoSolarized" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

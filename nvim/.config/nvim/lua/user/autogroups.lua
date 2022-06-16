@@ -6,16 +6,18 @@ local startup_group = vim.api.nvim_create_augroup("NeovimStartup", {
 
 -- SourcePost sets the background faster but i don't know the implications of
 -- that
-vim.api.nvim_create_autocmd("VimEnter", {
-        desc = "make background transparent on startup.",
-        group = startup_group,
-        callback = function ()
-            vim.api.nvim_set_hl(0, "Normal", {
-                    ctermbg = NONE,
-                    guibg = NONE
-                })
-        end,
-    })
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--         desc = "make background transparent on startup.",
+--         group = startup_group,
+--         callback = function ()
+--             if not vim.fn.exists("g:GuiLoaded") then
+--                 vim.api.nvim_set_hl(0, "Normal", {
+--                         ctermbg = NONE,
+--                         guibg = NONE
+--                     })
+--             end
+--         end,
+--     })
 
 -- vim.api.nvim_create_autocmd("SourcePost", {
 --         desc = "set LSP colors for side bar.",

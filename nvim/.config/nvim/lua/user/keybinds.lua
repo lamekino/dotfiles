@@ -99,7 +99,7 @@ else
     K.nnoremap("<C-y><C-y>", "\"+y$")
     K.nnoremap("<C-y>", "\"+y")
     K.vnoremap("<C-y>", "\"+y")
-    K.nnoremap("<C-p>", "\"+p")
+    K.nnoremap("<C-p>", "i<C-r>+<Esc>")
 end
 -- }}}
 -- vim:foldmethod=marker

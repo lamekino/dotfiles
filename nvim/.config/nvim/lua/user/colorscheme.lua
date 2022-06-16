@@ -1,11 +1,14 @@
--- vim.g.tokyonight_style = "night"
--- vim.g.tokyonight_italic_keywords = false
--- vim.g.tokyonight_italic_comments = false
+vim.g.tokyonight_style = "night"
+vim.g.tokyonight_italic_keywords = false
+vim.g.tokyonight_italic_comments = false
 -- vim.g.tokyonight_transparent     = true
 -- vim.o.background = "light"
+vim.g.catppuccin_flavour = "mocha" -- latte, frappe, macchiato, mocha
 vim.g.gruvbox_transparent_bg = 1
 vim.g.gruvbox_contrast_dark = "hard"
-vim.cmd [[colorscheme gruvbox]]
+-- vim.cmd [[colorscheme gruvbox]]
+-- vim.cmd [[colorscheme tokyonight]]
+vim.cmd [[colorscheme catppuccin]]
 
 -- configure dignostic sign on line number
 vim.cmd [[

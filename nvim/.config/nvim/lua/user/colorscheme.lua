@@ -1,6 +1,6 @@
 local M = {}
 
-local hl = function(name, groups)
+local function hl(name, groups)
     vim.api.nvim_set_hl(0, name, groups)
 end
 

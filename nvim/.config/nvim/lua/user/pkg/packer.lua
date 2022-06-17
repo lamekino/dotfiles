@@ -2,21 +2,21 @@
 local packer = require("packer")
 
 -- Bootstrap on a clean install
-local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+local install_path = vim.fn.stdpath("data").."/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
     PACKER_BOOTSTRAP = vim.fn.system {
-        'git', 'clone', '--depth', '1',
-        'https://github.com/wbthomason/packer.nvim', install_path
+        "git", "clone", "--depth", "1",
+        "https://github.com/wbthomason/packer.nvim", install_path
     }
 end
 
 -- use a floating window
 packer.init {
-  display = {
-    open_fn = function()
-      return require("packer.util").float { border = "rounded" }
-    end,
-  },
+    display = {
+        open_fn = function()
+            return require("packer.util").float { border = "rounded" }
+        end,
+    },
 }
 
 return packer.startup(function(use)
@@ -29,8 +29,9 @@ return packer.startup(function(use)
     use { "tpope/vim-commentary" }   -- Treat comments like text objects
     use { "tpope/vim-surround" }     -- Modify surrounding characters
     use { "tpope/vim-fugitive" }     -- Git support
-    use { "mhinz/vim-startify" }     -- Useful startup screen
     use { "godlygeek/tabular" }
+    use { "mbbill/undotree" }
+    use { "rafcamlet/nvim-luapad" }
     use { "nvim-telescope/telescope.nvim", -- better than fzf.vim
         requires = { { "nvim-lua/plenary.nvim" } }
     }
@@ -43,16 +44,16 @@ return packer.startup(function(use)
     -- completion
     use { "hrsh7th/nvim-cmp" }
     use { "hrsh7th/cmp-nvim-lsp" }
-    use { 'hrsh7th/cmp-buffer' }
-    use { 'hrsh7th/cmp-path' }
-    use { 'hrsh7th/cmp-cmdline' }
+    use { "hrsh7th/cmp-buffer" }
+    use { "hrsh7th/cmp-path" }
+    use { "hrsh7th/cmp-cmdline" }
 
     -- snip engine
-    use { 'L3MON4D3/LuaSnip' }
-    use { 'saadparwaiz1/cmp_luasnip' }
+    use { "L3MON4D3/LuaSnip" }
+    use { "saadparwaiz1/cmp_luasnip" }
 
     -- treesitter
-    use { 'nvim-treesitter/nvim-treesitter',
+    use { "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate" }
 
     -- language support
@@ -66,17 +67,9 @@ return packer.startup(function(use)
     use { "norcalli/nvim-colorizer.lua" }
 
     -- colorscheme hoarding
-    use { "drewtempelmeyer/palenight.vim",
-        disable = true }
-    use { "folke/tokyonight.nvim",
-        disable = false }
-    use { "catppuccin/nvim", as = "catppuccin",
-        disable = false }
-    use { "ellisonleao/gruvbox.nvim",
-        disable = false }
-    use { "joshdick/onedark.vim",
-        disable = true }
-    use { "overcache/NeoSolarized" }
+    use { "metalelf0/jellybeans-nvim", requires = { "rktjmp/lush.nvim" } }
+    -- use { "catppuccin/nvim", as = "catppuccin" }
+    -- use { "ellisonleao/gruvbox.nvim" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

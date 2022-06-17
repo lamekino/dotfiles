@@ -6,15 +6,21 @@ require("lualine").setup {
     },
     sections = {
         lualine_a = { "mode" },
-        lualine_b = { },
+        lualine_b = {},
         lualine_c = {
             {
                 "buffers",
-                mode = 2,
+                show_filename_only = true,
+                mode = 0,
                 buffers_color = {
-                    -- inactive = 'lualine_{section}_normal',
-                    active = 'StatusLine',
+                    inactive = 'StatusLineNC',
+                    -- active = 'User1',
                 },
+                symbols = {
+                    modified = "+",
+                    alternate_file = "",
+                    directory = "/"
+                }
             }
         },
         lualine_x = {

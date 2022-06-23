@@ -24,7 +24,6 @@ return packer.startup(function(use)
     use { "wbthomason/packer.nvim" }
 
     -- neat plugins
-    use { "vim-scripts/Align" }      -- Aligns whitespace
     use { "danro/rename.vim" }       -- Rename files from buffer
     use { "tpope/vim-commentary" }   -- Treat comments like text objects
     use { "tpope/vim-surround" }     -- Modify surrounding characters
@@ -68,8 +67,8 @@ return packer.startup(function(use)
 
     -- colorscheme hoarding
     use { "metalelf0/jellybeans-nvim", requires = { "rktjmp/lush.nvim" } }
-    -- use { "catppuccin/nvim", as = "catppuccin" }
-    -- use { "ellisonleao/gruvbox.nvim" }
+    use { "catppuccin/nvim", as = "catppuccin" }
+    use { "ellisonleao/gruvbox.nvim" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

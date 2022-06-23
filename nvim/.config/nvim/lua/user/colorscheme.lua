@@ -23,34 +23,54 @@ local function lsp_colors()
     end
 end
 
-local function tweak_highlights()
-    hl("Whitespace", { fg = "#313131" }) -- listchar colors
+local function tweak_highlights(colorscheme)
+    local highlights = {
+        ["catppuccin"] = function ()
+            hl("Normal", { bg = "NONE" })
+        end,
+        ["jellybeans-nvim"] = function ()
+            hl("Whitespace", { fg = "#313131" }) -- listchar colors
+        end
+    }
+
+    if highlights[colorscheme] then
+        highlights[colorscheme]()
+    end
 end
 
 M.setup = function(colorscheme, mode)
     -- Vim settings
     vim.o.background = mode
 
-    -- TokyoNight options
-    vim.g.tokyonight_style = "night"
-    vim.g.tokyonight_italic_keywords = false
-    vim.g.tokyonight_italic_comments = false
-    vim.g.tokyonight_transparent = true
-
-    -- Gruvbox options
-    vim.g.gruvbox_transparent_bg = 1
-    vim.g.gruvbox_contrast_dark = "hard"
-    vim.g.gruvbox_contrast_light= "hard"
-
-    -- Catppuccin options
-    vim.g.catppuccin_flavour = "mocha"
+    local tweaks = {
+        ["tokyonight"] = function ()
+            vim.g.tokyonight_style = "night"
+            vim.g.tokyonight_italic_keywords = false
+            vim.g.tokyonight_italic_comments = false
+            vim.g.tokyonight_transparent = true
+        end,
+        ["gruvbox"] = function ()
+            vim.g.gruvbox_transparent_bg = 1
+            vim.g.gruvbox_contrast_dark = "hard"
+            vim.g.gruvbox_contrast_light = "hard"
+        end,
+        ["catppuccin"] = function ()
+            vim.g.catppuccin_flavour = "mocha"
+        end,
+        ["jellybeans-nvim"] = function ()
+            -- TODO: get rid of italics
+        end
+    }
+    if tweaks[colorscheme] then
+        tweaks[colorscheme]()
+    end
 
     -- Set the colorscheme
     vim.cmd("colorscheme " .. colorscheme)
 
     -- Set the highlights
     lsp_colors()
-    tweak_highlights()
+    tweak_highlights(colorscheme)
 end
 
 return M

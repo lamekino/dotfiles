@@ -15,7 +15,7 @@ Requires [Powershell Core](https://github.com/powershell/powershell).
 
 To install:
 ```powershell
-PS>> git clone https://github.com/lamekino/dotfiles
-PS>> cd .\dotfiles
-PS>> .\install.ps1
+PS> git clone "https://github.com/lamekino/dotfiles"
+PS> cd .\dotfiles
+PS> .\install.ps1
 ```

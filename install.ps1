@@ -1,3 +1,4 @@
+#Requires -PSEdition Core
 $configFiles = @{
     "nvim" = @{
         src  = ".\nvim\.config\nvim"

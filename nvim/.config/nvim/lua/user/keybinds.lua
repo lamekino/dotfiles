@@ -12,9 +12,11 @@ M.setup = function()
     local k = {
         map  = create_mapper("", { silent = true }),
         imap = create_mapper("i", { silent = true }),
+        nmap = create_mapper("n", { silent = true }),
         nnoremap = create_mapper("n", { noremap = true }),
         inoremap = create_mapper("i", { noremap = true }),
-        vnoremap = create_mapper("v", { noremap = true })
+        vnoremap = create_mapper("v", { noremap = true }),
+        tnoremap = create_mapper("t", { noremap = true })
     }
 
     -- Set leader key
@@ -36,12 +38,14 @@ M.setup = function()
 
     -- Delete to void
     k.nnoremap("_", "\"_d")
-    -- YanM to end like D
+    -- Yank to end like D
     k.nnoremap("Y", "y$")
 
     -- Function Keys
     k.imap("<F1>", "") -- disable the F1 for help
-    k.nnoremap("<F1>", ":w<cr>:make<cr>")
+
+
+    -- Leader keys
     k.nnoremap("<Leader><Leader>", ":echo 'put something good here'")
     k.nnoremap("<Leader>a", ":copen<cr>")
     k.nnoremap("<Leader>s", ":Telescope buffers<cr>")
@@ -71,7 +75,7 @@ M.setup = function()
 
     -- Toggle options
     k.nnoremap("<Leader>;", ":noh<cr>")
-    k.nnoremap("<Leader>tr", function ()
+    k.nnoremap("<Leader>tr", function () -- FIXME: this doesn't work
         if vim.o.colorcolumn ~= 0 then
             vim.o.colorcolumn = 80
         else
@@ -81,10 +85,14 @@ M.setup = function()
     k.nnoremap("<Leader>tw", ":set wrap!<cr>")
     k.nnoremap("<Leader>tp", ":set paste!<cr>")
     k.nnoremap("<Leader>ts", ":set spell!<cr>")
+    -- Spawn terminal
+    k.nnoremap("<Leader>tt", ":sp | resize -8 | terminal<cr>")
+    k.tnoremap("<C-w>", "<C-\\><C-n>")
 
     -- Move blocks of text around
     k.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
     k.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
+
 end
 
 return M

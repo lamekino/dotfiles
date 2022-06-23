@@ -43,3 +43,11 @@ global.netrw_banner    = false
 if has("mouse") then
     set.mouse = "vn"
 end
+
+-- Set the shell to Powershell 7 when on windows host
+if has("win32") then
+    set.shell = "pwsh.exe"
+    set.shellcmdflag= "-Command"
+    set.shellquote= ""
+    set.shellxquote= ""
+end

@@ -5,7 +5,7 @@ $configFiles = @{
         dest = "$env:APPDATA\..\Local\nvim"
     }
     "powershell" = @{
-        src  = ".\powershell\.config\powershell\Microsoft.PowerShell_profile.ps1"
+        src  = ".\powershell\Microsoft.PowerShell_profile.ps1"
         dest = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
     }
     "alacritty" = @{

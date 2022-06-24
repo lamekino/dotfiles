@@ -12,6 +12,10 @@ $configFiles = @{
         src  = ".\alacritty\.config\alacritty"
         dest = "$env:APPDATA\alacritty"
     }
+    "autohotkey" = @{
+        src  = ".\autohotkey"
+        dest = "C:\utils\autohotkey"
+    }
 }
 
 $configFiles.Keys | ForEach-Object {

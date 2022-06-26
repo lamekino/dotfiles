@@ -1,7 +1,7 @@
 dots 💾
 ---
 #### For Linux:
-Requires ``stow``, ``bash``.
+Requires ``stow``, ``zsh``.
 
 To install:
 ```bash

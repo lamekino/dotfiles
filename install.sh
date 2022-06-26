@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 set -x
 
-for dot in */; do
+PROGRAMS=(alacritty bin nvim zsh)
+
+for dot in ${PROGRAMS[@]}; do
     stow -t "$HOME" "$dot"
 done
 echo ". ~/.config/zsh/.zshenv" > ~/.zshenv

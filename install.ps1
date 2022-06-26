@@ -5,7 +5,7 @@ $configFiles = @{
         dest = "$env:APPDATA\..\Local\nvim"
     }
     "powershell" = @{
-        src  = ".\powershell\.config\powershell\Microsoft.PowerShell_profile.ps1"
+        src  = ".\powershell\Microsoft.PowerShell_profile.ps1"
         dest = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
     }
     "alacritty" = @{
@@ -19,17 +19,21 @@ $configFiles = @{
 }
 
 $configFiles.Keys | ForEach-Object {
-    if (-Not (Test-Path -Path $configFiles[$_].dest)) {
-        New-Item -Type SymbolicLink `
-            -Path $configFiles[$_].dest `
-            -Target (Resolve-Path $configFiles[$_].src) `
+    $srcPath  = $configFiles[$_].src
+    $destPath = $configFiles[$_].dest
+
+    if (-Not (Test-Path -Path $destPath)) {
+        New-Item `
+            -Type SymbolicLink `
+            -Path $destPath `
+            -Target (Resolve-Path $srcPath) `
             | Out-Null
 
         Write-Host -ForegroundColor Green `
-            ("Installed:`t{0}" -f $configFiles[$_].dest)
+            ("Installed:`t{0}" -f $destPath)
     }
     else {
         Write-Host -ForegroundColor Red `
-            ("Skipping:`t{0}" -f $configFiles[$_].dest)
+            ("Skipping:`t{0}" -f $destPath)
     }
 }

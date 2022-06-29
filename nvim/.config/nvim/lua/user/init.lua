@@ -7,7 +7,7 @@ set.termguicolors  = true
 
 require("user.pkg")
 require("user.lsp")
-require("user.colorscheme").setup("jellybeans-nvim", "dark")
+require("user.colors").setup("jellybeans-nvim", "dark")
 require("user.autogroups").setup()
 require("user.keybinds").setup()
 

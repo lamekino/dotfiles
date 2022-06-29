@@ -2,7 +2,7 @@
 local packer = require("packer")
 
 -- Bootstrap on a clean install
-local install_path = vim.fn.stdpath("data").."/site/pack/packer/start/packer.nvim"
+local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
     PACKER_BOOTSTRAP = vim.fn.system {
         "git", "clone", "--depth", "1",
@@ -24,16 +24,20 @@ return packer.startup(function(use)
     use { "wbthomason/packer.nvim" }
 
     -- neat plugins
-    use { "danro/rename.vim" }       -- Rename files from buffer
-    use { "tpope/vim-commentary" }   -- Treat comments like text objects
-    use { "tpope/vim-surround" }     -- Modify surrounding characters
-    use { "tpope/vim-fugitive" }     -- Git support
+    use { "danro/rename.vim" }
+    use { "tpope/vim-commentary" }
+    use { "tpope/vim-surround" }
+    use { "tpope/vim-fugitive" }
     use { "godlygeek/tabular" }
     use { "mbbill/undotree" }
     use { "rafcamlet/nvim-luapad" }
-    use { "nvim-telescope/telescope.nvim", -- better than fzf.vim
+    use { "nvim-telescope/telescope.nvim",
         requires = { { "nvim-lua/plenary.nvim" } }
     }
+    -- TODO: switch from fugitive to this
+    -- use { "TimUntersberger/neogit",
+    --     requires = { { "nvim-lua/plenary.nvim" } }
+    -- }
 
     -- lsp
     use { "williamboman/nvim-lsp-installer" }
@@ -69,6 +73,7 @@ return packer.startup(function(use)
     use { "metalelf0/jellybeans-nvim", requires = { "rktjmp/lush.nvim" } }
     use { "catppuccin/nvim", as = "catppuccin" }
     use { "ellisonleao/gruvbox.nvim" }
+    use { "bluz71/vim-moonfly-colors" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

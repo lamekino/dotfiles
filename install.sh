@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 set -x
 
-PROGRAMS=(alacritty bin nvim zsh)
+PROGRAMS=(alacritty bin nvim zsh tmux)
 
 for dot in ${PROGRAMS[@]}; do
     stow -t "$HOME" "$dot"

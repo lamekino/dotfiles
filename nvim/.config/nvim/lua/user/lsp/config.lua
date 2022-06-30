@@ -1,5 +1,5 @@
 local M = {}
-local buf_set_keymap = vim.api.nvim_buf_set_keymap
+local old_keymap = vim.api.nvim_buf_set_keymap
 
 M.setup = function()
     -- create the autocmd for opening diagnostic windows
@@ -37,34 +37,36 @@ M.setup = function()
 end
 
 local function lsp_keymaps(bufnr)
-    local opts = { noremap = true, silent = true }
+    local lsp_nmap = function(keys, callback)
+        local opts = { noremap = true, silent = true, buffer = bufnr }
+        vim.keymap.set("n", keys, callback, opts)
+    end
+
+    lsp_nmap("gd", vim.lsp.buf.definition)
+    lsp_nmap("gt", vim.lsp.buf.type_definition)
+    lsp_nmap("gi", vim.lsp.buf.implementation)
+    lsp_nmap("gr", vim.lsp.buf.references)
+    lsp_nmap("K", vim.lsp.buf.hover)
+    lsp_nmap("<C-k>", vim.lsp.buf.signature_help)
+    lsp_nmap("<leader>rr", vim.lsp.buf.rename)
+    lsp_nmap("<leader>dj", vim.diagnostic.goto_next)
+    lsp_nmap("<leader>dk", vim.diagnostic.goto_prev)
+    lsp_nmap("<leader>l", vim.diagnostic.setloclist)
 
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-    buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "<leader>e", "<cmd>vim.diagnostic.open_float(nil, {focus=false})", opts)
-    buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "rounded" })<CR>', opts)
-    buf_set_keymap(
-        bufnr,
-        "n",
-        "gl",
-        '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({ border = "rounded" })<CR>',
-        opts
-    )
-    buf_set_keymap(bufnr, "n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>', opts)
-    buf_set_keymap(bufnr, "n", "<leader>L", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-    -- vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
     vim.api.nvim_create_user_command("Format", vim.lsp.buf.formatting, {})
+    vim.api.nvim_create_user_command("CodeAction", vim.lsp.buf.code_action, {})
 end
 
-M.on_attach = function(client, bufnr)
+M.on_attach = function(client, bufnr) -- TODO: use client
     lsp_keymaps(bufnr)
+
+    local lsp_group = vim.api.nvim_create_augroup("LSP", { clear = true })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+        desc = "autoformat",
+        group = lsp_group,
+        callback = function() vim.lsp.buf.formatting_sync(nil, 2000) end
+    })
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

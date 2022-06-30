@@ -17,25 +17,21 @@ Set-PSReadlineOption -EditMode vi
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 # }}}
 # Variables: {{{
-# Set the path
-{
-    $extraPaths = @(
-        "$env:USERPROFILE\.cargo\bin"
-        "C:\utils\ghcup\bin"
-        "C:\Program Files\LLVM\bin"
-        "C:\utils\haskell-stack\stack.exe"
-        "C:\Program Files\Rust stable MSVC 1.61\bin"
-        "C:\Program Files\Go\bin"
-        "C:\utils\luarocks-3.9.0"
-        "C:\Program Files (x86)\Lua\5.1"
-    )
-
-    $extraPaths | ForEach-Object {
-        if (-not $env:PATH.contains($_)) {
-            $env:PATH += (";{0}" -f $_)
-        }
+# append PATH
+@(
+    "$env:USERPROFILE\.cargo\bin"
+    "C:\utils\ghcup\bin"
+    "C:\Program Files\LLVM\bin"
+    "C:\utils\chocolately\ghc-9.2.3\bin"
+    "C:\Program Files\Rust stable MSVC 1.61\bin"
+    "C:\Program Files\Go\bin"
+    "C:\utils\luarocks-3.9.0"
+    "C:\Program Files (x86)\Lua\5.1"
+) | ForEach-Object {
+    if (-not $env:PATH.contains($_)) {
+        $env:PATH += (";{0}" -f $_)
     }
-}.Invoke()
+}
 
 # Set misc env variables
 $env:STACK_ROOT = "C:\utils\haskell-stack\root"
@@ -48,7 +44,7 @@ $env:RIPGREP_CONFIG_PATH = "$env:userprofile\AppData\Roaming\ripgrep\config"
 function Prompt {
     $dir = $(Get-Location).tostring().replace($env:userprofile, "~")
     $user = $([System.Security.Principal.WindowsIdentity]::GetCurrent().Name.toLower())
-    return "`e[1;35m$user`e[0m `e[1;36m$dir`e[0m`e[0;33m>>`e[0m "
+    return "`e[1;35m$user`e[0m `e[1;34m$dir`e[0m`e[0;33m>>`e[0m "
 }
 # }}}
 # Functions: {{{
@@ -120,5 +116,8 @@ Set-Alias poweroff Stop-Computer
 # Write-Host -NoNewLine -ForegroundColor Green "¯\_(ツ)_/¯ "
 # Write-Host -NoNewLine -ForegroundColor Blue "¯\_(ツ)_/¯ "
 # Write-Host -NoNewLine -ForegroundColor Magenta "¯\_(ツ)_/¯ "
+if (Test-Path -Path "$HOME\Documents\Powershell\Additional.ps1") {
+    . "$HOME\Documents\Powershell\Additional.ps1"
+}
 # }}}
 # vim:foldmethod=marker

@@ -11,7 +11,10 @@ $PATH:\
 $HOME/bin:\
 $HOME/.local/bin:\
 $GOPATH/bin:\
-$HOME/node_modules/.bin"
+$HOME/node_modules/.bin:\
+$HOME/.ghcup/bin:\
+$HOME/.cabal/bin:\
+$HOME/.cargo/bin"
 
 export CLASSPATH="$HOME/.jars/*:."
 export GOPATH="$HOME/.go"

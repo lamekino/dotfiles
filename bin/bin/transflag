@@ -1,0 +1,16 @@
+#!/bin/bash
+
+[ -z "$1" ] && SCALE=1 || SCALE="$1"
+
+COLORS=(159 219 231 219 159)
+BAR_HEIGHT=$(( 1 * SCALE ))
+BAR_WIDTH=$(( 20 * SCALE ))
+
+for color in ${COLORS[@]}; do
+	for _ in $(seq 1 $BAR_HEIGHT); do
+		for _ in $(seq 1 $BAR_WIDTH); do
+			printf "\033[48;5;${color}m%s\033[0m" " "
+		done
+		echo
+	done
+done

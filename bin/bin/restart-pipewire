@@ -1,0 +1,7 @@
+#!/bin/sh
+systemctl --user restart \
+    pipewire.service \
+    pipewire-pulse.service \
+    wireplumber.service
+
+

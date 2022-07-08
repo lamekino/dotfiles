@@ -1,0 +1,44 @@
+#!/bin/bash
+# Cycles linux swap off and on. Use to clear up
+# over use of swap.
+
+progress()
+{
+    # inspired by https://youtu.be/DyG9S9nAlUM
+    # source code for which is here: https://t.co/4kg3AZDA57
+    pid=$1
+    msg=$2
+
+    # https://stackoverflow.com/a/20165094
+    trap 'kill "$pid" 2> /dev/null' EXIT
+
+    printf "%s [-]" "$msg"
+    progress_str="-\\|/"
+    i=1
+    while kill -0 "$pid" 2> /dev/null
+    do
+        # stdbuf -o0 is like the fflush(stdout) from computerphile's source
+        stdbuf -o0 printf "\x8\x8%s]" "${progress_str:$i:1}"
+        i=$(( ( i + 1 ) % ${#progress_str} ))
+        sleep 0.1
+    done
+    stdbuf -o0 printf "\x8\x8%s]" "✓"
+    printf "\n"
+}
+
+cycle()
+{
+    swapoff -a &
+    progress $! "Turning swap off..."
+    swapon -a &
+    progress $! "Turning swap on..."
+    echo "done"
+}
+
+# cheap hack
+[ $UID -ne 0 ] && sudo "$0" && exit 0
+
+echo "This script has the potential to make your computer run out of memory!"
+printf "Run at your own risk? [y/N] "
+read -r
+[ "$REPLY" = "y" ] && cycle

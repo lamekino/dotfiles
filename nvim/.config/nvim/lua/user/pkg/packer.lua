@@ -68,12 +68,7 @@ return packer.startup(function(use)
     -- appearance stuff
     use { "nvim-lualine/lualine.nvim" }
     use { "norcalli/nvim-colorizer.lua" }
-
-    -- colorscheme hoarding
     use { "metalelf0/jellybeans-nvim", requires = { "rktjmp/lush.nvim" } }
-    use { "catppuccin/nvim", as = "catppuccin" }
-    use { "ellisonleao/gruvbox.nvim" }
-    use { "bluz71/vim-moonfly-colors" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

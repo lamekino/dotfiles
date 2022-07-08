@@ -1,7 +1,18 @@
 local M = {}
-local old_keymap = vim.api.nvim_buf_set_keymap
+
+M.square_border = {
+    { "┌", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "┐", "FloatBorder" },
+    { "│", "FloatBorder" },
+    { "┘", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "└", "FloatBorder" },
+    { "│", "FloatBorder" }
+}
 
 M.setup = function()
+
     -- create the autocmd for opening diagnostic windows
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
         callback = function()
@@ -9,30 +20,30 @@ M.setup = function()
         end
     })
 
-    local config = {
-        virtual_text = false, -- annoying
-        signs = true,
-        underline = true,
+    vim.diagnostic.config {
+        virtual_text     = false,
+        signs            = true,
+        underline        = false,
         update_in_insert = false,
-        severity_sort = false,
+        severity_sort    = true,
+
         float = {
-            style     = "minimal",
-            border    = "rounded",
-            source    = "always",
-            header    = "",
-            prefix    = "",
-            focusable = false
+            style         = "minimal",
+            border        = M.square_border,
+            source        = "always",
+            header        = "",
+            prefix        = "",
+            focusable     = false,
+            severity_sort = true
         },
     }
 
-    vim.diagnostic.config(config)
-
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = "rounded",
+        border = M.square_border,
     })
 
     vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = "rounded",
+        border = M.square_border,
     })
 end
 
@@ -62,6 +73,7 @@ M.on_attach = function(client, bufnr) -- TODO: use client
     lsp_keymaps(bufnr)
 
     local lsp_group = vim.api.nvim_create_augroup("LSP", { clear = true })
+
     vim.api.nvim_create_autocmd("BufWritePre", {
         desc = "autoformat",
         group = lsp_group,

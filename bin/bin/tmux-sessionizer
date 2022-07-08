@@ -3,14 +3,11 @@
 # https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/bin/tmux-sessionizer
 
 
-# use z's jump list
-source /usr/share/z/z.sh
-
 alias fzf="fzf --preview-window hidden --height=100%"
 
 selected="$1"
 if [ -z "$selected" ]; then
-    selected=$(z -e | awk '{print $2}' | fzf)
+    selected=$(zoxide query --list | fzf)
 else
     printf "Starting directory: "
     read -r selected

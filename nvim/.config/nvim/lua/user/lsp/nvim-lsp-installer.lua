@@ -10,6 +10,8 @@ local function set_lsp_opts(name, opts)
     return vim.tbl_deep_extend("force", ext_opts, opts);
 end
 
+-- FIXME: on_server_ready is deprecated, see:
+-- https://github.com/williamboman/nvim-lsp-installer/discussions/636
 require("nvim-lsp-installer").on_server_ready(function(server)
     local opts = {
         on_attach = require("user.lsp.config").on_attach,

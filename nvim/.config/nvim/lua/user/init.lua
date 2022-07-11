@@ -1,53 +1,63 @@
--- init.lua --
-local set    = vim.o
-local global = vim.g
-local has    = vim.fn.has
+-- line numbers
+vim.o.number         = true
+vim.o.relativenumber = true
+vim.o.numberwidth    = 6
+-- editor settings
+vim.o.confirm        = true
+vim.o.ignorecase     = true
+vim.o.hidden         = true
+vim.o.cursorline     = true
+vim.o.splitbelow     = true
+vim.o.splitright     = true
+vim.o.list           = true
+vim.o.listchars      = "tab:| ,space:·,trail:×,nbsp:*"
+vim.o.guicursor      = ""
+-- tab settings
+vim.o.expandtab      = true
+vim.o.tabstop        = 4
+vim.o.shiftwidth     = 4
+vim.o.softtabstop    = 4
+-- backup files
+vim.o.swapfile       = false
+vim.o.undofile       = true
+vim.o.undodir        = vim.fn.stdpath("cache") .. "/undodir"
+-- misc
+vim.o.termguicolors  = true
+vim.o.lazyredraw     = true
+vim.o.path           = vim.o.path .. "**"
+vim.o.fileencoding   = "utf-8"
+vim.o.fileformat     = "unix"
 
-set.termguicolors = true
-
-require("user.pkg")
-require("user.lsp")
-require("user.colors").setup("jellybeans-nvim", "dark")
-require("user.autogroups").setup()
-require("user.keybinds").setup()
-
--- basic editor options
-set.nu                 = true
-set.rnu                = true
-set.nuw                = 6
-set.confirm            = true
-set.ignorecase         = true
-set.lazyredraw         = true
-set.hidden             = true
-set.cursorline         = true
-set.splitbelow         = true
-set.splitright         = true
-set.expandtab          = true
-set.tabstop            = 4
-set.shiftwidth         = 4
-set.softtabstop        = 4
-set.laststatus         = 3
-set.list               = true
-set.listchars          = "tab:| ,space:·,trail:×,nbsp:*"
-set.guicursor          = ""
-set.swapfile           = false
-set.undofile           = true
-set.undodir            = vim.fn.stdpath("cache") .. "/undodir"
-set.path               = set.path .. "**"
-set.fileencoding       = "utf-8"
-set.fileformat         = "unix"
-global.netrw_winsize   = 15
-global.netrw_liststyle = 3
-global.netrw_banner    = false
-
-if has("mouse") then
-    set.mouse = "vn"
+-- mouse support in normal and visual
+if vim.fn.has("mouse") then
+    vim.o.mouse = "vn"
 end
+
+-- single status bar
+if vim.v.version >= 700 then
+    vim.o.laststatus = 3
+end
+
+-- remove unneeded space
+if vim.v.version >= 800 then
+    vim.o.cmdheight = 0
+end
+
+-- global variables
+vim.g.netrw_winsize   = 15
+vim.g.netrw_liststyle = 3
+vim.g.netrw_banner    = false
 
 -- Set the shell to Powershell 7 when on windows host
-if not has("unix") and has("win32") then
-    set.shell = "pwsh.exe"
-    set.shellcmdflag = "-Command"
-    set.shellquote = ""
-    set.shellxquote = ""
+if not vim.fn.has("unix") and vim.fn.has("win32") then
+    vim.o.shell = "pwsh.exe"
+    vim.o.shellcmdflag = "-Command"
+    vim.o.shellquote = ""
+    vim.o.shellxquote = ""
 end
+
+require("user.autogroups").setup()
+require("user.colors").setup("jellybeans-nvim", "dark")
+require("user.keybinds").setup()
+require("user.pkg")
+require("user.lsp")

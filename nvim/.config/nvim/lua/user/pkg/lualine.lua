@@ -1,55 +1,53 @@
--- https://github.com/nvim-lualine/lualine.nvim
-require("lualine").setup {
-    options = {
-        section_separators = "",
-        component_separators = "|"
+local lualine = require("lualine")
+local config = lualine.get_config() -- defaults
+
+config.options = {
+    icons_enabled = false,
+    -- component_separators = '',
+    component_separators = {
+        left  = "│",
+        right = "│"
     },
-    sections = {
-        lualine_a = { "mode" },
-        lualine_b = {},
-        lualine_c = {
-            {
-                "buffers",
-                show_filename_only = true,
-                mode = 0,
-                buffers_color = {
-                    inactive = 'StatusLineNC',
-                    -- active = 'User1',
-                },
-                symbols = {
-                    modified = "+",
-                    alternate_file = "",
-                    directory = "/"
-                }
-            }
-        },
-        lualine_x = {
-            "encoding",
-            {
-                "fileformat",
-                symbols = {
-                    unix = "unix",
-                    dos  = "dos",
-                    mac  = "mac"
-                },
-            },
-            "filetype"
-        },
-        lualine_y = {
-            "location",
-            {
-                "diagnostics",
-                symbols = {
-                    error = '*',
-                    warn = '!',
-                    info = '@',
-                    hint = '?'
-                },
-            },
-            "diff"
-        },
-        lualine_z = {
-            { "branch", icon = "*" }
-        }
+    section_separators = {
+        left  = "▓▒░",
+        right = "░▒▓"
     },
 }
+
+config.sections.lualine_a = { { "mode", fmt = string.lower } }
+config.sections.lualine_b = { { "branch", icons_enabled = true } }
+
+-- replace the filename default with a list of buffers
+config.sections.lualine_c = {
+    {
+        "buffers",
+        show_filename_only = false,
+        mode = 0,
+        buffers_color = {
+            inactive = "StatusLineNC",
+        },
+        symbols = {
+            modified = "+",
+            alternate_file = "",
+            directory = "/"
+        }
+    }
+}
+
+config.sections.lualine_x = {
+    "diff",
+    {
+        "diagnostics",
+        symbols = {
+            error = '*',
+            warn = '!', info = '@',
+            hint = '?'
+        },
+    }
+}
+
+config.sections.lualine_y = { "location" }
+
+config.sections.lualine_z = { "encoding", "fileformat", "filetype" }
+
+lualine.setup(config)

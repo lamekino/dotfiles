@@ -2,13 +2,41 @@ local M = {}
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
+local function has_args()
+    -- https://vi.stackexchange.com/a/715
+    return vim.fn.argc() ~= 0
+        or vim.fn.line2byte('$') ~= -1
+        or string.match(vim.v.progname, '^[-gmnq]\\=vim\\=x\\=\\%[\\.exe]$')
+end
+
 M.setup = function()
+    augroup("StartupFunc", { clear = true })
+
+    autocmd("VimEnter", {
+        group    = "StartupFunc",
+        desc     = "set termguicolors",
+        callback = function()
+            vim.o.termguicolors = true
+        end
+    })
+
+    -- Startup
+    autocmd("VimEnter", {
+        group    = "StartupFunc",
+        desc     = "open vim to :Explore on no args",
+        callback = function()
+            if not has_args() then
+                vim.cmd("Explore")
+            end
+        end
+    })
+
     -- Autogroups for terminal
     augroup("Terminal", { clear = true })
 
     autocmd("TermOpen", {
-        group = "Terminal",
-        desc = "remove line numbers from terminal",
+        group    = "Terminal",
+        desc     = "remove line numbers from terminal",
         callback = function()
             vim.opt_local.rnu = false
             vim.opt_local.nu  = false
@@ -28,8 +56,8 @@ M.setup = function()
     augroup("VisualFX", { clear = true })
 
     autocmd("TextYankPost", {
-        group = "VisualFX",
-        desc = "highlight on yanking text.",
+        group    = "VisualFX",
+        desc     = "highlight on yanking text.",
         callback = function()
             vim.highlight.on_yank()
         end

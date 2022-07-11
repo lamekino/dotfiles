@@ -12,7 +12,6 @@ M.square_border = {
 }
 
 M.setup = function()
-
     -- create the autocmd for opening diagnostic windows
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
         callback = function()
@@ -72,12 +71,24 @@ end
 M.on_attach = function(client, bufnr) -- TODO: use client
     lsp_keymaps(bufnr)
 
-    local lsp_group = vim.api.nvim_create_augroup("LSP", { clear = true })
+    vim.api.nvim_create_augroup("LSPFormatOnWrite", { clear = true })
 
     vim.api.nvim_create_autocmd("BufWritePre", {
-        desc = "autoformat",
-        group = lsp_group,
-        callback = function() vim.lsp.buf.formatting_sync(nil, 2000) end
+        group = "LSPFormatOnWrite",
+        desc = "autoformat with lsp",
+        callback = function()
+            if vim.v.version >= 800 then
+                -- new format for nvim 8.0
+                vim.lsp.buf.format {
+                    async = false,
+                    timeout_ms = 2000,
+                }
+                return
+            end
+
+            vim.lsp.buf.formatting_sync(nil, 2000)
+
+        end
     })
 end
 

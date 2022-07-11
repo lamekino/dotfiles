@@ -2,17 +2,16 @@
 local M = {}
 
 local function create_mapper(mode, opts)
-    return function (keys, func)
+    return function(keys, func)
         vim.keymap.set(mode, keys, func, opts)
     end
 end
 
--- NOTE: Should this be split across multiple files?
 M.setup = function()
     local k = {
-        map  = create_mapper("", { silent = true }),
-        imap = create_mapper("i", { silent = true }),
-        nmap = create_mapper("n", { silent = true }),
+        map      = create_mapper("", { silent = true }),
+        imap     = create_mapper("i", { silent = true }),
+        nmap     = create_mapper("n", { silent = true }),
         nnoremap = create_mapper("n", { noremap = true }),
         inoremap = create_mapper("i", { noremap = true }),
         vnoremap = create_mapper("v", { noremap = true }),
@@ -25,14 +24,8 @@ M.setup = function()
 
     -- Splits
     k.map("s", "<nop>")
-    k.nnoremap("sc", "<C-w>q")
     k.nnoremap("ss", ":vsp<CR>")
-    k.nnoremap("sa", ":sp<CR>")
-    k.nnoremap("sh", "<C-w>h")
-    k.nnoremap("sj", "<C-w>j")
-    k.nnoremap("sk", "<C-w>k")
-    k.nnoremap("sl", "<C-w>l")
-    k.nnoremap("sf", "<C-w>o")
+    k.nnoremap("sd", ":sp<CR>")
     k.nnoremap("sp", ":bprev!<cr>")
     k.nnoremap("sn", ":bnext!<cr>")
 
@@ -44,13 +37,15 @@ M.setup = function()
     -- Function Keys
     k.imap("<F1>", "") -- disable the F1 for help
 
-
     -- Leader keys
-    k.nnoremap("<Leader><Leader>", ":echo 'put something good here'")
     k.nnoremap("<Leader>a", ":copen<cr>")
     k.nnoremap("<Leader>s", ":Telescope buffers<cr>")
     k.nnoremap("<Leader>d", ":Lex<cr>")
     k.nnoremap("<Leader>f", ":Telescope find_files<cr>")
+
+    -- Leader Leader keys
+    k.nnoremap("<Leader><Leader>f", ":Telescope live_grep<cr>")
+
     k.nnoremap("<Leader>q", ":Telescope help_tags<cr>")
     k.nnoremap("<Leader>u", ":UndotreeToggle<cr>")
 
@@ -58,13 +53,13 @@ M.setup = function()
     k.nnoremap("<Leader>j", ":cnext<cr>")
     k.nnoremap("<Leader>k", ":cprev<cr>")
 
-    -- Git
+    -- Git TODO: make this work better
     k.nnoremap("<Leader>gg", ":Git ")
     k.nnoremap("<Leader>gf", ":Telescope git_files<cr>")
     -- Commits
     k.nnoremap("<Leader>ga", ":Git commit<cr>") -- commit what is staged
-    k.nnoremap("<Leader>gs", ":Git<cr>")        -- git status & stager
-    k.nnoremap("<Leader>gc", ":Git commit %")   -- commit working file
+    k.nnoremap("<Leader>gs", ":Git<cr>") -- git status & stager
+    k.nnoremap("<Leader>gc", ":Git commit %") -- commit working file
     -- Staging
     k.nnoremap("<Leader>gd", ":Git diff %<cr>")
     k.nnoremap("<Leader>gD", ":Git diff<cr>")
@@ -75,24 +70,13 @@ M.setup = function()
 
     -- Toggle options
     k.nnoremap("<Leader>;", ":noh<cr>")
-    k.nnoremap("<Leader>tr", function () -- FIXME: this doesn't work
-        if vim.o.colorcolumn ~= 0 then
-            vim.o.colorcolumn = 80
-        else
-            vim.o.colorcolumn = 0
-        end
-    end)
     k.nnoremap("<Leader>tw", ":set wrap!<cr>")
     k.nnoremap("<Leader>tp", ":set paste!<cr>")
     k.nnoremap("<Leader>ts", ":set spell!<cr>")
-    -- Spawn terminal
-    k.nnoremap("<Leader>tt", ":sp | resize -8 | terminal<cr>")
-    k.tnoremap("<C-w>", "<C-\\><C-n>")
 
     -- Move blocks of text around
     k.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
     k.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
-
 end
 
 return M

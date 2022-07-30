@@ -23,21 +23,29 @@ return packer.startup(function(use)
     -- the package manager
     use { "wbthomason/packer.nvim" }
 
-    -- neat plugins
-    use { "danro/rename.vim" }
-    use { "tpope/vim-commentary" }
-    use { "tpope/vim-surround" }
+    -- neat plugins (vim script)
     use { "tpope/vim-fugitive" }
-    use { "godlygeek/tabular" }
+    use { "tpope/vim-surround" }
     use { "mbbill/undotree" }
+    use { "danro/rename.vim" }
+
+    -- neat plugins (lua script)
+    use { "numToStr/Comment.nvim" }
     use { "rafcamlet/nvim-luapad" }
     use { "nvim-telescope/telescope.nvim",
-        requires = { { "nvim-lua/plenary.nvim" } }
+        requires = "nvim-lua/plenary.nvim"
     }
-    -- TODO: switch from fugitive to this
-    -- use { "TimUntersberger/neogit",
-    --     requires = { { "nvim-lua/plenary.nvim" } }
-    -- }
+    use { "folke/todo-comments.nvim",
+        requires = "nvim-lua/plenary.nvim"
+    }
+    -- TODO: move to this from vim-fugitive
+    use { "TimUntersberger/neogit",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "sindrets/diffview.nvim"
+        }
+
+    }
 
     -- lsp
     use { "williamboman/nvim-lsp-installer" }
@@ -57,18 +65,22 @@ return packer.startup(function(use)
 
     -- treesitter
     use { "nvim-treesitter/nvim-treesitter",
-        run = ":TSUpdate" }
+        run = ":TSUpdate"
+    }
 
     -- language support
     use { "sheerun/vim-polyglot" }
-    use { "alx741/vim-hindent" }
     use { "uiiaoo/java-syntax.vim" }
 
 
     -- appearance stuff
     use { "nvim-lualine/lualine.nvim" }
     use { "norcalli/nvim-colorizer.lua" }
+
+    -- colorschemes
     use { "metalelf0/jellybeans-nvim", requires = { "rktjmp/lush.nvim" } }
+    use { "folke/tokyonight.nvim" }
+    use { "rebelot/kanagawa.nvim" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

@@ -27,7 +27,7 @@ M.setup = function()
         severity_sort    = true,
 
         float = {
-            style         = "minimal",
+            style         = "rounded",
             border        = M.square_border,
             source        = "always",
             header        = "",

@@ -1,9 +1,10 @@
-local lualine = require("lualine")
-local config = lualine.get_config() -- defaults
+local lualine  = require("lualine")
+local my_theme = require("user.pkg.lualine_theme")
+local config   = lualine.get_config() -- defaults
 
 config.options = {
     icons_enabled = false,
-    -- component_separators = '',
+    theme = my_theme,
     component_separators = {
         left  = "│",
         right = "│"
@@ -15,7 +16,13 @@ config.options = {
 }
 
 config.sections.lualine_a = { { "mode", fmt = string.lower } }
-config.sections.lualine_b = { { "branch", icons_enabled = true } }
+config.sections.lualine_b = {
+    {
+        "branch",
+        icons_enabled = true,
+        icon = "*"
+    }
+}
 
 -- replace the filename default with a list of buffers
 config.sections.lualine_c = {
@@ -40,7 +47,8 @@ config.sections.lualine_x = {
         "diagnostics",
         symbols = {
             error = '*',
-            warn = '!', info = '@',
+            warn = '!',
+            info = '@',
             hint = '?'
         },
     }

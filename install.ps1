@@ -1,4 +1,11 @@
 #Requires -PSEdition Core
+if (-not $isWindows)
+{
+    Write-Host -ForegroundColor Red `
+        "This needs to be ran on a windows host!"
+    Exit
+}
+
 $configFiles = @{
     "nvim" = @{
         src  = ".\nvim\.config\nvim"
@@ -22,18 +29,19 @@ $configFiles.Keys | ForEach-Object {
     $srcPath  = $configFiles[$_].src
     $destPath = $configFiles[$_].dest
 
-    if (-Not (Test-Path -Path $destPath)) {
+    if (-Not (Test-Path -Path $destPath))
+    {
         New-Item `
             -Type SymbolicLink `
             -Path $destPath `
             -Target (Resolve-Path $srcPath) `
-            | Out-Null
+        | Out-Null
 
         Write-Host -ForegroundColor Green `
-            ("Installed:`t{0}" -f $destPath)
-    }
-    else {
+        ("Installed:`t{0}" -f $destPath)
+    } else
+    {
         Write-Host -ForegroundColor Red `
-            ("Skipping:`t{0}" -f $destPath)
+        ("Skipping:`t{0}" -f $destPath)
     }
 }

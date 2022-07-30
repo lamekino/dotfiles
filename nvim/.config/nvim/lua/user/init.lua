@@ -25,7 +25,7 @@ vim.o.undodir        = vim.fn.stdpath("cache") .. "/undodir"
 vim.o.termguicolors  = true
 vim.o.lazyredraw     = true
 vim.o.path           = vim.o.path .. "**"
-vim.o.fileencoding   = "utf-8"
+vim.o.encoding       = "utf-8"
 vim.o.fileformat     = "unix"
 
 -- mouse support in normal and visual
@@ -38,26 +38,21 @@ if vim.v.version >= 700 then
     vim.o.laststatus = 3
 end
 
--- remove unneeded space
-if vim.v.version >= 800 then
-    vim.o.cmdheight = 0
-end
-
 -- global variables
 vim.g.netrw_winsize   = 15
 vim.g.netrw_liststyle = 3
 vim.g.netrw_banner    = false
 
--- Set the shell to Powershell 7 when on windows host
+-- Windows host options
 if not vim.fn.has("unix") and vim.fn.has("win32") then
-    vim.o.shell = "pwsh.exe"
+    vim.o.shell        = "pwsh.exe"
     vim.o.shellcmdflag = "-Command"
-    vim.o.shellquote = ""
-    vim.o.shellxquote = ""
+    vim.o.shellquote   = ""
+    vim.o.shellxquote  = ""
 end
 
 require("user.autogroups").setup()
-require("user.colors").setup("jellybeans-nvim", "dark")
+require("user.colors").setup("kanagawa", "dark")
 require("user.keybinds").setup()
 require("user.pkg")
 require("user.lsp")

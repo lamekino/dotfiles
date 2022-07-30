@@ -25,7 +25,8 @@ M.setup = function()
     -- Splits
     k.map("s", "<nop>")
     k.nnoremap("ss", ":vsp<CR>")
-    k.nnoremap("sd", ":sp<CR>")
+    k.nnoremap("sS", ":vsp<CR>")
+    k.nnoremap("sd", ":bd<CR>")
     k.nnoremap("sp", ":bprev!<cr>")
     k.nnoremap("sn", ":bnext!<cr>")
 
@@ -47,26 +48,23 @@ M.setup = function()
     k.nnoremap("<Leader><Leader>f", ":Telescope live_grep<cr>")
 
     k.nnoremap("<Leader>q", ":Telescope help_tags<cr>")
+    k.nnoremap("<Leader><Leader>q", ":Telescope man_pages<cr>")
     k.nnoremap("<Leader>u", ":UndotreeToggle<cr>")
 
     -- Moving through quickfix
     k.nnoremap("<Leader>j", ":cnext<cr>")
     k.nnoremap("<Leader>k", ":cprev<cr>")
 
-    -- Git TODO: make this work better
-    k.nnoremap("<Leader>gg", ":Git ")
-    k.nnoremap("<Leader>gf", ":Telescope git_files<cr>")
-    -- Commits
-    k.nnoremap("<Leader>ga", ":Git commit<cr>") -- commit what is staged
-    k.nnoremap("<Leader>gs", ":Git<cr>") -- git status & stager
-    k.nnoremap("<Leader>gc", ":Git commit %") -- commit working file
+    -- NeoGit
+    k.nnoremap("<Leader>gg", ":Neogit<cr>")
     -- Staging
-    k.nnoremap("<Leader>gd", ":Git diff %<cr>")
+    k.nnoremap("<Leader>gd", ":Neogit diff %<cr>")
     k.nnoremap("<Leader>gD", ":Git diff<cr>")
     k.nnoremap("<Leader>g;", ":Git diff ORIG_HEAD HEAD<cr>")
     -- Remote
-    k.nnoremap("<Leader>gl", ":Git log<cr>")
-    k.nnoremap("<Leader>gp", ":Git pull<cr>")
+    k.nnoremap("<Leader>gl", ":Neogit log<cr>")
+    k.nnoremap("<Leader>]", ":Neogit push<cr>")
+    k.nnoremap("<Leader>[", ":Neogit pull<cr>")
 
     -- Toggle options
     k.nnoremap("<Leader>;", ":noh<cr>")

@@ -2,3 +2,4 @@ zsh/.config/zsh/.zhistory
 zsh/.config/zsh/.zcompdump
 zsh/.config/zsh/sources/local/*
 nvim/.config/nvim/plugin/*
+nvim/.config/nvim/spell/

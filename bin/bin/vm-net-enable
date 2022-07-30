@@ -1,0 +1,5 @@
+#!/bin/sh
+# https://askubuntu.com/a/1120132
+set -x
+
+sudo virsh net-start default

@@ -1,52 +1,48 @@
-# new zshrc :D
-
-# ZSH Options {{{
-bindkey -v                  # Vi keybinds
-bindkey '^R' history-incremental-search-backward
+# --- setopt
 setopt INTERACTIVE_COMMENTS # Comments in shell
 setopt COMPLETE_ALIASES     # Preserves aliases in autocomplete
 setopt PROMPT_SUBST         # Allow variables in prompt
 setopt HIST_IGNORE_ALL_DUPS # ignore duplicate commands in history
-# }}}
-# Imports and autoloads {{{
-# personal stuff
-[ -e "$XDG_CONFIG_HOME/personal/zsh" ] && source $XDG_CONFIG_HOME/personal/zsh
-# for zsh packages installed to system
-[ -e "$ZDOTDIR/local" ] \
-    && source "$ZDOTDIR"/local/*.zsh \
-    && source "$ZDOTDIR"/local/*.sh
-# dircolors if exists
-[ -e "$HOME/.dircolors" ] && eval $(dircolors -b $HOME/.dircolors)
 
-# this makes comments *actually* readable in Alacritty
-# NOTE: idk if this is actually needed anymore
-[ -v ZSH_HIGHLIGHT_STYLES ] && ZSH_HIGHLIGHT_STYLES[comment]=fg=white
+# --- sourcing, autoloads & imports
+# personal
+[ -e "$XDG_CONFIG_HOME/personal/zsh" ] \
+    && source "$XDG_CONFIG_HOME/personal/zsh"
 
+[ -e "$XDG_CONFIG_HOME/dircolors" ] \
+    && eval $(dircolors "$XDG_CONFIG_HOME/dircolors")
 
-# Use ZSH tab completion
-autoload -Uz compinit && compinit || echo "[$0] compinit failed" 1>&2
+# initialize zoxide
+command -v zoxide &>/dev/null \
+    && eval "$(zoxide init zsh)"
 
-# Documentation
-autoload run-help
-alias help="run-help"
+# completion
+autoload -Uz compinit \
+    && compinit
 
-# Command line editing
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
-# }}}
-# ZStyle {{{
+
+# --- zstyle
+# use a menu selector
+zstyle ":completion:*" menu select
+# case insensitive completion
+zstyle ":completion:*" matcher-list "" "m:{a-zA-Z}={A-Za-z}" "r:|=*" "l:|=* r:|=*"
 # set completion to show file attributes
-zstyle ':completion:*' menu select
-zstyle ':completion:*' file-list all
-# }}}
-# Aliases and functions {{{
-# jumps back N dirs if $1 exists 1 otherwise
+zstyle ":completion:*" file-list all
+
+# --- bindkey
+bindkey -v
+bindkey "^R" history-incremental-search-backward
+bindkey "^E" edit-command-line
+
+# --- functions
+# jumps back n dirs if $1 exists 1 otherwise
 function ..() {
-    if [ -z $1 ]; then
-        builtin cd ..
-    elif [ $1 -gt 0 ]; then
-        builtin cd $(printf "../%.0s" $(seq 1 $1))
+    if [ -z "$1" ]; then
+        cd .. || return
+    elif [ "$1" -gt 0 ]; then
+        cd $(printf "../%.0s" $(seq 1 "$1")) || return
     fi
 }
 # uses regex to search history uses the whole argv and basically globs it
@@ -56,101 +52,95 @@ function hgrep()  {
 }
 # touch and make executable
 function touchx() {
-    touch $1 && chmod +x $1
+    touch "$1" && chmod +x "$1"
 }
 # mkdir and cd into it
 function md() {
-    mkdir -p $1 && builtin cd $1
+    mkdir -p "$1" && builtin cd "$1"
 }
 # pushd using z
+# FIXME: using zoxide now
 function pz() {
     builtin pushd $(z -e "$@")
 }
 
-# Shadowing
-alias sudo='sudo ' # so aliases can be run with sudo
-alias dirs='dirs -v'
-alias jobs='jobs -l'
-alias pgrep='pgrep -l'
-alias vi='nvim'
-alias vim='nvim'
-alias info="info --vi-keys"
+# --- aliases
+alias sudo="sudo " # so aliases can be run with sudo
+alias dirs="dirs -v"
+alias jobs="jobs -l"
+alias pgrep="pgrep -l"
+alias vi="nvim"
+alias vim="nvim"
+alias ipython="ipython --no-confirm-exit"
 alias veracrypt="veracrypt -t"
 alias tmux="tmux -2"
 alias cls="clear"
 alias tree="tree -a"
-# Short hand
-alias cite="source $ZDOTDIR/.zshenv && source $ZDOTDIR/.zshrc" # cite your sources!
+alias cite="source $ZDOTDIR/.zshrc" # cite your sources!
 alias xres="xrdb ~/.Xresources"
-alias wgetbulk='wget -np -nd -r --reject html'
-alias stop='kill -STOP'
-alias ppath='sed "s/:/\n/g" <<< $PATH'
-alias screen='TERM=xterm-256color screen'
+alias wgetbulk="wget -np -nd -r --reject html"
+alias stop="kill -STOP"
+alias ppath="sed "s/:/\n/g" <<< $PATH"
+alias screen="TERM=xterm-256color screen"
 alias ipy="PAGER=less ipython"
 alias pwpls="pwgen -1Bsy 20"
-# Python
-# alias python="python3"
-# alias pip="pip3"
+alias shrug="echo '¯\\_(ツ)_/¯'"
+alias :q="echo '🤨'"
+alias wttr="curl -s http://wttr.in"
+alias ipecho="curl http://ipecho.net/plain; printf '\n'"
 
-# Curl Utils
-alias wttr='curl -s http://wttr.in'
-alias ipecho='curl http://ipecho.net/plain; printf "\n"'
-#
-# }}}
-# OS Specific {{{
+# --- os specific
 case "$(uname -s)" in
     "Linux")
         source "$ZDOTDIR/sources/linux.zsh"
         grep -qi Microsoft /proc/version && \
             source "$ZDOTDIR/sources/wsl.zsh"
 
-        # FIXME: find a better way of doing this
+        # TODO: find a better way of doing this
         case $(cut -d" " -f1 /etc/issue) in
-            'Arch') source "$ZDOTDIR/sources/arch-linux.zsh";;
-            'Ubuntu'|'Debian') source "$ZDOTDIR/sources/debian.zsh";;
+            "Arch") source "$ZDOTDIR/sources/arch-linux.zsh";;
+            "Ubuntu"|"Debian") source "$ZDOTDIR/sources/debian.zsh";;
         esac
         ;;
-    "Darwin") source "$ZDOTDIR/sources/mac.zsh"
-        ;;
+    "Darwin") source "$ZDOTDIR/sources/mac.zsh" ;;
 esac
-# }}}
-# Prompt {{{
-function color() {
+
+# --- prompt
+function prompt-color() {
     local color="$1"
     local string="$2"
-    echo "%F{$color}$string%f"
+    echo -n "%F{$color}$string%f"
 }
 
-_ZUSER="$(color 13 '%n')"
-_ZHOST="$(color 12 '%m')"
-_ZDIR="$(color 14 '%~')"
-_ZERR="\\$(color 202 "%?")"
-_ZJOB="\\$(color 172 "%%%j")"
+function precmd-prompt() {
+    local dir="$(prompt-color 12 '%~')"
+    local err="$(prompt-color 1 '%?')"
+    # local job="$(prompt-color 3 '%j')"
 
-function precmd_prompt() {
-    _PROMPT="$_ZUSER:$_ZHOST<$_ZDIR%(1j.$_ZJOB.)%(?..$_ZERR)>"
+    # get git branch name
+    local branch=$(git branch --show-current 2>/dev/null)
+    if [ -n "$branch" ]; then
+        local git="$(prompt-color 10 "*$branch"):"
+    fi
+
+    # _PROMPT="%(?..${err} )%(1j.${job} .)${git}${dir}"
+    _PROMPT="%(?..${err} )${git}${dir}"
 }
 
-# indicate vi insert/normal mode
+precmd_functions=(
+    precmd-prompt
+)
+
 function zle-line-init zle-keymap-select {
+    local norm="$(prompt-color 5 '>')"
+    local ins="$(prompt-color 8 '%#')"
+
     case $KEYMAP in
-        vicmd) # normal mode
-            PROMPT="${_PROMPT}| "
-            ;;
-        viins|main) # insert mode
-            PROMPT="${_PROMPT}%# "
-            ;;
+        vicmd)      PROMPT="${_PROMPT}${norm} " ;;
+        viins|main) PROMPT="${_PROMPT}${ins} " ;;
     esac
     zle reset-prompt
 }
+
 zle -N zle-line-init
 zle -N zle-keymap-select
-
-precmd_functions=(
-    precmd_prompt
-)
-[ -n $_Z_RESOLVE_SYMLINKS ] && precmd_functions+=_z_precmd
-
-unfunction color
-# }}}
-# vim:foldmethod=marker

@@ -12,14 +12,6 @@ end
 M.setup = function()
     augroup("StartupFunc", { clear = true })
 
-    autocmd("VimEnter", {
-        group    = "StartupFunc",
-        desc     = "set termguicolors",
-        callback = function()
-            vim.o.termguicolors = true
-        end
-    })
-
     -- Startup
     autocmd("VimEnter", {
         group    = "StartupFunc",
@@ -30,6 +22,27 @@ M.setup = function()
             end
         end
     })
+
+    autocmd("VimEnter", {
+        group    = "StartupFunc",
+        desc     = "set termguicolors",
+        callback = function()
+            vim.o.termguicolors = true
+        end
+    })
+
+    -- Spellcheck
+    augroup("Spellcheck", { clear = true })
+
+    autocmd("VimEnter", {
+        group = "Spellcheck",
+        desc = "sets spellcheck for filetypes",
+        pattern = { "*.md", "*.txt" },
+        callback = function()
+            vim.o.spell = true
+        end
+    })
+
 
     -- Autogroups for terminal
     augroup("Terminal", { clear = true })

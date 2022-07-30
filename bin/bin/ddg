@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+# opens a new browser window with duckduckgo search of all args
+
+import os
+from sys import argv
+
+def duckduckgo(query):
+    return f"https://duckduckgo.com/?q={query}"
+
+def browser(exe, url):
+    return f"{exe} --new-window '{url}'"
+
+def msg(s):
+    print(f"\033[0;33m=>> {s}\033[0m")
+
+if __name__ == "__main__":
+    try:
+        BROWSER = os.environ['BROWSER']
+    except KeyError:
+        BROWSER = "/usr/bin/env firefox"
+        msg("! defaulting to firefox")
+
+    args = argv[1:]
+
+    args[0] = args[0].replace("@", "!", 1)
+
+    query = "%20".join(args)
+
+    cmd = browser(BROWSER, duckduckgo(query))
+
+    msg(cmd)
+    os.system(cmd)

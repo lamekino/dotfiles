@@ -1,13 +1,3 @@
-## Environment Variables ##
-ZDOTDIR=~/.config/zsh
-HISTORY_IGNORE='([bf]g *|cd ..*|l[alsh]#( *)#|less *|vim# *|pwd|z *|..*)'
-HISTFILE="$ZDOTDIR/.zhistory"
-HISTSIZE=50000
-SAVEHIST=50000
-KEYTIMEOUT=5
-
-profile="$ZDOTDIR" # like powershell, so i can open in vim
-
 export BROWSER="/usr/bin/env firefox"
 export EDITOR="/usr/bin/env nvim"
 export VISUAL="$EDITOR"
@@ -45,6 +35,15 @@ export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+
+# Environment Variables
+ZDOTDIR=~/.config/zsh
+HISTORY_IGNORE='([bf]g *|cd ..*|l[alsh]#( *)#|less *|vim# *|pwd|z *|..*)'
+HISTFILE="$XDG_CACHE_HOME/zhistory"
+HISTSIZE=50000
+SAVEHIST=50000
+KEYTIMEOUT=5
+fpath=("$ZDOTDIR/fpath" $fpath)
 
 export PATH="\
 $PATH:\

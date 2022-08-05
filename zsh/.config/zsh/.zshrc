@@ -26,13 +26,11 @@ autoload -Uz compinit \
 autoload -Uz edit-command-line \
     && zle -N edit-command-line
 
-# helpful functions
-autoload -Uz utils-init.zsh \
-    && utils-init.zsh
-
-# prompt
-autoload -Uz my-prompt-init.zsh \
-    && my-prompt-init.zsh
+# run initialization functions
+for init in "$ZDOTDIR"/fpath/init-*; do
+    autoload -Uz "$init" \
+        && "$(basename "$init")"
+done
 
 # --- bindkey
 bindkey -v
@@ -63,7 +61,6 @@ alias xres="xrdb ~/.Xresources"
 alias wgetbulk="wget -np -nd -r --reject html"
 alias stop="kill -STOP"
 alias ppath="tr ':' '\n' <<< $PATH" # this is static...
-alias screen="TERM=xterm-256color screen"
 alias ipy="PAGER=less ipython"
 alias pwpls="pwgen -1Bsy 20"
 alias shrug="echo '¯\\_(ツ)_/¯'"

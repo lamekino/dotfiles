@@ -1,11 +1,3 @@
-# --- mouse/keyboard
-mouse:
-  hide_when_typing: true
-
-mouse_bindings:
-  - { mouse: Middle, action: PasteSelection }
-  - { mouse: Right,  action: Paste }
-
 # --- terminal settings
 dynamic_title: false
 live_config_reload: true
@@ -84,3 +76,27 @@ colors:
   indexed_colors:
     - { index: 16, color: '#ffa066' }
     - { index: 17, color: '#ff5d62' }
+
+# --- mouse/keyboard
+mouse:
+  hide_when_typing: true
+
+mouse_bindings:
+  - { mouse: Middle, action: PasteSelection }
+  - { mouse: Right,  action: Paste }
+
+key_bindings:
+  # https://www.youtube.com/watch?v=lHBD6pdJ-Ng
+  - { key: H, mods: Control|Shift, chars: "\x1b[72;6u" }
+  - { key: J, mods: Control|Shift, chars: "\x1b[74;6u" }
+  - { key: K, mods: Control|Shift, chars: "\x1b[75;6u" }
+  - { key: L, mods: Control|Shift, chars: "\x1b[76;6u" }
+
+  - { key: I, mods: Control, chars: "\x1b[105;5u" }
+
+  - { key: Period, mods: Control, chars: "\x1b[46;5u" }
+  - { key: Comma, mods: Control, chars: "\x1b[44;5u" }
+  - { key: Semicolon, mods: Control, chars: "\x1b[59;5u" }
+
+  - { key: Return, mods: Shift, chars: "\x1b[13;2u" }
+

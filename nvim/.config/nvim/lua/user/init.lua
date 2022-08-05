@@ -52,7 +52,7 @@ if not vim.fn.has("unix") and vim.fn.has("win32") then
 end
 
 require("user.autogroups").setup()
-require("user.colors").setup("kanagawa", "dark")
 require("user.keybinds").setup()
 require("user.pkg")
 require("user.lsp")
+require("user.colors").setup("kanagawa", "dark")

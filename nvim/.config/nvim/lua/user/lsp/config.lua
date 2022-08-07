@@ -1,3 +1,6 @@
+local installer = require("nvim-lsp-installer")
+local lspconfig = require("lspconfig")
+
 local M = {}
 
 M.square_border = {
@@ -44,6 +47,27 @@ M.setup = function()
     vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
         border = M.square_border,
     })
+
+    -- configure lsps
+    installer.setup()
+
+    for _, s in ipairs(installer.get_installed_servers()) do
+        local setup_tbl = { on_attach = M.on_attach }
+
+        -- check if there is a settings file
+        local found, settings = pcall(require, "user.lsp.settings." .. s.name)
+        -- if it is, then append its contents to the table
+        if found and settings ~= true then
+            setup_tbl = vim.tbl_deep_extend("force", settings, setup_tbl)
+        end
+
+        lspconfig[s.name].setup(setup_tbl)
+    end
+
+    -- configure capabilities
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+    M.capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 end
 
 local function lsp_keymaps(bufnr)
@@ -80,6 +104,7 @@ M.on_attach = function(client, bufnr) -- TODO: use client
             if vim.v.version >= 800 then
                 -- new format for nvim 8.0
                 vim.lsp.buf.format {
+                    bufnr = bufnr,
                     async = false,
                     timeout_ms = 2000,
                 }
@@ -92,7 +117,4 @@ M.on_attach = function(client, bufnr) -- TODO: use client
     })
 end
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-M.capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 return M

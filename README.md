@@ -26,4 +26,4 @@ PS> .\install.ps1
 ```
 
 ### To uninstall:
-There's currently no way to do this ¯\_(ツ)_/¯
+There's currently no way to do this ¯\\_(ツ)_/¯

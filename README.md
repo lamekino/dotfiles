@@ -1,6 +1,6 @@
 dots 💾
 ---
-#### For Unix-likes:
+## For Unix-likes:
 Requires ``stow``
 
 ### To install:

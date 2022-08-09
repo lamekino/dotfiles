@@ -1,6 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 set -x
 
-for dot in */; do
-    stow -D -t "$HOME" $dot
+dotfiles="
+alacritty
+bin
+nvim
+tmux
+zsh
+"
+
+for dot in $dotfiles; do
+    echo "removing: $dot"
+    stow -D -t "$HOME" "$dot"
 done

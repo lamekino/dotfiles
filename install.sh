@@ -1,9 +1,15 @@
-#!/usr/bin/env zsh
-set -x
+#!/bin/sh
 
-PROGRAMS=(alacritty bin nvim zsh tmux)
+dotfiles="
+alacritty
+bin
+nvim
+tmux
+zsh
+"
 
-for dot in ${PROGRAMS[@]}; do
+for dot in ${dotfiles}; do
+    echo "installing: $dot"
     stow -t "$HOME" "$dot"
 done
 echo ". ~/.config/zsh/.zshenv" > ~/.zshenv

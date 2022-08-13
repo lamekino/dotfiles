@@ -12,7 +12,7 @@ env:
   TERM: xterm-256color
 
 window:
-  opacity: 0.95
+  opacity: 0.92
   decorations: none
   startup_mode: Maximized
   title: Alacritty
@@ -32,13 +32,13 @@ font:
     style:  Text
   bold:
     family: IBM Plex Mono
-    style:  Bold
+    style:  SemiBold
   italic:
     family: IBM Plex Mono
     style:  Text Italic
   bold_italic:
     family: IBM Plex Mono
-    style:  Bold Italic
+    style:  SemiBold Italic
   offset:
     x: -1
     y: -2
@@ -87,6 +87,9 @@ mouse_bindings:
 
 key_bindings:
   # https://www.youtube.com/watch?v=lHBD6pdJ-Ng
+  # note that N is the capital ascii in \x1b[N;6u
+  - { key: A, mods: Control|Shift, chars: "\x1b[65;6u" }
+  - { key: Q, mods: Control|Shift, chars: "\x1b[81;6u" }
   - { key: H, mods: Control|Shift, chars: "\x1b[72;6u" }
   - { key: J, mods: Control|Shift, chars: "\x1b[74;6u" }
   - { key: K, mods: Control|Shift, chars: "\x1b[75;6u" }

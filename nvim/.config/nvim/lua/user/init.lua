@@ -27,6 +27,12 @@ vim.o.lazyredraw     = true
 vim.o.path           = vim.o.path .. "**"
 vim.o.encoding       = "utf-8"
 vim.o.fileformat     = "unix"
+vim.api.nvim_create_autocmd("VimEnter", {
+    desc = "hack to get setting formatoptions to work",
+    callback = function()
+        vim.o.fo = vim.o.fo:gsub("o", "")
+    end
+})
 
 -- mouse support in normal and visual
 if vim.fn.has("mouse") then
@@ -34,7 +40,7 @@ if vim.fn.has("mouse") then
 end
 
 -- single status bar
-if vim.v.version >= 700 then
+if vim.fn.has("nvim-0.7.2") then
     vim.o.laststatus = 3
 end
 
@@ -43,7 +49,7 @@ vim.g.netrw_winsize   = 15
 vim.g.netrw_liststyle = 3
 vim.g.netrw_banner    = false
 
--- Windows host options
+-- windows host options
 if not vim.fn.has("unix") and vim.fn.has("win32") then
     vim.o.shell        = "pwsh.exe"
     vim.o.shellcmdflag = "-Command"

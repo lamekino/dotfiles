@@ -2,6 +2,8 @@ require("user.pkg.packer")
 require("user.pkg.treesitter")
 require("user.pkg.lualine")
 
+require("toggleterm").setup()
+
 require("colorizer").setup {
     "*",
     css = { rgb_fn = true },

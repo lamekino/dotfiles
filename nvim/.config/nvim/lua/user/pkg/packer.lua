@@ -32,13 +32,13 @@ return packer.startup(function(use)
     -- neat plugins (lua script)
     use { "numToStr/Comment.nvim" }
     use { "rafcamlet/nvim-luapad" }
+    use { "akinsho/toggleterm.nvim" }
     use { "nvim-telescope/telescope.nvim",
         requires = "nvim-lua/plenary.nvim"
     }
     use { "folke/todo-comments.nvim",
         requires = "nvim-lua/plenary.nvim"
     }
-    -- TODO: move to this from vim-fugitive
     use { "TimUntersberger/neogit",
         requires = {
             "nvim-lua/plenary.nvim",

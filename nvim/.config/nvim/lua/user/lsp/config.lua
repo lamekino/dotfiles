@@ -82,10 +82,10 @@ local function lsp_keymaps(bufnr)
     lsp_nmap("gr", vim.lsp.buf.references)
     lsp_nmap("K", vim.lsp.buf.hover)
     lsp_nmap("<C-k>", vim.lsp.buf.signature_help)
-    lsp_nmap("<leader>rr", vim.lsp.buf.rename)
-    lsp_nmap("<leader>dj", vim.diagnostic.goto_next)
-    lsp_nmap("<leader>dk", vim.diagnostic.goto_prev)
+    lsp_nmap("<leader>r", vim.lsp.buf.rename)
     lsp_nmap("<leader>l", vim.diagnostic.setloclist)
+    -- lsp_nmap("<Leader>j", vim.diagnostic.goto_next)
+    -- lsp_nmap("<Leader>k", vim.diagnostic.goto_prev)
 
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.api.nvim_create_user_command("Format", vim.lsp.buf.formatting, {})
@@ -101,7 +101,7 @@ M.on_attach = function(client, bufnr) -- TODO: use client
         group = "LSPFormatOnWrite",
         desc = "autoformat with lsp",
         callback = function()
-            if vim.v.version >= 800 then
+            if vim.fn.has("nvim-0.8.0") then
                 -- new format for nvim 8.0
                 vim.lsp.buf.format {
                     bufnr = bufnr,

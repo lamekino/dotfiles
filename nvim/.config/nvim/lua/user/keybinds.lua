@@ -25,44 +25,60 @@ M.setup = function()
     -- Splits
     k.map("s", "<nop>")
     k.nnoremap("ss", ":vsp<CR>")
-    k.nnoremap("sS", ":vsp<CR>")
+    k.nnoremap("sS", ":sp<CR>")
     k.nnoremap("sd", ":bd<CR>")
     k.nnoremap("sp", ":bprev!<cr>")
     k.nnoremap("sn", ":bnext!<cr>")
 
-    -- Delete to void
+    -- registers
     k.nnoremap("_", "\"_d")
-    -- Yank to end like D
-    k.nnoremap("Y", "y$")
+    k.nnoremap("Y", "\"+y")
+    k.vnoremap("<C-y>", "\"+y")
+    k.nnoremap("<C-p>", "\"+p")
 
     -- Function Keys
     k.imap("<F1>", "") -- disable the F1 for help
 
     -- Leader keys
-    k.nnoremap("<Leader>a", ":copen<cr>")
+    k.nnoremap("<Leader>a", ":Neogit<cr>")
     k.nnoremap("<Leader>s", ":Telescope buffers<cr>")
     k.nnoremap("<Leader>d", ":Lex<cr>")
     k.nnoremap("<Leader>f", ":Telescope find_files<cr>")
-
-    -- Leader Leader keys
-    k.nnoremap("<Leader><Leader>f", ":Telescope live_grep<cr>")
+    k.nnoremap("<Leader>g", ":lvimgrep ")
 
     k.nnoremap("<Leader>q", ":Telescope help_tags<cr>")
-    k.nnoremap("<Leader><Leader>q", ":Telescope man_pages<cr>")
+    k.nnoremap("<Leader>w", ":Telescope man_pages<cr>")
+    k.nnoremap("<Leader>e", ":Telescope live_grep<cr>")
     k.nnoremap("<Leader>u", ":UndotreeToggle<cr>")
 
-    -- Moving through quickfix
-    k.nnoremap("<Leader>j", ":cnext<cr>")
-    k.nnoremap("<Leader>k", ":cprev<cr>")
+
+    -- location list (alt key)
+    k.nnoremap("<Esc>a", ":lwindow<cr>")
+    k.nnoremap("<Esc>q", ":lclose<cr>")
+    k.nnoremap("<Esc>j", ":lnext<cr>")
+    k.nnoremap("<Esc>k", ":lprev<cr>")
+
+    -- quickfix list (requires csi escapes to be enabled)
+    -- http://www.leonerd.org.uk/hacks/fixterms/
+    k.nnoremap("<C-S-a>", ":cwindow<cr>")
+    k.nnoremap("<C-S-q>", ":cclose<cr>")
+    k.nnoremap("<C-S-j>", ":cnext<cr>")
+    k.nnoremap("<C-S-k>", ":cprev<cr>")
+
+    -- Building
+    k.nnoremap("<C-;>", ":make<cr>")
+
+    -- ToggleTerm
+    k.nnoremap("<S-Return>", ":ToggleTerm direction=float<cr>")
+    k.tnoremap("<S-Return>", "<C-\\><C-n>:ToggleTerm<cr>")
+    k.tnoremap("<C-w>", "<C-\\><C-n><C-w>")
+    k.tnoremap("<C-n>", "<C-\\><C-n>")
 
     -- NeoGit
-    k.nnoremap("<Leader>gg", ":Neogit<cr>")
     -- Staging
-    k.nnoremap("<Leader>gd", ":Neogit diff %<cr>")
-    k.nnoremap("<Leader>gD", ":Git diff<cr>")
-    k.nnoremap("<Leader>g;", ":Git diff ORIG_HEAD HEAD<cr>")
+    k.nnoremap("<Leader><Leader>d", ":Neogit diff %<cr>")
     -- Remote
-    k.nnoremap("<Leader>gl", ":Neogit log<cr>")
+    k.nnoremap("<Leader><Leader>l", ":Neogit log<cr>")
     k.nnoremap("<Leader>]", ":Neogit push<cr>")
     k.nnoremap("<Leader>[", ":Neogit pull<cr>")
 

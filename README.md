@@ -1,5 +1,6 @@
 dots 💾
 ---
+![Screenshot](./screenshot.png?raw=true)
 ### For Unix-likes:
 Requires ``stow``
 

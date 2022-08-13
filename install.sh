@@ -3,6 +3,7 @@
 dotfiles="
 alacritty
 bin
+dircolors
 nvim
 tmux
 zsh

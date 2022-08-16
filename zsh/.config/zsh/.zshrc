@@ -1,7 +1,7 @@
 # --- setopt
-setopt INTERACTIVE_COMMENTS # Comments in shell
-setopt COMPLETE_ALIASES     # Preserves aliases in autocomplete
-setopt PROMPT_SUBST         # Allow variables in prompt
+setopt INTERACTIVE_COMMENTS # comments in shell
+setopt COMPLETE_ALIASES     # preserves aliases in autocomplete
+setopt PROMPT_SUBST         # allow variables in prompt
 setopt HIST_IGNORE_ALL_DUPS # ignore duplicate commands in history
 
 # --- sourcing & imports
@@ -52,21 +52,33 @@ alias jobs="jobs -l"
 alias pgrep="pgrep -l"
 alias vim="nvim"
 alias ipython="ipython --no-confirm-exit"
-alias veracrypt="veracrypt -t"
 alias tmux="tmux -2"
-alias cls="clear"
 alias tree="tree -a"
-alias cite="source $ZDOTDIR/.zshrc" # cite your sources!
-alias xres="xrdb ~/.Xresources"
-alias wgetbulk="wget -np -nd -r --reject html"
+alias t="tree -a"
 alias stop="kill -STOP"
 alias ppath="tr ':' '\n' <<< $PATH" # this is static...
-alias ipy="PAGER=less ipython"
+
+# files
+alias tmuxconf="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf"
+alias vimrc="$EDITOR $XDG_CONFIG_HOME/nvim/"
+alias zshrc="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc"
+alias zshenv="$EDITOR $XDG_CONFIG_HOME/zsh/.zshenv"
+
+# git
+alias gitl="git log --oneline --graph"
+
+# security
 alias pwpls="pwgen -1Bsy 20"
-alias shrug="echo '¯\\_(ツ)_/¯'"
-alias :q="echo '🤨'"
-alias wttr="curl -s http://wttr.in"
+alias veracrypt="veracrypt -t"
+
+# curl/wget
 alias ipecho="curl http://ipecho.net/plain; printf '\n'"
+alias wttr="curl -s http://wttr.in"
+alias wgetbulk="wget -np -nd -r --reject html"
+
+# misc
+alias cite="source $ZDOTDIR/.zshrc" # cite your sources!
+alias :q="echo '🤨'"
 
 # --- os specific
 case "$(uname -s)" in

@@ -1,5 +1,5 @@
 # --- terminal settings
-dynamic_title: false
+dynamic_title: true
 live_config_reload: true
 
 scrolling:
@@ -12,13 +12,15 @@ env:
   TERM: xterm-256color
 
 window:
-  opacity: 0.92
-  decorations: none
-  startup_mode: Maximized
-  title: Alacritty
+  opacity: 0.95
+  # decorations: none
+  # startup_mode: Maximized
+  dimensions:
+    columns: 120
+    lines: 32
   padding:
-    x: 8
-    y: 8
+    x: 4
+    y: 4
 
 cursor:
   style: Block
@@ -26,7 +28,7 @@ cursor:
 
 # --- font
 font:
-  size: 12.5
+  size: 12
   normal:
     family: IBM Plex Mono
     style:  Text
@@ -46,36 +48,60 @@ font:
 # --- colorscheme
 colors:
   primary:
-    background: '#1f1f28'
-    foreground: '#dcd7ba'
-
+    foreground: '#ECE1D7'
+    background: '#2A2520'
   normal:
-    black:   '#090618'
-    red:     '#c34043'
-    green:   '#76946a'
-    yellow:  '#c0a36e'
-    blue:    '#7e9cd8'
-    magenta: '#957fb8'
-    cyan:    '#6a9589'
-    white:   '#c8c093'
-
+    black:   '#352F2A'
+    red:     '#B65C60'
+    green:   '#78997A'
+    yellow:  '#EBC06D'
+    blue:    '#9AACCE'
+    magenta: '#B380B0'
+    cyan:    '#86A3A3'
+    white:   '#A38D78'
   bright:
-    black:   '#727169'
-    red:     '#e82424'
-    green:   '#98bb6c'
-    yellow:  '#e6c384'
-    blue:    '#7fb4ca'
-    magenta: '#938aa9'
-    cyan:    '#7aa89f'
-    white:   '#dcd7ba'
+    black:   '#4D453E'
+    red:     '#F17C64'
+    green:   '#99D59D'
+    yellow:  '#EBC06D'
+    blue:    '#9AACCE'
+    magenta: '#CE9BCB'
+    cyan:    '#88B3B2'
+    white:   '#C1A78E'
 
-  selection:
-    background: '#2d4f67'
-    foreground: '#c8c093'
-
-  indexed_colors:
-    - { index: 16, color: '#ffa066' }
-    - { index: 17, color: '#ff5d62' }
+# colors:
+#   primary:
+#     # background: '#1f1f28'
+#     background: '#000000'
+#     foreground: '#dcd7ba'
+#
+#   normal:
+#     black:   '#090618'
+#     red:     '#c34043'
+#     green:   '#76946a'
+#     yellow:  '#c0a36e'
+#     blue:    '#7e9cd8'
+#     magenta: '#957fb8'
+#     cyan:    '#6a9589'
+#     white:   '#c8c093'
+#
+#   bright:
+#     black:   '#727169'
+#     red:     '#e82424'
+#     green:   '#98bb6c'
+#     yellow:  '#e6c384'
+#     blue:    '#7fb4ca'
+#     magenta: '#938aa9'
+#     cyan:    '#7aa89f'
+#     white:   '#dcd7ba'
+#
+#   selection:
+#     background: '#2d4f67'
+#     foreground: '#c8c093'
+#
+#   indexed_colors:
+#     - { index: 16, color: '#ffa066' }
+#     - { index: 17, color: '#ff5d62' }
 
 # --- mouse/keyboard
 mouse:
@@ -86,9 +112,11 @@ mouse_bindings:
   - { mouse: Right,  action: Paste }
 
 key_bindings:
+  - { key: N, mods: Control|Shift, action: SpawnNewInstance }
   # https://www.youtube.com/watch?v=lHBD6pdJ-Ng
   # note that N is the capital ascii in \x1b[N;6u
   - { key: A, mods: Control|Shift, chars: "\x1b[65;6u" }
+  - { key: S, mods: Control|Shift, chars: "\x1b[83;6u" }
   - { key: Q, mods: Control|Shift, chars: "\x1b[81;6u" }
   - { key: H, mods: Control|Shift, chars: "\x1b[72;6u" }
   - { key: J, mods: Control|Shift, chars: "\x1b[74;6u" }

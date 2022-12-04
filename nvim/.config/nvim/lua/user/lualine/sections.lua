@@ -1,44 +1,27 @@
 local M = {}
-
-M.a = {
-    { "mode",
-        fmt = string.lower }
+local diag_sym = {
+    error = '*',
+    warn = '!',
+    info = '@',
+    hint = '?'
 }
 
-M.b = {
+M.a = { { "mode", fmt = string.lower } }
+
+M.b = {}
+
+M.c = { { "filename", path = 3 } }
+
+M.x = { { "diagnostics", symbols = diag_sym } }
+
+M.y = {
     { "branch",
         icons_enabled = true,
-        icon = "*" }
+        icon = "*" },
+    "diff"
 }
 
-M.c = {
-    { "buffers",
-        show_filename_only = false,
-        mode = 0,
-        buffers_color = {
-            inactive = "StatusLineNC",
-        },
-        symbols = {
-            modified = "+",
-            alternate_file = "",
-            directory = "/"
-        }
-    }
-}
 
-M.x = {
-    "diff",
-    { "diagnostics",
-        symbols = {
-            error = '*',
-            warn = '!',
-            info = '@',
-            hint = '?'
-        }
-    }
-}
-
-M.y = { "location" }
-M.z = { "encoding", "fileformat", "filetype" }
+M.z = { "encoding", "fileformat", "filetype", "location" }
 
 return M

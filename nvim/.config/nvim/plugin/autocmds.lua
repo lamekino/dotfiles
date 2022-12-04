@@ -9,40 +9,38 @@ vim.api.nvim_create_autocmd("VimEnter", {
         local has_args = function()
             return vim.fn.argc() ~= 0
                 or vim.fn.line2byte('$') ~= -1
-                or string.match(vim.v.progname, '^[-gmnq]\\=vim\\=x\\=\\%[\\.exe]$')
+                or string.match(vim.v.progname,
+                    '^[-gmnq]\\=vim\\=x\\=\\%[\\.exe]$')
         end
         if not has_args() then
-            vim.cmd("Explore")
+            require('luapad.evaluator'):new {
+                buf = vim.api.nvim_get_current_buf()
+            }:start()
+            vim.opt_local.syntax = "lua"
         end
-    end
-})
-
-vim.api.nvim_create_autocmd("VimEnter", {
-    group    = "StartupFunc",
-    desc     = "set termguicolors",
-    callback = function()
-        vim.o.termguicolors = true
     end
 })
 
 -- Spellcheck
-vim.api.nvim_create_augroup("Spellcheck", { clear = true })
+vim.api.nvim_create_augroup("PlainText", { clear = true })
 
 vim.api.nvim_create_autocmd("VimEnter", {
-    group = "Spellcheck",
-    desc = "sets spellcheck for filetypes",
+    group = "PlainText",
+    desc = "sets options for editing plain text files",
     pattern = { "*.md", "*.txt" },
     callback = function()
-        vim.o.spell = true
+        vim.opt_local.spell = true
+        vim.opt_local.textwidth = 80
+        vim.opt_local.wrapmargin = 2
     end
 })
 
 
 -- Autogroups on file write
-vim.api.nvim_create_augroup("FileMod", { clear = true })
+vim.api.nvim_create_augroup("RemoveTrailing", { clear = true })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-    group = "FileMod",
+    group = "RemoveTrailing",
     desc = "remove trailing whitespace on write.",
     command = ":%s/\\s\\+$//e"
 })

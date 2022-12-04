@@ -10,7 +10,8 @@ vim.o.cursorline     = true
 vim.o.splitbelow     = true
 vim.o.splitright     = true
 vim.o.list           = true
-vim.o.listchars      = "tab:| ,space:·,trail:×,nbsp:*"
+vim.o.wrap           = false
+vim.o.listchars      = "tab:| ,space:·,trail:×,nbsp:*,extends:$"
 vim.o.guicursor      = ""
 -- tab settings
 vim.o.expandtab      = true
@@ -28,15 +29,17 @@ vim.o.path           = vim.o.path .. "**"
 vim.o.encoding       = "utf-8"
 vim.o.fileformat     = "unix"
 vim.api.nvim_create_autocmd("VimEnter", {
-    desc = "hack to get setting formatoptions to work",
+    desc = "gets misc options to set on startup",
     callback = function()
         vim.o.fo = vim.o.fo:gsub("o", "")
+        vim.o.termguicolors = true
     end
 })
 
 -- mouse support in normal and visual
 if vim.fn.has("mouse") then
     vim.o.mouse = "vn"
+    vim.o.mousemodel = "extend"
 end
 
 -- single status bar

@@ -86,8 +86,16 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 -- configure lsps
 installer.setup()
 
+-- configure capabilities
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- https://github.com/neovim/neovim/pull/13183#issue-731760011
+capabilities["textDocument/completion/completionItem/snippetSupport"] = true
+
 for _, s in ipairs(installer.get_installed_servers()) do
-    local setup_tbl = { on_attach = on_attach }
+    local setup_tbl = {
+        on_attach = on_attach,
+        capabilities = capabilities -- snippet, cmp support
+    }
 
     -- check if there is a settings file
     local found, settings = pcall(require, "user.lsp-settings." .. s.name)
@@ -98,8 +106,3 @@ for _, s in ipairs(installer.get_installed_servers()) do
 
     lspconfig[s.name].setup(setup_tbl)
 end
-
--- configure capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)

@@ -1,12 +1,15 @@
+vim.api.nvim_create_augroup("ColorschemeTweaks", { clear = true })
+
 -- set autogroups for after the colorscheme is loaded
 vim.api.nvim_create_autocmd("Colorscheme", {
     desc     = "lsp line number indicators",
+    group    = "ColorschemeTweaks",
     callback = function()
         local colors = {
-            ["Error"] = { bg = "#51202A", fg = "#FF0000" },
-            ["Warn"] = { bg = "#51412A", fg = "#FFA501" },
-            ["Info"] = { bg = "#1E535D", fg = "#00FFFF" },
-            ["Hint"] = { bg = "#1E205D", fg = "#0000FF" }
+            ["Error"] = { fg = "#51202A", bg = "#FF0000" },
+            ["Warn"] = { fg = "#51412A", bg = "#FFA501" },
+            ["Info"] = { fg = "#1E535D", bg = "#00FFFF" },
+            ["Hint"] = { fg = "#1E205D", bg = "#0000FF" }
         }
 
         -- set up the number line to be highlighted with a color instead of using
@@ -26,13 +29,19 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 
 vim.api.nvim_create_autocmd("Colorscheme", {
     desc     = "colorscheme highlight tweaks",
+    group    = "ColorschemeTweaks",
     callback = function()
-        vim.api.nvim_set_hl(0,
-            "Normal", { bg = "NONE" })
-        vim.api.nvim_set_hl(0,
-            "FloatBorder", { fg = "#353535", bg = "NONE" })
-        vim.api.nvim_set_hl(0,
-            "WinSeparator", { fg = "#353535", bg = "NONE" })
+        vim.api.nvim_set_hl(0, "Normal", {
+            bg = "NONE"
+        })
+        vim.api.nvim_set_hl(0, "FloatBorder", {
+            fg = "#353535",
+            bg = "NONE"
+        })
+        -- vim.api.nvim_set_hl(0, "WinSeparator", {
+        --     fg = "#353535",
+        --     bg = "NONE"
+        -- })
 
         -- match the window background with normal
         vim.o.winhl = "Normal:Normal,NormalNC:Normal"
@@ -41,6 +50,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 
 vim.api.nvim_create_autocmd("ColorschemePre", {
     desc     = "sets global colorscheme variables",
+    group    = "ColorschemeTweaks",
     callback = function()
         -- Tokyonight
         vim.g.tokyonight_style       = "night"
@@ -53,4 +63,4 @@ vim.api.nvim_create_autocmd("ColorschemePre", {
 
 -- set the colorscheme
 vim.o.background = "dark"
-vim.cmd("colorscheme kanagawa")
+vim.cmd("colorscheme melange")

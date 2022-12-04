@@ -1,4 +1,3 @@
--- Useful Plugins
 local packer = require("packer")
 local util = require("packer.util")
 
@@ -16,7 +15,7 @@ packer.init {
     compile_path = util.join_paths(
         vim.fn.stdpath('config'),
         'plugin',
-        'compiled_plugins.lua'
+        '__compiled.lua'
     ),
     display = {
         open_fn = function()
@@ -25,6 +24,7 @@ packer.init {
     },
 }
 
+-- TODO: refactor `config = ...` to lua/user/pkg
 packer.startup(function(use)
     -- the package manager
     use { "wbthomason/packer.nvim" }
@@ -133,7 +133,6 @@ packer.startup(function(use)
             require("lualine").setup {
                 options = {
                     icons_enabled = false,
-                    theme = require("user.lualine.theme"),
                     component_separators = {
                         left  = "│",
                         right = "│"
@@ -157,6 +156,7 @@ packer.startup(function(use)
     }
     use { "norcalli/nvim-colorizer.lua",
         config = function()
+            -- FIXME: why is this giving an LSP warning?
             require("colorizer").setup {
                 "*",
                 css = { rgb_fn = true },
@@ -166,6 +166,7 @@ packer.startup(function(use)
 
     -- colorscheme
     use { "rebelot/kanagawa.nvim" }
+    use { "savq/melange" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

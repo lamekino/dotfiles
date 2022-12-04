@@ -9,14 +9,14 @@ local has_words_before = function()
 end
 
 local feedkey = function(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
 cmp.setup {
     snippet = {
         -- REQUIRED - you must specify a snippet engine
         expand = function(args)
-           require("luasnip").lsp_expand(args.body)
+            require("luasnip").lsp_expand(args.body)
         end,
     },
     mapping = {
@@ -25,9 +25,9 @@ cmp.setup {
         ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
         ["<C-q>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
         ["<C-e>"] = cmp.mapping({
-                i = cmp.mapping.abort(),
-                c = cmp.mapping.close(),
-            }),
+            i = cmp.mapping.abort(),
+            c = cmp.mapping.close(),
+        }),
         ["<cr>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         -- Tab autocomplete
         ["<Tab>"] = cmp.mapping(function(fallback)
@@ -61,19 +61,19 @@ cmp.setup {
 
 -- Set configuration for specific filetype.
 cmp.setup.filetype("gitcommit", {
-        sources = cmp.config.sources({
-                { name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
-            }, {
-                { name = "buffer" },
-            })
+    sources = cmp.config.sources({
+        { name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
+    }, {
+        { name = "buffer" },
     })
+})
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won"t work anymore).
 cmp.setup.cmdline("/", {
-        sources = {
-            { name = "buffer" }
-        }
-    })
+    sources = {
+        { name = "buffer" }
+    }
+})
 
 -- Use cmdline & path source for ":" (if you enabled `native_menu`, this won"t work anymore).
 cmp.setup.cmdline(":",
@@ -81,4 +81,4 @@ cmp.setup.cmdline(":",
         { name = "cmdline" },
         { name = "path" }
     }
-})
+    })

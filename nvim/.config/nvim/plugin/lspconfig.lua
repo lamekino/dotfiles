@@ -1,5 +1,6 @@
 local lspconfig = require("lspconfig")
-local installer = require("nvim-lsp-installer")
+local mason = require("mason")
+local masonlsp = require("mason-lspconfig")
 require("lsp_signature").setup {}
 
 local square_border = {
@@ -49,7 +50,6 @@ local function on_attach(client, bufnr) -- TODO: use client
     })
 end
 
--- ## SETUP
 -- create the autocmd for opening diagnostic windows
 vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     callback = function()
@@ -83,26 +83,31 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
     border = square_border,
 })
 
--- configure lsps
-installer.setup()
+-- configure mason (nvim lsp installer)
+mason.setup()
+masonlsp.setup {
+    ensure_installed = { "sumneko_lua" }
+}
 
 -- configure capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- https://github.com/neovim/neovim/pull/13183#issue-731760011
 capabilities["textDocument/completion/completionItem/snippetSupport"] = true
 
-for _, s in ipairs(installer.get_installed_servers()) do
+-- configure all the servers that are installed with mason
+for _, server in ipairs(masonlsp.get_installed_servers()) do
     local setup_tbl = {
         on_attach = on_attach,
         capabilities = capabilities -- snippet, cmp support
     }
 
     -- check if there is a settings file
-    local found, settings = pcall(require, "user.lsp-settings." .. s.name)
+    local found, settings = pcall(require, "user.lsp-settings." .. server)
+
     -- if it is, then append its contents to the table
     if found and settings ~= true then
         setup_tbl = vim.tbl_deep_extend("force", settings, setup_tbl)
     end
 
-    lspconfig[s.name].setup(setup_tbl)
+    lspconfig[server].setup(setup_tbl)
 end

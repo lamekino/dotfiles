@@ -86,16 +86,21 @@ packer.startup(function(use)
     }
 
     -- lsp
-    use { "williamboman/nvim-lsp-installer" }
-    use { "neovim/nvim-lspconfig" }
-    use { "ray-x/lsp_signature.nvim" }
+    use {
+        "neovim/nvim-lspconfig",   -- obligatory
+        "williamboman/mason.nvim", -- replaces nvim-lsp-installer
+        "williamboman/mason-lspconfig.nvim", -- ^
+        "ray-x/lsp_signature.nvim" -- shows function arguments while typing
+    }
 
     -- completion
-    use { "hrsh7th/nvim-cmp" }
-    use { "hrsh7th/cmp-nvim-lsp" }
-    use { "hrsh7th/cmp-buffer" }
-    use { "hrsh7th/cmp-path" }
-    use { "hrsh7th/cmp-cmdline" }
+    use {
+        "hrsh7th/nvim-cmp",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-cmdline",
+    }
 
     -- snip engine
     use { "L3MON4D3/LuaSnip" }

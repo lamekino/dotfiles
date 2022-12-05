@@ -83,31 +83,34 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
     border = square_border,
 })
 
+-- configure capabilities
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- https://github.com/neovim/neovim/pull/13183#issue-731760011
+capabilities["textDocument/completion/completionItem/snippetSupport"] = true
+
+
 -- configure mason (nvim lsp installer)
 mason.setup()
 masonlsp.setup {
     ensure_installed = { "sumneko_lua" }
 }
 
--- configure capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
--- https://github.com/neovim/neovim/pull/13183#issue-731760011
-capabilities["textDocument/completion/completionItem/snippetSupport"] = true
-
 -- configure all the servers that are installed with mason
-for _, server in ipairs(masonlsp.get_installed_servers()) do
-    local setup_tbl = {
-        on_attach = on_attach,
-        capabilities = capabilities -- snippet, cmp support
-    }
+masonlsp.setup_handlers {
+    function(server_name)
+        local setup_tbl = {
+            on_attach = on_attach,
+            capabilities = capabilities -- snippet, cmp support
+        }
 
-    -- check if there is a settings file
-    local found, settings = pcall(require, "user.lsp-settings." .. server)
+        -- check if there is a settings file
+        local found, settings = pcall(require, "user.lsp-settings." .. server_name)
 
-    -- if it is, then append its contents to the table
-    if found and settings ~= true then
-        setup_tbl = vim.tbl_deep_extend("force", settings, setup_tbl)
+        -- if it is, then append its contents to the table
+        if found and settings ~= true then
+            setup_tbl = vim.tbl_deep_extend("force", settings, setup_tbl)
+        end
+
+        lspconfig[server_name].setup(setup_tbl)
     end
-
-    lspconfig[server].setup(setup_tbl)
-end
+}

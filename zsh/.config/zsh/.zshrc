@@ -49,12 +49,17 @@ zstyle ":completion:*" file-list all
 alias sudo="sudo " # so aliases can be run with sudo
 alias dirs="dirs -v"
 alias jobs="jobs -l"
+alias js="jobs -l"
 alias pgrep="pgrep -l"
 alias vim="nvim"
+alias gvim="nvim-qt"
 alias ipython="ipython --no-confirm-exit"
+alias py="ipython --no-confirm-exit"
 alias tmux="tmux -2"
 alias tree="tree -a"
-alias t="tree -a"
+alias t="tree"
+alias td="tree -L"
+alias yy="xclip -selection clipboard"
 alias stop="kill -STOP"
 alias ppath="tr ':' '\n' <<< $PATH" # this is static...
 
@@ -78,20 +83,25 @@ alias wgetbulk="wget -np -nd -r --reject html"
 
 # misc
 alias cite="source $ZDOTDIR/.zshrc" # cite your sources!
-alias :q="echo '🤨'"
+alias :q="echo '🤭'"
+alias cls="echo '🤨'"
+alias dir="echo '🖕'"
 
 # --- os specific
 case "$(uname -s)" in
     "Linux")
-        source "$ZDOTDIR/sources/linux.zsh"
+        source "$ZDOTDIR/os/linux.zsh"
         grep -qi Microsoft /proc/version && \
-            source "$ZDOTDIR/sources/wsl.zsh"
+            source "$ZDOTDIR/os/wsl.zsh"
 
-        # TODO: find a better way of doing this
         case $(cut -d" " -f1 /etc/issue) in
-            "Arch") source "$ZDOTDIR/sources/arch-linux.zsh";;
-            "Ubuntu"|"Debian") source "$ZDOTDIR/sources/debian.zsh";;
+            "Arch") source "$ZDOTDIR/os/archlinux.zsh";;
+            "Ubuntu"|"Debian") source "$ZDOTDIR/os/debian.zsh";;
         esac
         ;;
     "Darwin") source "$ZDOTDIR/sources/mac.zsh" ;;
 esac
+
+# --- source init files
+source "$ZDOTDIR/sources/utils.zsh"
+source "$ZDOTDIR/sources/prompt.zsh"

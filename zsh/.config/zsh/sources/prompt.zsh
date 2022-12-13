@@ -7,30 +7,29 @@ function prompt-color() {
 function git-prompt() {
     local branch=$(git branch --show-current 2>/dev/null)
     if [ -n "$branch" ]; then
-        local unstaged=$(git status --short 2>/dev/null)
+        local unstaged=$(git status --short | wc -l)
 
-        if [ -z "$unstaged" ]; then
+        if [ $unstaged -eq 0 ]; then
             echo "$(prompt-color 10 "@$branch"):"
         else
-            echo "$(prompt-color 11 "+$branch"):"
+            echo "$(prompt-color 9 "@$branch+$unstaged"):"
         fi
     fi
 }
 
 function precmd-prompt() {
-    local dir="$(prompt-color 12 '%~')"
+    local dir="$(prompt-color 6 '%~')"
     local err="$(prompt-color 1 '%?')"
-    # local job="$(prompt-color 3 '%j')"
+    local job="$(prompt-color 3 '%%%j')"
     local git="$(git-prompt)"
 
-    # _PROMPT="%(?..${err} )%(1j.${job} .)${git}${dir}"
-    _PROMPT="%(?..${err} )${git}${dir}"
+    _PROMPT="%(1j.${job} .)%(?..${err} )${git}${dir}"
 }
 
 
 function zle-line-init zle-keymap-select {
     local norm="$(prompt-color 5 '>')"
-    local ins="$(prompt-color 8 '%#')"
+    local ins="$(prompt-color 15 '%#')"
 
     case $KEYMAP in
         vicmd)      PROMPT="${_PROMPT}${norm} " ;;

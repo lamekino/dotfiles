@@ -1,14 +1,28 @@
+function up() {
+    N="$1"
+    [ -z "$N" ] && N=1
+    printf "../%.0s" $(seq 1 "$N")
+}
+
 # jumps back n dirs if $1 exists 1 otherwise
 function ..() {
-    if [ -z "$1" ]; then
-        cd .. || return
-    elif [ "$1" -gt 0 ]; then
-        cd $(printf "../%.0s" $(seq 1 "$1")) || return
-    fi
+    cd $(up "$1") || return
+}
+
+function pp() { # push to parent ;)
+    pushd $(up "$1") || return
+}
+
+function bak() {
+    mv "${1}"{,.bak}
+}
+
+function unbak() {
+    mv "${1}"{.bak,}
 }
 
 # uses regex to search history uses the whole argv and basically globs it
-function hgrep()  {
+function h()  {
     args=$(sed 's/ /.*/g' <<< ".*$@.*")
     history 1 | grep -E "$args"
 }

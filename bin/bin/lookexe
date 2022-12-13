@@ -1,0 +1,14 @@
+#!/bin/bash
+# look(1) for executables in $PATH
+
+[ -z "$1" ] && exit
+
+look="$1"
+
+for path in ${PATH//:/ }; do
+    if [ -d "$path" ]; then
+        ls "$path" | \
+            grep "^$look.*" -Ei --color=never
+    fi
+done
+exit 0

@@ -24,7 +24,6 @@ packer.init {
     },
 }
 
--- TODO: refactor `config = ...` to lua/user/pkg
 packer.startup(function(use)
     -- the package manager
     use { "wbthomason/packer.nvim" }
@@ -35,49 +34,24 @@ packer.startup(function(use)
 
     -- neat plugins (lua script)
     use { "numToStr/Comment.nvim",
-        config = function()
-            require("Comment").setup()
-        end
+        config = function() require("Comment").setup() end
     }
+
+    -- Make buffer an active lua repl
     use { "rafcamlet/nvim-luapad" }
-    use { "akinsho/toggleterm.nvim",
-        config = function()
-            require("toggleterm").setup()
-        end
-    }
+
+    -- Fuzzy finding
     use { "nvim-telescope/telescope.nvim",
         requires = "nvim-lua/plenary.nvim"
     }
+
+    -- Show TODOs, etc
     use { "folke/todo-comments.nvim",
         requires = "nvim-lua/plenary.nvim",
-        config = function()
-            require("todo-comments").setup {
-                signs = false,
-                highlight = {
-                    before = "",
-                    keyword = "fg",
-                    after = "fg",
-                }
-            }
+    }
 
-        end
-    }
-    use { "nvim-lua/plenary.nvim",
-        config = function()
-            require("diffview").setup {
-                use_icons = false
-            }
-        end
-    }
     use { "TimUntersberger/neogit",
         config = function()
-            require("neogit").setup {
-                kind = "split",
-                disable_signs = true,
-                integrations = {
-                    diffview = true
-                }
-            }
         end,
         requires = {
             "nvim-lua/plenary.nvim",
@@ -85,44 +59,25 @@ packer.startup(function(use)
         }
     }
 
-    -- lsp
+    -- All the lsp stuff
     use {
         "neovim/nvim-lspconfig",   -- obligatory
         "williamboman/mason.nvim", -- replaces nvim-lsp-installer
         "williamboman/mason-lspconfig.nvim", -- ^
-        "ray-x/lsp_signature.nvim" -- shows function arguments while typing
-    }
-
-    -- completion
-    use {
+        "ray-x/lsp_signature.nvim", -- shows function arguments while typing
+        -- completetion
         "hrsh7th/nvim-cmp",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-cmdline",
+        "saadparwaiz1/cmp_luasnip",
+        "L3MON4D3/LuaSnip"
     }
 
-    -- snip engine
-    use { "L3MON4D3/LuaSnip" }
-    use { "saadparwaiz1/cmp_luasnip" }
-
-    -- treesitter
+     -- treesitter
     use { "nvim-treesitter/nvim-treesitter",
-        run = ":TSUpdate",
-        config = function()
-            require("nvim-treesitter.configs").setup {
-                sync_install = false,
-                ensure_installed = {
-                    "java", "c", "cpp", "bash", "python", "haskell", "rust",
-                    "lua", "vim"
-                },
-                highlight = {
-                    enable = true,
-                    disable = { "markdown" },
-                    additional_vim_regex_highlighting = false,
-                }
-            }
-        end
+        run = vim.cmd.TSUpdate
     }
 
     -- language support
@@ -131,43 +86,8 @@ packer.startup(function(use)
 
 
     -- appearance stuff
-    use { "nvim-lualine/lualine.nvim",
-        config = function()
-            local section = require("user.lualine.sections")
-
-            require("lualine").setup {
-                options = {
-                    icons_enabled = false,
-                    component_separators = {
-                        left  = "│",
-                        right = "│"
-                    },
-                    section_separators = {
-                        left  = "▓▒░",
-                        right = "░▒▓"
-                    },
-                },
-
-                sections = {
-                    lualine_a = section.a,
-                    lualine_b = section.b,
-                    lualine_c = section.c,
-                    lualine_x = section.x,
-                    lualine_y = section.y,
-                    lualine_z = section.z,
-                }
-            }
-        end
-    }
-    use { "norcalli/nvim-colorizer.lua",
-        config = function()
-            -- FIXME: why is this giving an LSP warning?
-            require("colorizer").setup {
-                "*",
-                css = { rgb_fn = true },
-            }
-        end
-    }
+    use { "nvim-lualine/lualine.nvim" }
+    use { "norcalli/nvim-colorizer.lua" }
 
     -- colorscheme
     use { "rebelot/kanagawa.nvim" }

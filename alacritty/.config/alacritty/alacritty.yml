@@ -23,8 +23,12 @@ window:
     y: 4
 
 cursor:
-  style: Block
   unfocused_hollow: true
+  blink_interval: 550
+  blink_timeout: 0
+  style:
+    shape: Block
+    blinking: Always
 
 # --- font
 font:

@@ -39,21 +39,28 @@ end
 local function on_attach(client, bufnr) -- TODO: use client
     lsp_keymaps(bufnr)
 
-    -- vim.api.nvim_create_augroup("LSPFormatOnWrite", { clear = true })
-    --
-    -- vim.api.nvim_create_autocmd("BufWritePre", {
-    --     group = "LSPFormatOnWrite",
-    --     desc = "autoformat with lsp",
-    --     callback = function()
-    --         vim.lsp.buf.formatting_sync(nil, 2000)
-    --     end
-    -- })
+    vim.api.nvim_create_augroup("LSPFormatOnWrite", { clear = true })
+
+    vim.api.nvim_create_autocmd("BufWritePre", {
+        group = "LSPFormatOnWrite",
+        desc = "autoformat with lsp",
+        callback = function()
+            -- the clang autoformater is WAY too aggressive
+            -- FIXME: this is a botch job
+            -- TODO: make custom format options (clang-format?)
+            if vim.bo.filetype ~= "c" then
+                vim.lsp.buf.formatting_sync(nil, 2000)
+            end
+        end
+    })
 end
 
 -- create the autocmd for opening diagnostic windows
 vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     callback = function()
-        vim.diagnostic.open_float(nil, { focus = false })
+        if vim.fn.mode() ~= "i" then
+            vim.diagnostic.open_float(nil, { focus = false })
+        end
     end
 })
 

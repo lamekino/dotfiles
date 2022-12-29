@@ -1,5 +1,5 @@
 zsh/.config/zsh/.zhistory
 zsh/.config/zsh/.zcompdump
 zsh/.config/zsh/sources/local/*
-nvim/.config/nvim/plugin/__compiled.lua
+nvim/.config/nvim/plugin/__packer_compiled.lua
 nvim/.config/nvim/spell/

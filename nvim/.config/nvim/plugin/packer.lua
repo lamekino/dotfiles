@@ -15,7 +15,7 @@ packer.init {
     compile_path = util.join_paths(
         vim.fn.stdpath('config'),
         'plugin',
-        '__compiled.lua'
+        '__packer_compiled.lua'
     ),
     display = {
         open_fn = function()

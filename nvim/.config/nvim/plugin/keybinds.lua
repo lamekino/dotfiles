@@ -26,6 +26,8 @@ imap("<F1>", "") -- disable the F1 for help
 
 -- Control keys
 nnoremap("<C-i>", ":ls<cr>")
+nnoremap("<C-d>", "<C-d>zz")
+nnoremap("<C-u>", "<C-u>zz")
 
 -- Leader keys
 nnoremap("<Leader>a", ":Neogit<cr>")

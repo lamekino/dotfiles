@@ -11,7 +11,7 @@ vim.o.splitbelow     = true
 vim.o.splitright     = true
 vim.o.list           = true
 vim.o.wrap           = false
-vim.o.listchars      = "tab:| ,space:·,trail:×,nbsp:*,extends:$"
+vim.o.listchars      = "tab:--,space:·,trail:×,nbsp:*,extends:$"
 vim.o.guicursor      = ""
 -- tab settings
 vim.o.expandtab      = true

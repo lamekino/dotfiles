@@ -61,9 +61,9 @@ packer.startup(function(use)
 
     -- All the lsp stuff
     use {
-        "neovim/nvim-lspconfig",   -- obligatory
         "williamboman/mason.nvim", -- replaces nvim-lsp-installer
         "williamboman/mason-lspconfig.nvim", -- ^
+        "neovim/nvim-lspconfig", -- obligatory
         "ray-x/lsp_signature.nvim", -- shows function arguments while typing
         -- completetion
         "hrsh7th/nvim-cmp",
@@ -75,7 +75,7 @@ packer.startup(function(use)
         "L3MON4D3/LuaSnip"
     }
 
-     -- treesitter
+    -- treesitter
     use { "nvim-treesitter/nvim-treesitter",
         run = vim.cmd.TSUpdate
     }

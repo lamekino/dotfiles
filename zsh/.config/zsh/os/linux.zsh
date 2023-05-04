@@ -6,5 +6,5 @@ alias la='LC_ALL=C ls -pkah --color=auto --group-directories-first'
 alias lla='LC_ALL=C ls -pkalh --color=auto --group-directories-first'
 alias diff='diff --color=always'
 alias feh='feh -x --scale-down'
-alias feh-svg="feh --magick-timeout 1 $1"
 alias open='xdg-open'
+alias trash='gio trash'

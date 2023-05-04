@@ -23,18 +23,22 @@ nnoremap("<C-p>", "\"+p")
 
 -- Function Keys
 imap("<F1>", "") -- disable the F1 for help
+-- F1 to search the internet using my script
+nnoremap("<F1>", ":!ddg ")
+-- search from begining of line
+nnoremap("<F2>", "/^\\(\\s*\\)")
+nnoremap("<F12>", ":messages<cr>")
 
 -- Control keys
-nnoremap("<C-i>", ":ls<cr>")
 nnoremap("<C-d>", "<C-d>zz")
 nnoremap("<C-u>", "<C-u>zz")
 
 -- Leader keys
-nnoremap("<Leader>a", ":Neogit<cr>")
 nnoremap("<Leader>s", ":Telescope buffers<cr>")
 nnoremap("<Leader>d", ":Lex<cr>")
 nnoremap("<Leader>f", ":Telescope find_files<cr>")
-nnoremap("<Leader>g", ":Telescope live_grep<cr>")
+nnoremap("<Leader>g", ":Neogit<cr>")
+nnoremap("<Leader>h", ":Telescope live_grep<cr>")
 
 nnoremap("<Leader>q", ":Telescope help_tags<cr>")
 nnoremap("<Leader>w", function()
@@ -43,6 +47,8 @@ nnoremap("<Leader>w", function()
     }
 end)
 nnoremap("<Leader>u", ":UndotreeToggle<cr>")
+
+nnoremap("J", "J$")
 
 map("s", "<Nop>")
 nnoremap("sn", ":bn<cr>")
@@ -63,7 +69,11 @@ nnoremap("<Esc>a", ":lwindow<cr>")
 nnoremap("<Esc>q", ":lclose<cr>")
 nnoremap("<Esc>j", ":lnext<cr>")
 nnoremap("<Esc>k", ":lprev<cr>")
-nnoremap("<Esc>;", ":lvimgrep FIXME ** | lwindow<cr>")
+nnoremap("<Esc>;", ":lvimgrep"
+    .. "'\\(FIXME:\\|TODO:\\|WARNING:\\|BUG:\\)' **"
+    .. "| lwindow<cr>")
+-- search multiple files
+nnoremap("?", ":lvimgrep '' **" .. string.rep("<Left>", 4))
 
 -- quickfix list (requires csi escapes to be enabled)
 -- http://www.leonerd.org.uk/hacks/fixterms/

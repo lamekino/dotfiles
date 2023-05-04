@@ -14,7 +14,7 @@ local square_border = {
     { "│", "FloatBorder" }
 }
 
-local function lsp_keymaps(bufnr)
+local function on_attach(client, bufnr)
     local lsp_nmap = function(keys, callback)
         local opts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set("n", keys, callback, opts)
@@ -26,33 +26,13 @@ local function lsp_keymaps(bufnr)
     lsp_nmap("gr", vim.lsp.buf.references)
     lsp_nmap("K", vim.lsp.buf.hover)
     lsp_nmap("<C-k>", vim.lsp.buf.signature_help)
+    lsp_nmap("<leader>a", vim.lsp.buf.code_action)
     lsp_nmap("<leader>r", vim.lsp.buf.rename)
     lsp_nmap("<leader>l", vim.diagnostic.setloclist)
-    -- lsp_nmap("<Leader>j", vim.diagnostic.goto_next)
-    -- lsp_nmap("<Leader>k", vim.diagnostic.goto_prev)
+    lsp_nmap("<Leader>j", vim.diagnostic.goto_next)
+    lsp_nmap("<Leader>k", vim.diagnostic.goto_prev)
 
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-    vim.api.nvim_create_user_command("Format", vim.lsp.buf.formatting, {})
-    vim.api.nvim_create_user_command("CodeAction", vim.lsp.buf.code_action, {})
-end
-
-local function on_attach(client, bufnr) -- TODO: use client
-    lsp_keymaps(bufnr)
-
-    vim.api.nvim_create_augroup("LSPFormatOnWrite", { clear = true })
-
-    vim.api.nvim_create_autocmd("BufWritePre", {
-        group = "LSPFormatOnWrite",
-        desc = "autoformat with lsp",
-        callback = function()
-            -- the clang autoformater is WAY too aggressive
-            -- FIXME: this is a botch job
-            -- TODO: make custom format options (clang-format?)
-            if vim.bo.filetype ~= "c" then
-                vim.lsp.buf.formatting_sync(nil, 2000)
-            end
-        end
-    })
 end
 
 -- create the autocmd for opening diagnostic windows
@@ -64,6 +44,24 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     end
 })
 
+-- create autocmd for formating files
+vim.api.nvim_create_augroup("LSPFormatOnWrite", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group    = "LSPFormatOnWrite",
+    desc     = "autoformat with lsp",
+    callback = function()
+        local disabled_formatters = {
+            "clangd"
+        }
+
+        vim.lsp.buf.format {
+            filter = function(c)
+                return disabled_formatters[c.name] == nil
+            end
+        }
+    end
+})
+
 vim.diagnostic.config {
     virtual_text     = false,
     signs            = true,
@@ -71,7 +69,7 @@ vim.diagnostic.config {
     update_in_insert = false,
     severity_sort    = true,
 
-    float = {
+    float            = {
         style         = "rounded",
         border        = square_border,
         source        = "always",
@@ -90,24 +88,28 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
     border = square_border,
 })
 
--- configure capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
--- https://github.com/neovim/neovim/pull/13183#issue-731760011
-capabilities["textDocument/completion/completionItem/snippetSupport"] = true
-
-
 -- configure mason (nvim lsp installer)
 mason.setup()
 masonlsp.setup {
-    ensure_installed = { "sumneko_lua" }
+    ensure_installed = {
+        "lua_ls",
+        "clangd",
+        "jdtls",
+        "jedi_language_server"
+    }
 }
 
 -- configure all the servers that are installed with mason
 masonlsp.setup_handlers {
     function(server_name)
+        -- configure capabilities
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        -- https://github.com/neovim/neovim/pull/13183#issue-731760011
+        capabilities["textDocument/completion/completionItem/snippetSupport"] = true
+
         local setup_tbl = {
             on_attach = on_attach,
-            capabilities = capabilities -- snippet, cmp support
+            capabilities = capabilities
         }
 
         -- check if there is a settings file
@@ -116,8 +118,9 @@ masonlsp.setup_handlers {
         -- if it is, then append its contents to the table
         if found and settings ~= true then
             setup_tbl = vim.tbl_deep_extend("force", settings, setup_tbl)
+            lspconfig[server_name].setup(setup_tbl)
+        else
+            lspconfig[server_name].setup {}
         end
-
-        lspconfig[server_name].setup(setup_tbl)
     end
 }

@@ -46,7 +46,8 @@ zstyle ":completion:*" matcher-list "" "m:{a-zA-Z}={A-Za-z}" "r:|=*" "l:|=* r:|=
 zstyle ":completion:*" file-list all
 
 # --- aliases
-alias sudo="sudo " # so aliases can be run with sudo
+alias sudo="sudo " # makes aliases work with sudo
+alias \$=" " # copy paste from archwiki
 alias dirs="dirs -v"
 alias jobs="jobs -l"
 alias js="jobs -l"
@@ -61,7 +62,8 @@ alias t="tree"
 alias td="tree -L"
 alias yy="xclip -selection clipboard"
 alias stop="kill -STOP"
-alias ppath="tr ':' '\n' <<< $PATH" # this is static...
+alias pyserver="python3 -m http.server"
+alias youtube-dl="yt-dlp"
 
 # files
 alias tmuxconf="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf"

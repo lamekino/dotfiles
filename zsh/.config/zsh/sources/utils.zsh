@@ -9,16 +9,8 @@ function ..() {
     cd $(up "$1") || return
 }
 
-function pp() { # push to parent ;)
+function pup() {
     pushd $(up "$1") || return
-}
-
-function bak() {
-    mv "${1}"{,.bak}
-}
-
-function unbak() {
-    mv "${1}"{.bak,}
 }
 
 # uses regex to search history uses the whole argv and basically globs it
@@ -26,6 +18,7 @@ function h()  {
     args=$(sed 's/ /.*/g' <<< ".*$@.*")
     history 1 | grep -E "$args"
 }
+alias hgrep="h"
 
 # mkdir and cd into it
 function md() {
@@ -35,4 +28,10 @@ function md() {
 # pushd using z
 function pz() {
     builtin pushd $(zoxide query "$@")
+}
+
+# pretty prints $PATH
+function ppath() {
+    paths=$(sed 's/:/\n/g' <<< "$PATH")
+    printf "%s\n" $paths
 }

@@ -80,10 +80,12 @@ packer.startup(function(use)
         run = vim.cmd.TSUpdate
     }
 
+    -- discord rpc
+    use { 'andweeb/presence.nvim' }
+
     -- language support
     use { "sheerun/vim-polyglot" }
     use { "uiiaoo/java-syntax.vim" }
-
 
     -- appearance stuff
     use { "nvim-lualine/lualine.nvim" }

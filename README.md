@@ -27,4 +27,6 @@ PS> .\install.ps1
 ```
 
 #### To uninstall:
-There's currently no way to do this ¯\\_(ツ)_/¯
+```powershell
+PS> .\install -Uninstall
+```

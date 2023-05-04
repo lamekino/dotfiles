@@ -38,10 +38,10 @@ vim.api.nvim_create_autocmd("Colorscheme", {
             fg = "#353535",
             bg = "NONE"
         })
-        -- vim.api.nvim_set_hl(0, "WinSeparator", {
-        --     fg = "#353535",
-        --     bg = "NONE"
-        -- })
+        vim.api.nvim_set_hl(0, "WinSeparator", {
+            fg = "#353535",
+            bg = "NONE"
+        })
 
         -- match the window background with normal
         vim.o.winhl = "Normal:Normal,NormalNC:Normal"

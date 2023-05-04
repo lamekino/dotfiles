@@ -1,0 +1,62 @@
+#!/bin/sh
+# copies image text to clipboard using tesseract meant to be used with
+# a screenshot program
+
+# requires:
+# - tesseract (https://github.com/tesseract-ocr/tesseract)
+# - notify-send
+# - xclip
+
+[ -z "$EDITOR" ] && EDITOR=mousepad
+[ -z "$SCRSHOT_CMD" ] && SCRSHOT_CMD="xfce4-screenshooter -r -s"
+
+# shellcheck disable=SC2139 # save program name here so it can be ran anywhere
+alias relaunch_with="$0"
+# shellcheck disable=SC2139 # allows user to define region selector with args
+alias save_region_as="$SCRSHOT_CMD"
+alias notify="notify-send -i emblem-photos"
+
+readonly COPY_ACTION=0
+readonly EDIT_ACTION=1
+
+get_text_action() {
+    notify -u critical \
+        -A Copy \
+        -A Edit \
+        "Processed from screenshot:" \
+        "\'$1\'"
+}
+
+clipboard_string() {
+    printf "%s" "$1" | xclip -selection clipboard
+    notify "Copied!"
+}
+
+edit_string() {
+    tmpfile=$(mktemp)
+    printf "%s\n" "$1" > "$tmpfile"
+    sleep 0.5
+    "$EDITOR" "$tmpfile" && rm "$tmpfile"
+}
+
+# relaunch program with a temporary screenshot when no args
+if [ -z "$1" ]; then
+    pngfile=$(mktemp --suffix=.png)
+    save_region_as "$pngfile"
+    relaunch_with "$pngfile"
+    rm "$pngfile"
+    exit 0
+fi
+
+# get selection as text
+OCR_DATA=$(tesseract "$1" - 2>/dev/null)
+
+if [ -z "$OCR_DATA" ]; then
+    notify "No text found from screenshot"
+    exit 1
+fi
+
+case $(get_text_action "$OCR_DATA") in
+    "$COPY_ACTION") clipboard_string "$OCR_DATA" ;;
+    "$EDIT_ACTION") edit_string "$OCR_DATA" ;;
+esac

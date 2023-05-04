@@ -2,35 +2,52 @@
 # modified from:
 # https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/bin/tmux-sessionizer
 
-alias fzf="fzf --preview-window hidden --height=100%"
+confirm() {
+    clear
+    printf "Confirm:\n\n"
+    printf ">>> Session name: %s\n" "$1"
+    printf ">>> Session path: %s\n" "$2"
+    [ -n "$3" ] \
+        && printf ">>> Session command: '%s'\n" "$3" \
+        || printf ">>> Session shell: %s\n" "$SHELL"
 
-selected="$1"
-if [ -z "$selected" ]; then
-    selected=$(zoxide query --list | fzf)
+    printf "\nIs this OK? [Y/n] "
+    read -r prompt
+    [[ "$prompt" =~ ^(n|N)+ ]] && exit 0
+}
+
+command -v toilet &>/dev/null \
+    && toilet --gay -f future "\\ \\ \\ tmux sessionizer / / /"
+# Get session name
+printf "New session name: "
+read -r name
+[ -z "$name" ] && exit 1
+
+path="$HOME"
+program=
+case "$1" in
+    "zoxide")
+        path=$(zoxide query --list | fzf \
+                --layout=reverse --preview-window hidden --height=100%)
+        ;;
+    "explicit-path")
+        printf "Starting directory: "
+        read -r path
+        path="${path/\~/$HOME}"
+        ;;
+    "program")
+        printf "Command to run: "
+        read -r program
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+
+confirm "$name" "$path" "$program"
+if [ -z "$program" ]; then
+    tmux new-session -ds "$name" -c "$path"
 else
-    printf "Starting directory: "
-    read -r selected
-    selected=${selected/\~/$HOME}
+    tmux new-session -ds "$name" -c "$path" "$program"
 fi
-
-if [[ -z "$selected" ]]; then
-    exit 0
-fi
-
-echo "Starting in: $selected"
-
-printf "Session name: "
-read -r selected_name
-
-tmux_running=$(pgrep tmux)
-
-if [[ -z "$TMUX" ]] && [[ -z "$tmux_running" ]]; then
-    tmux new-session -s "$selected_name" -c "$selected"
-    exit 0
-fi
-
-if ! tmux has-session -t "$selected_name" 2> /dev/null; then
-    tmux new-session -ds "$selected_name" -c "$selected"
-fi
-
-tmux switch-client -t "$selected_name"
+tmux switch-client -t "$name"

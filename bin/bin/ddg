@@ -14,11 +14,8 @@ def msg(s):
     print(f"\033[0;33m=>> {s}\033[0m")
 
 if __name__ == "__main__":
-    try:
-        BROWSER = os.environ['BROWSER']
-    except KeyError:
-        BROWSER = "/usr/bin/env firefox"
-        msg("! defaulting to firefox")
+    os.environ.setdefault('BROWSER',  "/usr/bin/env firefox")
+    BROWSER = os.environ['BROWSER']
 
     args = argv[1:]
 

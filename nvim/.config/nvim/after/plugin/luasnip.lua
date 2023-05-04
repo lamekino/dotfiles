@@ -77,3 +77,12 @@ ls.add_snippets("haskell", {
         fmt("data {} = {} a", { i(1), rep(1) })
     )
 })
+
+ls.add_snippets("java", {
+    s("printout",
+        fmt("System.out.println({});\n", i(1, "\"\""))
+    ),
+    s("printerr",
+        fmt("System.err.println({});\n", i(1, "\"\""))
+    ),
+})

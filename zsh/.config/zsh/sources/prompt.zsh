@@ -1,7 +1,7 @@
 function prompt-color() {
     local color="$1"
     local string="$2"
-    echo -n "%F{$color}$string%f"
+    printf "%%F{%s}%s%%f" "$color" "$string"
 }
 
 function git-prompt() {
@@ -28,7 +28,7 @@ function precmd-prompt() {
 
 
 function zle-line-init zle-keymap-select {
-    local norm="$(prompt-color 5 '>')"
+    local norm="$(prompt-color 15 '[')"
     local ins="$(prompt-color 15 '%#')"
 
     case $KEYMAP in

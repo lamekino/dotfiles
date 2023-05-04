@@ -1,26 +1,3 @@
--- Startup
-vim.api.nvim_create_augroup("StartupFunc", { clear = true })
-
-vim.api.nvim_create_autocmd("VimEnter", {
-    group    = "StartupFunc",
-    desc     = "open vim to :Explore on no args",
-    callback = function()
-        -- https://vi.stackexchange.com/a/715
-        local has_args = function()
-            return vim.fn.argc() ~= 0
-                or vim.fn.line2byte('$') ~= -1
-                or string.match(vim.v.progname,
-                    '^[-gmnq]\\=vim\\=x\\=\\%[\\.exe]$')
-        end
-        if not has_args() then
-            require('luapad.evaluator'):new {
-                buf = vim.api.nvim_get_current_buf()
-            }:start()
-            vim.opt_local.syntax = "lua"
-        end
-    end
-})
-
 -- Spellcheck
 vim.api.nvim_create_augroup("PlainText", { clear = true })
 
@@ -34,7 +11,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
         vim.opt_local.wrapmargin = 2
     end
 })
-
 
 -- Autogroups on file write
 vim.api.nvim_create_augroup("RemoveTrailing", { clear = true })

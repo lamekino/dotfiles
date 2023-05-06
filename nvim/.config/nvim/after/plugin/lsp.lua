@@ -14,9 +14,8 @@ local square_border = {
     { "│", "FloatBorder" }
 }
 
-local function on_attach(client, bufnr)
+local function lsp_keymaps(opts)
     local lsp_nmap = function(keys, callback)
-        local opts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set("n", keys, callback, opts)
     end
 
@@ -26,14 +25,27 @@ local function on_attach(client, bufnr)
     lsp_nmap("gr", vim.lsp.buf.references)
     lsp_nmap("K", vim.lsp.buf.hover)
     lsp_nmap("<C-k>", vim.lsp.buf.signature_help)
-    lsp_nmap("<leader>a", vim.lsp.buf.code_action)
     lsp_nmap("<leader>r", vim.lsp.buf.rename)
     lsp_nmap("<leader>l", vim.diagnostic.setloclist)
     lsp_nmap("<Leader>j", vim.diagnostic.goto_next)
     lsp_nmap("<Leader>k", vim.diagnostic.goto_prev)
-
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 end
+
+vim.api.nvim_create_augroup("MyLspConfig", {})
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = "MyLspConfig",
+    callback = function(ev)
+        vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+        lsp_keymaps {
+            buffer = ev.buf,
+            noremap = true
+        }
+
+        vim.api.nvim_create_user_command("Format", vim.lsp.buf.format, {})
+        vim.api.nvim_create_user_command("CodeAction", vim.lsp.buf.code_action, {})
+    end
+})
 
 -- create the autocmd for opening diagnostic windows
 vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -44,11 +56,10 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     end
 })
 
--- create autocmd for formating files
 vim.api.nvim_create_augroup("LSPFormatOnWrite", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePre", {
-    group    = "LSPFormatOnWrite",
-    desc     = "autoformat with lsp",
+    group = "LSPFormatOnWrite",
+    desc = "autoformat with lsp",
     callback = function()
         local disabled_formatters = {
             ["clangd"] = true
@@ -88,6 +99,12 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
     border = square_border,
 })
 
+-- configure capabilities
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- https://github.com/neovim/neovim/pull/13183#issue-731760011
+capabilities["textDocument/completion/completionItem/snippetSupport"] = true
+
+
 -- configure mason (nvim lsp installer)
 mason.setup()
 masonlsp.setup {
@@ -99,28 +116,23 @@ masonlsp.setup {
     }
 }
 
+-- TODO: iterate over directory to find files
+local function get_lsp_settings(server_name)
+    local exists, module = pcall(require, "user.lsp-settings." .. server_name)
+
+    if exists then
+        return module
+    end
+
+    return {}
+end
+
 -- configure all the servers that are installed with mason
 masonlsp.setup_handlers {
-    function(server_name)
-        -- configure capabilities
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        -- https://github.com/neovim/neovim/pull/13183#issue-731760011
-        capabilities["textDocument/completion/completionItem/snippetSupport"] = true
-
-        local setup_tbl = {
-            on_attach = on_attach,
-            capabilities = capabilities
-        }
-
-        -- check if there is a settings file
-        local found, settings = pcall(require, "user.lsp-settings." .. server_name)
-
-        -- if it is, then append its contents to the table
-        if found and settings ~= true then
-            setup_tbl = vim.tbl_deep_extend("force", settings, setup_tbl)
-            lspconfig[server_name].setup(setup_tbl)
-        else
-            lspconfig[server_name].setup {}
-        end
+    function(server_name) -- the default handler
+        lspconfig[server_name].setup {}
+    end,
+    ["lua_ls"] = function()
+        lspconfig.lua_ls.setup(get_lsp_settings("lua_ls"))
     end
 }

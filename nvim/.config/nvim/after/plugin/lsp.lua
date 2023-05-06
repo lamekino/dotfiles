@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     desc     = "autoformat with lsp",
     callback = function()
         local disabled_formatters = {
-            "clangd"
+            ["clangd"] = true
         }
 
         vim.lsp.buf.format {

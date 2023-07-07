@@ -61,18 +61,30 @@ packer.startup(function(use)
 
     -- All the lsp stuff
     use {
-        "williamboman/mason.nvim", -- replaces nvim-lsp-installer
-        "williamboman/mason-lspconfig.nvim", -- ^
-        "neovim/nvim-lspconfig", -- obligatory
-        "ray-x/lsp_signature.nvim", -- shows function arguments while typing
-        -- completetion
-        "hrsh7th/nvim-cmp",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "saadparwaiz1/cmp_luasnip",
-        "L3MON4D3/LuaSnip"
+        'VonHeikemen/lsp-zero.nvim',
+        branch = 'v2.x',
+        requires = {
+            -- LSP Support
+            { 'neovim/nvim-lspconfig' }, -- Required
+            {
+                'williamboman/mason.nvim',
+                run = function()
+                    pcall(vim.cmd, 'MasonUpdate')
+                end,
+            },
+            { 'williamboman/mason-lspconfig.nvim' },
+
+            -- Autocompletion
+            { 'hrsh7th/nvim-cmp' },
+            { 'hrsh7th/cmp-nvim-lsp' },
+            { "hrsh7th/cmp-nvim-lsp" },
+            { "hrsh7th/cmp-buffer" },
+            { "hrsh7th/cmp-path" },
+            { "hrsh7th/cmp-cmdline" },
+            { "saadparwaiz1/cmp_luasnip" },
+            { "ray-x/lsp_signature.nvim" },
+            { 'L3MON4D3/LuaSnip' },
+        }
     }
 
     -- treesitter

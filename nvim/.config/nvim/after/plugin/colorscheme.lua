@@ -1,9 +1,9 @@
-vim.api.nvim_create_augroup("ColorschemeTweaks", { clear = true })
+local aug_tweaks = vim.api.nvim_create_augroup("ColorschemeTweaks", { clear = true })
 
 -- set autogroups for after the colorscheme is loaded
 vim.api.nvim_create_autocmd("Colorscheme", {
     desc     = "lsp line number indicators",
-    group    = "ColorschemeTweaks",
+    group    = aug_tweaks,
     callback = function()
         local colors = {
             ["Error"] = { fg = "#51202A", bg = "#FF0000" },
@@ -65,19 +65,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     end
 })
 
-vim.api.nvim_create_autocmd("ColorschemePre", {
-    desc     = "sets global colorscheme variables",
-    group    = "ColorschemeTweaks",
-    callback = function()
-        -- Tokyonight
-        vim.g.tokyonight_style       = "night"
-        vim.g.tokyonight_transparent = true
-
-        -- Catpuccin
-        vim.g.catppuccin_flavour = "mocha"
-    end
-})
-
 -- set the colorscheme
 vim.o.background = "dark"
-vim.cmd("colorscheme melange")
+vim.cmd.colorscheme("melange")

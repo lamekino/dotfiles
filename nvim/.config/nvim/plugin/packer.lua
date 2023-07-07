@@ -104,7 +104,6 @@ packer.startup(function(use)
     use { "norcalli/nvim-colorizer.lua" }
 
     -- colorscheme
-    use { "rebelot/kanagawa.nvim" }
     use { "savq/melange" }
 
     if PACKER_BOOTSTRAP then

@@ -4,16 +4,16 @@ local create_mapper = function(mode, opts)
     end
 end
 
-local map      = create_mapper("", { silent = true })
-local imap     = create_mapper("i", { silent = true })
-local nmap     = create_mapper("n", { silent = true })
-local nnoremap = create_mapper("n", { noremap = true })
-local inoremap = create_mapper("i", { noremap = true })
-local vnoremap = create_mapper("v", { noremap = true })
-local tnoremap = create_mapper("t", { noremap = true })
+local map           = create_mapper("", { silent = true })
+local imap          = create_mapper("i", { silent = true })
+local nmap          = create_mapper("n", { silent = true })
+local nnoremap      = create_mapper("n", { noremap = true })
+local inoremap      = create_mapper("i", { noremap = true })
+local vnoremap      = create_mapper("v", { noremap = true })
+local tnoremap      = create_mapper("t", { noremap = true })
 
 -- Set leader key map('<Space>', '<Nop>')
-vim.g.mapleader = " "
+vim.g.mapleader     = " "
 
 -- registers
 nnoremap("_", "\"_d")

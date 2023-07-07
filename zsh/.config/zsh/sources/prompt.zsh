@@ -12,13 +12,13 @@ function git-prompt() {
         if [ $unstaged -eq 0 ]; then
             echo "$(prompt-color 10 "@$branch"):"
         else
-            echo "$(prompt-color 9 "@$branch+$unstaged"):"
+            echo "$(prompt-color 5 "@$branch+$unstaged"):"
         fi
     fi
 }
 
 function precmd-prompt() {
-    local dir="$(prompt-color 6 '%~')"
+    local dir="$(prompt-color 4 '%~')"
     local err="$(prompt-color 1 '%?')"
     local job="$(prompt-color 3 '%%%j')"
     local git="$(git-prompt)"

@@ -27,20 +27,37 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     end
 })
 
+local function set_tweaked_hl(group_name, tweaks)
+    local hl = vim.api.nvim_get_hl(0, { name = group_name })
+    for field, tweak in pairs(tweaks) do
+        hl[field] = tweak
+    end
+    vim.api.nvim_set_hl(0, group_name, hl)
+end
+
 vim.api.nvim_create_autocmd("Colorscheme", {
     desc     = "colorscheme highlight tweaks",
-    group    = "ColorschemeTweaks",
+    group    = aug_tweaks,
     callback = function()
-        vim.api.nvim_set_hl(0, "Normal", {
-            bg = "NONE"
+        -- make background transparent
+        set_tweaked_hl("Normal", {
+            ["bg"] = "NONE"
         })
-        vim.api.nvim_set_hl(0, "FloatBorder", {
-            fg = "#353535",
-            bg = "NONE"
+
+        -- borders and separators look presentable
+        set_tweaked_hl("FloatBorder", {
+            ["fg"] = "#353535",
+            ["bg"] = "NONE"
         })
-        vim.api.nvim_set_hl(0, "WinSeparator", {
-            fg = "#353535",
-            bg = "NONE"
+
+        set_tweaked_hl("WinSeparator", {
+            ["fg"] = "#353535",
+            ["bg"] = "NONE"
+        })
+
+        -- disable annoying italic comments
+        set_tweaked_hl("Comment", {
+            ["italic"] = false
         })
 
         -- match the window background with normal

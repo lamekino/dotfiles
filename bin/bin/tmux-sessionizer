@@ -29,6 +29,7 @@ case "$1" in
     "zoxide")
         path=$(zoxide query --list | fzf \
                 --layout=reverse --preview-window hidden --height=100%)
+        [ -z "$path" ] && path="$HOME"
         ;;
     "explicit-path")
         printf "Starting directory: "

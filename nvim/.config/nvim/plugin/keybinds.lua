@@ -35,7 +35,7 @@ nnoremap("<C-u>", "<C-u>zz")
 
 -- Leader keys
 nnoremap("<Leader>s", ":Telescope buffers<cr>")
-nnoremap("<Leader>d", ":Lex<cr>")
+nnoremap("<Leader>d", ":Lex <C-r>=expand('%:p:h')<cr><cr>")
 nnoremap("<Leader>f", ":Telescope find_files<cr>")
 nnoremap("<Leader>g", ":Neogit<cr>")
 nnoremap("<Leader>h", ":Telescope live_grep<cr>")

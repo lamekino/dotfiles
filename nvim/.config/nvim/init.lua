@@ -1,8 +1,9 @@
 -- line numbers
 vim.o.number         = true
 vim.o.relativenumber = true
-vim.o.numberwidth    = 6
+vim.o.numberwidth    = 4
 -- editor settings
+vim.opt.colorcolumn  = "80"
 vim.o.confirm        = true
 vim.o.ignorecase     = true
 vim.o.hidden         = true
@@ -48,9 +49,9 @@ if vim.fn.has("nvim-0.7.2") then
 end
 
 -- global variables
-vim.g.netrw_winsize   = 15
-vim.g.netrw_liststyle = 3
-vim.g.netrw_banner    = false
+vim.g.netrw_winsize = 15
+-- vim.g.netrw_liststyle = 3
+vim.g.netrw_banner  = false
 
 -- windows host options
 if not vim.fn.has("unix") and vim.fn.has("win32") then

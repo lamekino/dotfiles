@@ -1,5 +1,6 @@
 vim.cmd [[compiler javag]]
 vim.o.suffixesadd = ".java"
+vim.o.makeprg = "mvn -q -f pom.xml test compile package"
 
 vim.keymap.set("n", "<C-s>", '<C-r>=expand("%:r")<cr>')
 vim.keymap.set("n", "<F2>", ':!java <C-r>=expand("%:r")<cr><cr>')

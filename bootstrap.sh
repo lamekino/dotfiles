@@ -43,7 +43,6 @@ install_dependencies_linux() {
         (git clone "$AUR_URL" \
             && cd neovim-git \
             && makepkg -si \
-            && find . -print0 -name \*.zst | xargs -0 -I {} "sudo pacman -U {}"
         ) || report_error "error in building $AUR_URL"
         ;;
     "Ubuntu" | "Debian")

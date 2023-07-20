@@ -1,6 +1,10 @@
-local cmp = require('cmp')
-local border = require("user.aesthetics.square_border")
-local lsp = require('lsp-zero').preset {
+local okay, cmp = pcall(require, 'cmp')
+if not okay then return end
+
+local okay, lsp = pcall(require, 'lsp-zero')
+if not okay then return end
+
+lsp.preset {
     manage_nvim_cmp = {
         set_sources = 'recommended',
         set_extra_mappings = true
@@ -46,6 +50,8 @@ lsp.ensure_installed {
 }
 
 lsp.on_attach(function(client, bufnr)
+    local border = require("user.aesthetics.square_border")
+
     lsp_keybinds(bufnr)
 
     -- configure function signature helper
@@ -81,6 +87,9 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 -- (Optional) Configure lua language server for neovim
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+local okay, lspconfig = pcall(require, "lspconfig")
+if okay then
+    lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
+end
 
 lsp.setup()

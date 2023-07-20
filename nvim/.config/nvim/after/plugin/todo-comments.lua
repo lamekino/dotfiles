@@ -1,4 +1,7 @@
-require("todo-comments").setup {
+local okay, todo = pcall(require, "todo-comments")
+if not okay then return end
+
+todo.setup {
     signs = false,
     highlight = {
         before = "",
@@ -6,4 +9,3 @@ require("todo-comments").setup {
         after = "fg",
     }
 }
-

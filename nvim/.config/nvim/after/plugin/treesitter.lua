@@ -1,4 +1,7 @@
-require("nvim-treesitter.configs").setup {
+local okay, treesitter = require("nvim-treesitter.configs")
+if not okay or treesitter == nil then return end
+
+treesitter.setup {
     sync_install = false,
     ensure_installed = {
         "java", "c", "cpp", "bash", "python", "haskell", "rust",

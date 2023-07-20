@@ -1,12 +1,23 @@
-local ls = require("luasnip")
+local okay, ls = pcall(require, "luasnip")
+if not okay then return end
+
+local okay, types = pcall(require, "luasnip.util.types")
+if not okay then return end
+
+local okay, extras = pcall(require, "luasnip.extras")
+if not okay then return end
+
+local okay, extras_fmt = pcall(require, "luasnip.extras.fmt")
+if not okay then return end
+
 local s = ls.s
 local i = ls.insert_node
 local t = ls.text_node
 local c = ls.choice_node
-local fmt = require("luasnip.extras.fmt").fmt
-local fmta = require("luasnip.extras.fmt").fmta
-local rep = require("luasnip.extras").rep
--- local types = require("luasnip.util.types")
+
+local rep = extras.rep
+local fmt = extras_fmt.fmt
+local fmta = extras_fmt.fmta
 
 local newline = function(text)
     return t { "", text }

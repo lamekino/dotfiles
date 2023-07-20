@@ -1,3 +1,6 @@
+local okay, lualine = pcall(require, "lualine")
+if not okay then return end
+
 local diag_sym = {
     error = '*',
     warn = '!',
@@ -14,15 +17,17 @@ local c = { { "filename", path = 3 } }
 local x = { { "diagnostics", symbols = diag_sym } }
 
 local y = {
-    { "branch",
+    {
+        "branch",
         icons_enabled = true,
-        icon = "*" },
+        icon = "*"
+    },
     "diff"
 }
 
 local z = { "encoding", "fileformat", "filetype", "location" }
 
-require("lualine").setup {
+lualine.setup {
     options = {
         icons_enabled = false,
         component_separators = {

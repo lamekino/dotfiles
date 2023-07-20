@@ -1,5 +1,7 @@
--- FIXME: why is this giving an LSP warning?
-require("colorizer").setup {
+local okay, colorizer = pcall(require, "colorizer")
+if not okay then return end
+
+colorizer.setup {
     "*",
     css = { rgb_fn = true },
 }

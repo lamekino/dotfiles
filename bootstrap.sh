@@ -2,6 +2,7 @@
 
 NVIM_GITHUB_URL=https://github.com/neovim/neovim
 PACKER_GITHUB_URL=https://github.com/wbthomason/packer.nvim
+BREW_INSTALL_URL=https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
 TMP=$(mktemp -d)
 
 remove_temp() {
@@ -60,7 +61,7 @@ install_dependencies_linux() {
             && sudo dpkg -i nvim-linux64.deb \
         ) || report_error "error in creating .deb for $NVIM_GITHUB_URL"
         ;;
-    *) report_error "Unknown linux distro: $DISTRO" ;;
+    *) report_error "Unknown linux distro: '$DISTRO'" ;;
     esac
 
     cd "$old_wd" || report_error "can't cd to $old_wd"
@@ -68,6 +69,11 @@ install_dependencies_linux() {
 
 install_dependencies_macos() {
     report_error "macOS support is not implemented!"
+
+    bash -c "$(curl -fsSL "$BREW_INSTALL_URL")" \
+        || report_error "could not install homebrew"
+
+    brew analytics off
 }
 
 initialize_packer_nvim() {

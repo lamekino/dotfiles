@@ -1,4 +1,4 @@
-local okay, treesitter = require("nvim-treesitter.configs")
+local okay, treesitter = pcall(require, "nvim-treesitter.configs")
 if not okay or treesitter == nil then return end
 
 treesitter.setup {

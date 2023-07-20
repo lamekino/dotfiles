@@ -67,4 +67,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 
 -- set the colorscheme
 vim.o.background = "dark"
-vim.cmd.colorscheme("melange")
+pcall(function()
+    vim.cmd.colorscheme("melange")
+end)

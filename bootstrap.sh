@@ -78,8 +78,7 @@ initialize_packer_nvim() {
             || report_error "failed to clone $PACKER_DEST"
     fi
 
-    nvim -s "$PACKER_DEST/lua/packer.lua"
-        -c 'autocmd User PackerComplete quitall' -c 'PackerSync' \
+    nvim -c 'autocmd User PackerComplete quitall' -c 'PackerSync' \
         || report_error "failed to initialize packer.nvim"
 }
 

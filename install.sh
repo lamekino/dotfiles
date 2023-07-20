@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -x
+. ./bootstrap.sh
+[ "$1" = "-b" ] && alias use_bootstrap=true || alias use_bootstrap=false
+
 dotfiles="
 alacritty
 bin
@@ -9,23 +13,19 @@ tmux
 zsh
 "
 
-for dot in ${dotfiles}; do
+if use_bootstrap; then
+    bootstrap
+fi
+
+for dot in $dotfiles; do
     echo "installing: $dot"
-    stow -t "$HOME" "$dot"
+    stow -t "/home/z0" "$dot"
 done
 
-! [ -f ~/.zshenv ] \
-    && echo ". ~/.config/zsh/.zshenv" > ~/.zshenv
+if ! [ -f ~/.zshenv ]; then
+    printf ". ~/.config/zsh/.zshenv\n" > ~/.zshenv
+fi
 
-[ -z "$FRESH_INSTALL" ] && exit
-
-# configure neovim
-if ! [ -f ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]; then
-    git clone --depth 1 https://github.com/wbthomason/packer.nvim \
-        ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-
-    nvim -u NONE -c \
-        "lua dofile('./nvim/.config/nvim/plugin/packer.lua'); \
-        require('packer').sync(); \
-        print('finished')"
+if use_bootstrap; then
+    initialize_packer_nvim
 fi

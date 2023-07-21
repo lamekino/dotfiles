@@ -5,6 +5,22 @@ PACKER_GITHUB_URL=https://github.com/wbthomason/packer.nvim
 BREW_INSTALL_URL=https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
 TMP=$(mktemp -d)
 
+main() {
+    dotfiles="
+    alacritty
+    bin
+    dircolors
+    nvim
+    tmux
+    zsh
+    "
+
+    link_configs $dotfiles
+    create_zshenv
+    install_dependencies
+    initialize_packer_nvim
+}
+
 remove_temp() {
     rm -fr "$TMP"
 }
@@ -67,6 +83,7 @@ install_dependencies_linux() {
     cd "$old_wd" || report_error "can't cd to $old_wd"
 }
 
+# shellcheck disable=SC2317
 install_dependencies_macos() {
     report_error "macOS support is not implemented!"
 
@@ -87,7 +104,7 @@ initialize_packer_nvim() {
         || report_error "failed to initialize packer.nvim"
 }
 
-bootstrap() {
+install_dependencies() {
     case "$(uname -s)" in
     "Linux") install_dependencies_linux ;;
     "Darwin") install_dependencies_macos ;;
@@ -95,4 +112,17 @@ bootstrap() {
     esac
 
     remove_tmp
+}
+
+link_configs() {
+    for dot in "$@"; do
+        echo "installing: $dot"
+        stow -t "/home/z0" "$dot"
+    done
+}
+
+create_zshenv() {
+    if ! [ -f ~/.zshenv ]; then
+        printf ". ~/.config/zsh/.zshenv\n" > ~/.zshenv
+    fi
 }

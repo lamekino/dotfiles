@@ -50,6 +50,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
             ["bg"] = "NONE"
         })
 
+
         set_tweaked_hl("WinSeparator", {
             ["fg"] = "#353535",
             ["bg"] = "NONE"
@@ -58,6 +59,10 @@ vim.api.nvim_create_autocmd("Colorscheme", {
         -- disable annoying italic comments
         set_tweaked_hl("Comment", {
             ["italic"] = false
+        })
+
+        set_tweaked_hl("String", {
+            ["italic"] = false,
         })
 
         -- match the window background with normal

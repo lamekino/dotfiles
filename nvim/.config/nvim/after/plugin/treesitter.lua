@@ -5,7 +5,7 @@ treesitter.setup {
     sync_install = false,
     ensure_installed = {
         "java", "c", "cpp", "bash", "python", "haskell", "rust",
-        "lua", "vim", "help"
+        "lua", "vim", -- "help"
     },
     highlight = {
         enable = true,

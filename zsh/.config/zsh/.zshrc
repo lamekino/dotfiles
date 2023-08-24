@@ -1,49 +1,50 @@
-# --- setopt
-setopt INTERACTIVE_COMMENTS # comments in shell
-setopt COMPLETE_ALIASES     # preserves aliases in autocomplete
-setopt PROMPT_SUBST         # allow variables in prompt
-setopt HIST_IGNORE_ALL_DUPS # ignore duplicate commands in history
+[ -n "${DEBUG+1}" ]  && zmodload zsh/zprof
 
-# --- sourcing & imports
-# personal
-[ -e "$XDG_CONFIG_HOME/personal/zsh" ] \
-    && source "$XDG_CONFIG_HOME/personal/zsh"
+setopt COMPLETE_ALIASES
+setopt HIST_IGNORE_ALL_DUPS
+setopt INTERACTIVE_COMMENTS
+setopt PROMPT_SUBST
 
-# dircolors
-[ -e "$XDG_CONFIG_HOME/dircolors" ] \
-    && eval $(dircolors "$XDG_CONFIG_HOME/dircolors")
+function init() {
+    local dir_colors=$(dircolors $XDG_CONFIG_HOME/dircolors)
+    (( ${+commands[zoxide]} )) && local z_init=$(zoxide init zsh)
 
-# initialize zoxide
-command -v zoxide &>/dev/null \
-    && eval "$(zoxide init zsh)"
+    local key="\$key" # when this gets eval'd it will become the loop iterator
+    local autoload_key="autoload -Uz $key"
+    local source_key="source $key"
 
-# --- autoloads
-# completion
-autoload -Uz compinit \
-    && compinit
+    local -A files=( \
+        ["$XDG_CONFIG_HOME/personal/zsh"]="[ -f $key ] && $source_key" \
+        ["$XDG_CONFIG_HOME/dircolors"]="$dir_colors" \
+        ["$ZDOTDIR/utils.zsh"]="$source_key" \
+        ["$ZDOTDIR/prompt.zsh"]="$source_key" \
+    )
+    local -A autoloads=( \
+        ["compinit"]="$autoload_key && $key" \
+        ["edit-command-line"]="$autoload_key && zle -N $key" \
+    )
+    local -A init_cmds=( \
+        ["zoxide"]="$z_init" \
+    )
 
-# command editor
-autoload -Uz edit-command-line \
-    && zle -N edit-command-line
+    for key cmd in ${(kv)files} ${(kv)autoloads} ${(kv)init_cmds}; do
+        eval "$cmd"
+    done
 
-# run initialization functions
-for init in "$ZDOTDIR"/fpath/init-*; do
-    autoload -Uz "$init" \
-        && "$(basename "$init")"
-done
+    unfunction "$0"
+}
+init
 
-# --- bindkey
+# bindkey
 bindkey -v
 bindkey "^R" history-incremental-search-backward
 bindkey "^E" edit-command-line
 
-# --- zstyle
-# use a menu selector
-zstyle ":completion:*" menu select
-# case insensitive completion
-zstyle ":completion:*" matcher-list "" "m:{a-zA-Z}={A-Za-z}" "r:|=*" "l:|=* r:|=*"
-# set completion to show file attributes
-zstyle ":completion:*" file-list all
+# zstyle
+zstyle ":completion:*" menu select # use a menu selector
+zstyle ":completion:*" file-list all # set completion to show file attributes
+zstyle ":completion:*" matcher-list "" \
+    "m:{a-zA-Z}={A-Za-z}" "r:|=*" "l:|=* r:|=*" # case insensitive completion
 
 # --- aliases
 alias sudo="sudo " # makes aliases work with sudo
@@ -64,6 +65,7 @@ alias yy="xclip -selection clipboard"
 alias stop="kill -STOP"
 alias pyserver="python3 -m http.server"
 alias youtube-dl="yt-dlp"
+alias zsh_startuptime="time DEBUG=1 zsh -i -c exit"
 
 # files
 alias tmuxconf="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf"
@@ -89,21 +91,39 @@ alias :q="echo '🤭'"
 alias cls="echo '🤨'"
 alias dir="echo '🖕'"
 
-# --- os specific
-case "$(uname -s)" in
-    "Linux")
-        source "$ZDOTDIR/os/linux.zsh"
-        grep -qi Microsoft /proc/version && \
-            source "$ZDOTDIR/os/wsl.zsh"
+case $(uname -s) in
+    Linux)
+    alias grep='grep --color=auto'
+    alias lablk="lsblk -o name,label,size,ro,type,mountpoint,uuid"
+    alias ls='LC_ALL=C ls -pk --color=auto --group-directories-first'
+    alias ll='LC_ALL=C ls -pklh --color=auto --group-directories-first'
+    alias la='LC_ALL=C ls -pkah --color=auto --group-directories-first'
+    alias lla='LC_ALL=C ls -pkalh --color=auto --group-directories-first'
+    alias diff='diff --color=always'
+    alias feh='feh -x --scale-down'
+    alias open='xdg-open'
+    alias trash='gio trash'
+    alias hd="hexdump -C"
 
-        case $(cut -d" " -f1 /etc/issue) in
-            "Arch") source "$ZDOTDIR/os/archlinux.zsh";;
-            "Ubuntu"|"Debian") source "$ZDOTDIR/os/debian.zsh";;
-        esac
-        ;;
-    "Darwin") source "$ZDOTDIR/sources/mac.zsh" ;;
+    if grep -qi Microsoft /proc/version; then
+        export DISPLAY=:0 # for xorg applications FIXME: broken in WSL2
+        export USERPROFILE=/mnt/c/Users/$(whoami)
+        alias open="/mnt/c/Windows/explorer.exe"
+        alias xclip="/mnt/c/Windows/system32/clip.exe"
+    fi
+
+    if grep -q Arch /etc/issue && (( ${+commands[aura]} )); then
+        alias pacman="aura --hotedit --unsuppress"
+        alias aura="aura --hotedit --unsuppress"
+    fi
+    ;;
+    Darwin)
+    export CLICOLOR=1
+    alias ls='ls -pk'
+    alias ll='ls -pkl'
+    alias la='ls -pkla'
+    alias lsblk='diskutil list'
+    ;;
 esac
 
-# --- source init files
-source "$ZDOTDIR/sources/utils.zsh"
-source "$ZDOTDIR/sources/prompt.zsh"
+[ -n "${DEBUG+1}" ]  && zprof

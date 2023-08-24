@@ -87,12 +87,18 @@ alias wgetbulk="wget -np -nd -r --reject html"
 
 # misc
 alias cite="source $ZDOTDIR/.zshrc" # cite your sources!
+
+# bad habits
 alias :q="echo '🤭'"
 alias cls="echo '🤨'"
 alias dir="echo '🖕'"
+alias sl=" echo -e '\x1b[1;31mSet-Location\x1b[0;31m: The term \
+'Set-Location' is not recognized as a name of a cmdlet, function, script \
+file, or executable program. Check the spelling of the name, or if a path \
+was included, verify that the path is correct and try again\x1b[0m'"
 
 case $(uname -s) in
-    Linux)
+Linux)
     alias grep='grep --color=auto'
     alias lablk="lsblk -o name,label,size,ro,type,mountpoint,uuid"
     alias ls='LC_ALL=C ls -pk --color=auto --group-directories-first'
@@ -117,7 +123,7 @@ case $(uname -s) in
         alias aura="aura --hotedit --unsuppress"
     fi
     ;;
-    Darwin)
+Darwin)
     export CLICOLOR=1
     alias ls='ls -pk'
     alias ll='ls -pkl'

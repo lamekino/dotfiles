@@ -38,18 +38,20 @@ export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 # Environment Variables
+# TODO: add milliseconds
+PS4="%F{2}%D{%s} $PS4%f"
 ZDOTDIR=~/.config/zsh
 HISTORY_IGNORE='([bf]g *|cd ..*|l[alsh]#( *)#|less *|vim# *|pwd|z *|..*)'
 HISTFILE="$XDG_CACHE_HOME/zhistory"
 HISTSIZE=50000
 SAVEHIST=50000
 KEYTIMEOUT=5
-fpath=("$ZDOTDIR/fpath" $fpath)
+fpath=("$XDG_CONFIG_HOME/zsh_fpath" $fpath)
 
 export PATH="\
-$PATH:\
 $HOME/bin:\
 $HOME/.local/bin:\
+$PATH:\
 $GOPATH/bin:\
 $CABAL_DIR/bin:\
 $CARGO_HOME/bin"

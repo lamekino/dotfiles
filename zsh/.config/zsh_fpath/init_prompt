@@ -1,0 +1,41 @@
+# vim:ft=zsh
+
+function prompt_color() {
+    local color="$1"
+    local string="$2"
+    printf "%%F{%s}%s%%f" "$color" "$string"
+}
+
+function git_prompt() {
+    local branch=$(git branch --show-current 2>/dev/null)
+    if [ -n "$branch" ]; then
+        local unstaged=$(git status --short | wc -l)
+
+        if [ $unstaged -eq 0 ]; then
+            echo "$(prompt_color 10 "@$branch"):"
+        else
+            echo "$(prompt_color 5 "@$branch+$unstaged"):"
+        fi
+    fi
+}
+
+function zle-line-init zle-keymap-select {
+    local norm="$(prompt_color 15 '[')"
+    local ins="$(prompt_color 15 '%#')"
+
+    local dir="$(prompt_color 4 '%~')"
+    local err="$(prompt_color 1 '%?')"
+    local job="$(prompt_color 3 '%%%j')"
+    local git="$(git_prompt)"
+
+    local prompt_str="%(1j.${job} .)%(?..${err} )${git}${dir}"
+
+    case $KEYMAP in
+        vicmd)      PROMPT="${prompt_str}${norm} " ;;
+        viins|main) PROMPT="${prompt_str}${ins} " ;;
+    esac
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select

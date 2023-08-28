@@ -46,7 +46,6 @@ lsp.ensure_installed {
     "lua_ls",
     "clangd",
     "jdtls",
-    "jedi_language_server"
 }
 
 lsp.on_attach(function(client, bufnr)

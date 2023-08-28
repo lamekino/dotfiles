@@ -105,6 +105,7 @@ packer.startup(function(use)
 
     -- colorscheme
     use { "savq/melange" }
+    use { "catppuccin/nvim", as = "catppuccin" }
 
     if PACKER_BOOTSTRAP then
         packer.sync()

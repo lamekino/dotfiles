@@ -43,15 +43,15 @@ local c = {
     }
 }
 
-local x = {}
-
-local y = {
+local x = {
     {
         "branch",
         icons_enabled = true,
         icon = "*",
     }
 }
+
+local y = {}
 
 local z = { "encoding", "fileformat", "filetype" }
 

@@ -1,4 +1,6 @@
-local aug_tweaks = vim.api.nvim_create_augroup("ColorschemeTweaks", { clear = true })
+local aug_tweaks = vim.api.nvim_create_augroup("ColorschemeTweaks", {
+    clear = true
+})
 
 -- set autogroups for after the colorscheme is loaded
 vim.api.nvim_create_autocmd("Colorscheme", {
@@ -73,5 +75,5 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 -- set the colorscheme
 vim.o.background = "dark"
 pcall(function()
-    vim.cmd.colorscheme("melange")
+    vim.cmd.colorscheme("catppuccin-mocha")
 end)

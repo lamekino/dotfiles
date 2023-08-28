@@ -6,6 +6,6 @@ todo.setup {
     highlight = {
         before = "",
         keyword = "fg",
-        after = "fg",
+        after = "",
     }
 }

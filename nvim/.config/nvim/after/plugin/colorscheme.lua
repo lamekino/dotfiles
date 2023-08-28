@@ -31,9 +31,11 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 
 local function set_tweaked_hl(group_name, tweaks)
     local hl = vim.api.nvim_get_hl(0, { name = group_name })
+
     for field, tweak in pairs(tweaks) do
         hl[field] = tweak
     end
+
     vim.api.nvim_set_hl(0, group_name, hl)
 end
 
@@ -41,31 +43,22 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     desc     = "colorscheme highlight tweaks",
     group    = aug_tweaks,
     callback = function()
-        -- make background transparent
         set_tweaked_hl("Normal", {
             ["bg"] = "NONE"
         })
 
-        -- borders and separators look presentable
-        set_tweaked_hl("FloatBorder", {
-            ["fg"] = "#353535",
-            ["bg"] = "NONE"
-        })
+        for _, ugly_border in ipairs({ "FloatBorder", "WinSeparator" }) do
+            set_tweaked_hl(ugly_border, {
+                ["fg"] = "#353535",
+                ["bg"] = "NONE"
+            })
+        end
 
-
-        set_tweaked_hl("WinSeparator", {
-            ["fg"] = "#353535",
-            ["bg"] = "NONE"
-        })
-
-        -- disable annoying italic comments
-        set_tweaked_hl("Comment", {
-            ["italic"] = false
-        })
-
-        set_tweaked_hl("String", {
-            ["italic"] = false,
-        })
+        for _, ugly_italic in ipairs({ "Comment", "String" }) do
+            set_tweaked_hl(ugly_italic, {
+                ["italic"] = false
+            })
+        end
 
         -- match the window background with normal
         vim.o.winhl = "Normal:Normal,NormalNC:Normal"
@@ -75,5 +68,5 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 -- set the colorscheme
 vim.o.background = "dark"
 pcall(function()
-    vim.cmd.colorscheme("catppuccin-mocha")
+    vim.cmd.colorscheme("catppuccin-frappe")
 end)

@@ -12,7 +12,7 @@ env:
   TERM: xterm-256color
 
 window:
-  opacity: 0.85
+  opacity: 0.97
   # decorations: none
   # startup_mode: Maximized
   dimensions:
@@ -52,7 +52,7 @@ font:
 # --- colorscheme
 colors:
   primary:
-    foreground: '#ECE1D7'
+    Foreground: '#F1F1F1'
     background: '#121212' # original
     # background: '#000000'
   normal:
@@ -63,7 +63,7 @@ colors:
     blue:    '#9AACCE'
     magenta: '#B380B0'
     cyan:    '#86A3A3'
-    white:   '#A38D78'
+    white:   '#A0A0A0'
   bright:
     black:   '#4D453E'
     red:     '#F17C64'
@@ -72,7 +72,7 @@ colors:
     blue:    '#9AACCE'
     magenta: '#CE9BCB'
     cyan:    '#88B3B2'
-    white:   '#C1A78E'
+    white:   '#F1F1F1'
 
 # --- mouse/keyboard
 mouse:

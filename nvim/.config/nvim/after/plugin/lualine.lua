@@ -8,7 +8,13 @@ local diag_sym = {
     hint = '?'
 }
 
-local a = { { "mode", fmt = string.lower } }
+local a = {
+    {
+        "mode",
+        draw_empty = true,
+        fmt = function() return "" end
+    }
+}
 
 local b = {}
 

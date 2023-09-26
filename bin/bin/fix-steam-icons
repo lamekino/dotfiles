@@ -24,6 +24,9 @@ def append_wmclass_field(f: IO, icon_field: str) -> int:
 
 
 if __name__ == "__main__":
+    icon_regex = re.compile(r"^Icon=steam_icon.*")
+    wm_regex = re.compile(r"^StartupWMClass=steam_app.*")
+
     home = os.getenv("HOME")
     applications_dirname = f"{home}/.local/share/applications/"
 
@@ -37,8 +40,8 @@ if __name__ == "__main__":
 
         path = os.path.join(applications_dirname, filename)
         with open(path, "a+") as f:
-            icon_field = regex_file_search(f, r"^Icon=steam_icon.*")
-            wm_field = regex_file_search(f, r"^StartupWMClass=steam_app.*")
+            icon_field = regex_file_search(f, icon_regex)
+            wm_field = regex_file_search(f, wm_regex)
 
             if icon_field is None:
                 print(f"'{filename}' is not a steam game, skipping...")

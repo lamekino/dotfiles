@@ -1,6 +1,0 @@
-#!/bin/sh
-# this is somewhat broken sometimes...
-
-selection=$(curl -s cht.sh/:list | fzf --no-preview)
-[ -n "$selection" ] \
-    && curl -s "cht.sh/$selection" | less -R

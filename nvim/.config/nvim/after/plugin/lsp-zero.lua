@@ -1,10 +1,10 @@
 local okay, cmp = pcall(require, 'cmp')
 if not okay then return end
 
-local okay, lsp = pcall(require, 'lsp-zero')
+local okay, zero = pcall(require, 'lsp-zero')
 if not okay then return end
 
-lsp.preset {
+zero.preset {
     manage_nvim_cmp = {
         set_sources = 'recommended',
         set_extra_mappings = true
@@ -12,11 +12,11 @@ lsp.preset {
 }
 
 -- local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
+local cmp_mappings = zero.defaults.cmp_mappings({
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
 })
 
-lsp.setup_nvim_cmp({
+zero.setup_nvim_cmp({
     mapping = cmp_mappings
 })
 
@@ -42,15 +42,16 @@ local function lsp_keybinds(buffer)
     lsp_nmap("<Leader>k", vim.diagnostic.goto_prev)
 end
 
-lsp.ensure_installed {
+zero.ensure_installed {
     "lua_ls",
     "clangd",
     "jdtls",
 }
 
-lsp.on_attach(function(client, bufnr)
+zero.on_attach(function(client, bufnr)
     local border = require("user.aesthetics.square_border")
 
+    vim.lsp.set_log_level("error")
     lsp_keybinds(bufnr)
 
     -- configure function signature helper
@@ -88,7 +89,10 @@ end)
 -- (Optional) Configure lua language server for neovim
 local okay, lspconfig = pcall(require, "lspconfig")
 if okay then
-    lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
+    lspconfig.lua_ls.setup(zero.nvim_lua_ls())
+    lspconfig.hls.setup {
+        filetypes = { 'haskell', 'lhaskell', 'cabal' },
+    }
 end
 
-lsp.setup()
+zero.setup()

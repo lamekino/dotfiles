@@ -60,6 +60,17 @@ vim.api.nvim_create_autocmd("Colorscheme", {
             })
         end
 
+        for _, ugly_column in ipairs({ "ColorColumn", "CursorLine" }) do
+            set_tweaked_hl(ugly_column, {
+                ["fg"] = "NONE",
+                ["bg"] = "#353535"
+            })
+        end
+
+        vim.api.nvim_set_hl(0, "@parameter", {
+            ["fg"] = "#ffaadb",
+            ["bg"] = "NONE"
+        })
         -- match the window background with normal
         vim.o.winhl = "Normal:Normal,NormalNC:Normal"
     end
@@ -68,5 +79,5 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 -- set the colorscheme
 vim.o.background = "dark"
 pcall(function()
-    vim.cmd.colorscheme("catppuccin-frappe")
+    vim.cmd.colorscheme("catppuccin-mocha")
 end)

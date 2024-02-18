@@ -37,9 +37,6 @@ packer.startup(function(use)
         config = function() require("Comment").setup() end
     }
 
-    -- Make buffer an active lua repl
-    use { "rafcamlet/nvim-luapad" }
-
     -- Fuzzy finding
     use { "nvim-telescope/telescope.nvim",
         requires = "nvim-lua/plenary.nvim"
@@ -92,12 +89,9 @@ packer.startup(function(use)
         run = vim.cmd.TSUpdate
     }
 
-    -- discord rpc
-    use { 'andweeb/presence.nvim' }
-
     -- language support
-    use { "sheerun/vim-polyglot" }
-    use { "uiiaoo/java-syntax.vim" }
+    -- use { "sheerun/vim-polyglot" }
+    -- use { "uiiaoo/java-syntax.vim" }
 
     -- appearance stuff
     use { "nvim-lualine/lualine.nvim" }

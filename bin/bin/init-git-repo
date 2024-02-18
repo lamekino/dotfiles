@@ -1,0 +1,58 @@
+#!/bin/sh
+
+DEFAULT_INITIAL_COMMIT_MSG="initial commit"
+GH_API_GITIGNORE_URL="https://api.github.com/repos/github/gitignore/contents"
+GH_RAW_GITIGNORE_URL="https://raw.githubusercontent.com/github/gitignore/main"
+
+jq_filter() {
+    jq -r '.[].name | select(test("\\.gitignore$"))'
+}
+
+
+printf "Select your project's gitignore:\n"
+selection=$(curl -s $GH_API_GITIGNORE_URL | jq_filter | fzf)
+[ -z "$selection" ] && exit 1
+
+curl -s "$GH_RAW_GITIGNORE_URL/$selection" > .gitignore
+printf "Initialize repo?
+ [d = default, '%s'/y = yes/n = no, don't add files/q = quit] " \
+    "$DEFAULT_INITIAL_COMMIT_MSG"
+read -r confirm
+
+case "$confirm" in
+d|D)
+    git init
+    git add --all
+    git commit -m "$DEFAULT_INITIAL_COMMIT_MSG"
+    ;;
+y|Y)
+    git init
+    git add --all
+    git commit
+    ;;
+n|N)
+    printf "Okay, skipping.\n"
+    git init
+    ;;
+q|Q)
+    printf "Okay, exitting.\n"
+    exit 0
+    ;;
+*)
+    printf "Invalid response: '%s'.\n" "$confirm"
+    exit 1
+    ;;
+esac
+
+printf "Repository URL (blank skips): "
+read -r repo_url
+if [ -z "$repo_url" ]; then
+    printf "Okay, finished\n"
+    exit 0
+fi
+
+if git remote add origin "$repo_url"; then
+    printf "Okay, finished\n"
+else
+    printf "Errors in adding origin... Good luck!\n"
+fi

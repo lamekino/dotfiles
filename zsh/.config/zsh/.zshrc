@@ -17,6 +17,7 @@ zstyle ":completion:*" matcher-list "" \
 # general
 alias sudo="sudo " # makes aliases work with sudo
 alias \$=" " # copy paste from archwiki
+alias \@="sgpt" # terminal chatgpt
 alias dirs="dirs -v"
 alias jobs="jobs -l"
 alias js="jobs -l"
@@ -33,6 +34,7 @@ alias stop="kill -STOP"
 alias pyserver="python3 -m http.server"
 alias youtube-dl="yt-dlp"
 alias zsh_debug="time DEBUG=1 zsh -i -c exit"
+alias Z="zoxide"
 
 # files
 alias tmuxconf="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf"
@@ -41,7 +43,13 @@ alias zshrc="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc"
 alias zshenv="$EDITOR $XDG_CONFIG_HOME/zsh/.zshenv"
 
 # git
-alias gitl="git log --oneline --graph"
+alias gl="git log"
+alias gs="git status"
+alias gp="git pull"
+alias gP="git push"
+alias gc="git commit"
+alias gr="git root"
+alias g~="printf 'pushed: '; pushd \$(git root)"
 
 # security
 alias pwpls="pwgen -1Bsy 20"
@@ -66,9 +74,9 @@ alias dir="sleep .4; echo 'The system cannot find the path specified.'"
 alias cls="sleep .4; echo '‘cls’ is not recognized as an internal or \
 external command, operable program or batch file.'"
 alias sl="sleep .4; echo -e '\x1b[1;31mSet-Location\x1b[0;31m: The term \
-'Set-Location' is not recognized as a name of a cmdlet, function, script \
-file, or executable program. Check the spelling of the name, or if a path \
-was included, verify that the path is correct and try again\x1b[0m'"
+'Set-Location' is not recognized as a name of a cmdlet, function, script file, \
+or executable program. Check the spelling of the name, or if a path was \
+included, verify that the path is correct and try again\x1b[0m'"
 
 case $(uname -s) in
 Linux)
@@ -85,16 +93,21 @@ Linux)
     alias hd="hexdump -C"
 
     if grep -qi Microsoft /proc/version; then
-        export DISPLAY=:0 # for xorg applications FIXME: broken in WSL2
         export USERPROFILE=/mnt/c/Users/$(whoami)
         alias open="/mnt/c/Windows/explorer.exe"
         alias xclip="/mnt/c/Windows/system32/clip.exe"
     fi
 
-    if grep -q Arch /etc/issue && (( ${+commands[aura]} )); then
-        alias pacman="aura --hotedit --unsuppress"
-        alias aura="aura --hotedit --unsuppress"
-    fi
+    read distro _ < /etc/issue
+    case "$distro" in
+    Arch)
+        if (( ${+commands[aura]} )); then
+            alias pacman="aura --hotedit --unsuppress"
+            alias aura="aura --hotedit --unsuppress"
+        fi
+        ;;
+    esac
+    unset distro
     ;;
 Darwin)
     export CLICOLOR=1

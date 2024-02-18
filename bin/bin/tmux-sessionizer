@@ -1,54 +1,87 @@
-#!/bin/bash
-# modified from:
-# https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/bin/tmux-sessionizer
+#!/bin/sh
+# based off ThePrimeagen's script
 
-confirm() {
+# these are the arguments for the program, this script was made a long time
+# ago, so these must be what they are for backwards compatibility
+MODE_FIND="zoxide"
+MODE_DIR="explicit-path"
+MODE_CMD="program"
+
+BANNER="\\ \\ \\ tmux sessionizer / / /"
+
+alias fuzzy_find="fzf --layout=reverse --preview-window hidden --height=100%"
+alias query_directory="zoxide query --list | fuzzy_find"
+
+display_banner() {
     clear
-    printf "Confirm:\n\n"
-    printf ">>> Session name: %s\n" "$1"
-    printf ">>> Session path: %s\n" "$2"
-    [ -n "$3" ] \
-        && printf ">>> Session command: '%s'\n" "$3" \
-        || printf ">>> Session shell: %s\n" "$SHELL"
-
-    printf "\nIs this OK? [Y/n] "
-    read -r prompt
-    [[ "$prompt" =~ ^(n|N)+ ]] && exit 0
+    command -v 'toilet' >/dev/null 2>&1 && toilet --gay -f future "$BANNER"
 }
 
-command -v toilet &>/dev/null \
-    && toilet --gay -f future "\\ \\ \\ tmux sessionizer / / /"
-# Get session name
-printf "New session name: "
-read -r name
-[ -z "$name" ] && exit 1
+tmux_new() (
+    name="$1" path="$2" cmd="$3"
 
-path="$HOME"
-program=
-case "$1" in
-    "zoxide")
-        path=$(zoxide query --list | fzf \
-                --layout=reverse --preview-window hidden --height=100%)
-        [ -z "$path" ] && path="$HOME"
-        ;;
-    "explicit-path")
-        printf "Starting directory: "
-        read -r path
-        path="${path/\~/$HOME}"
-        ;;
-    "program")
-        printf "Command to run: "
-        read -r program
-        ;;
-    *)
-        exit 1
-        ;;
+    # this check may seem redundant, but the session won't spawn without it
+    if [ -n "$cmd" ]
+        then tmux new-session -ds "$name" -c "$path" "$cmd"
+        else tmux new-session -ds "$name" -c "$path"
+    fi
+
+    tmux switch-client -t "$name"
+)
+
+matches_regex() (
+    string="$1" pattern="$2"
+
+    expr "$string" :  "$pattern" > /dev/null
+)
+
+prompt_user() (
+    msg="$1"
+    recv=""
+
+    printf "%s: " "$msg" 1>&2
+    read -r recv
+    echo "$recv"
+)
+
+confirm_session() (
+    name="$1" path="$2" cmd="$3"
+    confirmation=""
+
+    [ -z "$cmd" ] && cmd="$SHELL"
+
+    clear
+    printf "Confirm:\n"
+    printf "* Session name: %s\n" "$name"
+    printf "* Session path: %s\n" "$path"
+    printf "* Session command: '%s'\n" "$cmd"
+
+    confirmation=$(prompt_user "Is this OK? [Y/n]")
+
+    # return value
+    ! matches_regex "$confirmation" "^(n|N)+"
+)
+
+# main program
+mode="$1"
+working_path="" program="" name=""
+
+display_banner
+while [ -z "$name" ]; do
+    name=$(prompt_user "New session name")
+done
+
+case "$mode" in
+"$MODE_FIND") working_path=$(query_directory) ;;
+"$MODE_DIR")  working_path=$(prompt_user "Starting directory") ;;
+"$MODE_CMD")  program=$(prompt_user "Command to run") ;;
+*) exit 1 ;;
 esac
 
-confirm "$name" "$path" "$program"
-if [ -z "$program" ]; then
-    tmux new-session -ds "$name" -c "$path"
-else
-    tmux new-session -ds "$name" -c "$path" "$program"
+if [ -z "$working_path" ]; then
+    working_path="$HOME"
 fi
-tmux switch-client -t "$name"
+
+if confirm_session "$name" "$working_path" "$program"; then
+    tmux_new "$name" "$working_path" "$program"
+fi

@@ -27,6 +27,16 @@ imap("<F1>", "") -- disable the F1 for help
 nnoremap("<F1>", ":!ddg ")
 -- search from begining of line
 nnoremap("<F2>", "/^\\(\\s*\\)")
+-- cd between git root and current file path
+nnoremap("<F3>", [[
+<cmd>GitRootCd
+<cmd>pwd
+]])
+nnoremap("<F4>", [[
+<cmd>cd %:p:h
+<cmd>pwd
+]])
+-- display messages
 nnoremap("<F12>", ":messages<cr>")
 
 -- Control keys
@@ -81,7 +91,7 @@ nnoremap("<C-S-a>", ":cwindow<cr>")
 nnoremap("<C-S-q>", ":cclose<cr>")
 nnoremap("<C-S-j>", ":cnext<cr>")
 nnoremap("<C-S-k>", ":cprev<cr>")
-nnoremap("<C-;>", ":make | cwindow<cr>")
+nnoremap("<C-;>", ":make<cr>")
 
 -- ToggleTerm
 nnoremap("<S-Return>", ":ToggleTerm direction=float<cr>")

@@ -37,3 +37,7 @@ function ppath() {
     paths=$(sed 's/:/\n/g' <<< "$PATH")
     printf "%s\n" $paths
 }
+
+function stalk() {
+    echo "$1" | entr -c "$1"
+}

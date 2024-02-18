@@ -49,9 +49,9 @@ KEYTIMEOUT=5
 fpath=("$XDG_CONFIG_HOME/zsh_fpath" $fpath)
 
 export PATH="\
+$CABAL_DIR/bin:\
+$GOPATH/bin:\
+$CARGO_HOME/bin \
 $HOME/bin:\
 $HOME/.local/bin:\
-$PATH:\
-$GOPATH/bin:\
-$CABAL_DIR/bin:\
-$CARGO_HOME/bin"
+$PATH"

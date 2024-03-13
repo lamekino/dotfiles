@@ -41,3 +41,10 @@ function ppath() {
 function stalk() {
     echo "$1" | entr -c "$1"
 }
+
+function tada {
+    if tmux ls 2>/dev/null | grep -q home
+    then tmux a -t home
+    else tmux new -s home -c "$HOME"
+    fi
+}

@@ -33,7 +33,7 @@ function zle-line-init zle-keymap-select init_prompt {
     local dir="$(prompt_color 11 '%~')"
     prompt_str+="${dir}"
 
-    local norm="$(prompt_color 15 '>')"
+    local norm="$(prompt_color 15 ':')"
     local ins="$(prompt_color 15 '%#')"
     case $KEYMAP in
         vicmd)      PROMPT="${prompt_str}${norm} " ;;

@@ -92,13 +92,16 @@ Linux)
     alias trash='gio trash'
     alias hd="hexdump -C"
 
-    if grep -qi Microsoft /proc/version; then
-        export USERPROFILE=/mnt/c/Users/$(whoami)
+    if [ -n "$WSL_DISTRO_NAME" ]; then
         alias open="/mnt/c/Windows/explorer.exe"
         alias xclip="/mnt/c/Windows/system32/clip.exe"
+        alias pwsh="/mnt/c/Program\ Files/PowerShell/7/pwsh.exe"
     fi
 
-    read distro _ < /etc/issue
+    if [ -f /etc/issue ]; then
+        read distro _ < /etc/issue
+    fi
+
     case "$distro" in
     Arch)
         if (( ${+commands[aura]} )); then
@@ -106,6 +109,7 @@ Linux)
             alias aura="aura --hotedit --unsuppress"
         fi
         ;;
+    *)
     esac
     unset distro
     ;;

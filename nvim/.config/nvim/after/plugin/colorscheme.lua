@@ -1,3 +1,5 @@
+local my = require("my.highlight")
+
 local aug_tweaks = vim.api.nvim_create_augroup("ColorschemeTweaks", {
     clear = true
 })
@@ -29,55 +31,39 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     end
 })
 
-local function set_tweaked_hl(group_name, tweaks)
-    local hl = vim.api.nvim_get_hl(0, { name = group_name })
-
-    for field, tweak in pairs(tweaks) do
-        hl[field] = tweak
-    end
-
-    vim.api.nvim_set_hl(0, group_name, hl)
-end
-
-local function set_tweaks(group_names, new_colors)
-    for _, group in ipairs(group_names) do
-        set_tweaked_hl(group, new_colors)
-    end
-end
-
 vim.api.nvim_create_autocmd("Colorscheme", {
     desc     = "colorscheme highlight tweaks",
     group    = aug_tweaks,
     callback = function()
-        set_tweaks({ "Normal" }, {
+        my.set_groups({ "Normal" }, {
             ["bg"] = "NONE"
         })
 
-        set_tweaks({ "Comment", "String" }, {
+        my.set_groups({ "Comment", "String" }, {
             ["italic"] = false
         })
 
-        set_tweaks({ "FloatBorder", "WinSeparator" }, {
+        my.set_groups({ "FloatBorder", "WinSeparator" }, {
             ["fg"] = "#353535",
             ["bg"] = "NONE"
         })
 
-        set_tweaks({ "ColorColumn", "CursorLine" }, {
+        my.set_groups({ "ColorColumn", "CursorLine" }, {
             ["fg"] = "NONE",
             ["bg"] = "#353535"
         })
 
-        set_tweaks({ "@text.todo", "Todo" }, {
+        my.set_groups({ "@text.todo", "Todo" }, {
             ["fg"] = "NONE",
             ["bg"] = "NONE"
         })
 
-        set_tweaks({ "@parameter" }, {
+        my.set_groups({ "@parameter" }, {
             ["fg"] = "#ffaadb",
             ["bg"] = "NONE"
         })
 
-        set_tweaks({ "Function" }, {
+        my.set_groups({ "Function" }, {
             ["fg"] = "#a5bbdd"
         })
 

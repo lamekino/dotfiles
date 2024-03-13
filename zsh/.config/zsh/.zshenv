@@ -51,7 +51,7 @@ fpath=("$XDG_CONFIG_HOME/zsh_fpath" $fpath)
 export PATH="\
 $CABAL_DIR/bin:\
 $GOPATH/bin:\
-$CARGO_HOME/bin \
+$CARGO_HOME/bin:\
 $HOME/bin:\
 $HOME/.local/bin:\
 $PATH"

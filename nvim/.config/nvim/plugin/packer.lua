@@ -2,7 +2,10 @@ local packer = require("packer")
 local util = require("packer.util")
 
 -- Bootstrap on a clean install
-local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local install_path =
+    vim.fn.stdpath("data")
+    .. "/site/pack/packer/start/packer.nvim"
+
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
     PACKER_BOOTSTRAP = vim.fn.system {
         "git", "clone", "--depth", "1",
@@ -33,8 +36,9 @@ packer.startup(function(use)
     use { "mbbill/undotree" }
 
     -- neat plugins (lua script)
-    use { "numToStr/Comment.nvim",
-        config = function() require("Comment").setup() end
+    use { "numToStr/Comment.nvim" }
+    use { "folke/todo-comments.nvim",
+        requires = "nvim-lua/plenary.nvim",
     }
 
     -- Fuzzy finding
@@ -42,11 +46,7 @@ packer.startup(function(use)
         requires = "nvim-lua/plenary.nvim"
     }
 
-    -- Show TODOs, etc
-    use { "folke/todo-comments.nvim",
-        requires = "nvim-lua/plenary.nvim",
-    }
-
+    -- Git support
     use { "TimUntersberger/neogit",
         config = function()
         end,
@@ -89,16 +89,9 @@ packer.startup(function(use)
         run = vim.cmd.TSUpdate
     }
 
-    -- language support
-    -- use { "sheerun/vim-polyglot" }
-    -- use { "uiiaoo/java-syntax.vim" }
-
     -- appearance stuff
     use { "nvim-lualine/lualine.nvim" }
     use { "norcalli/nvim-colorizer.lua" }
-
-    -- colorscheme
-    use { "savq/melange" }
     use { "catppuccin/nvim", as = "catppuccin" }
 
     if PACKER_BOOTSTRAP then

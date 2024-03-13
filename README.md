@@ -17,6 +17,8 @@ $ ./uninstall.sh
 ```
 
 ### For Windows:
+**THIS IS BROKEN** manual install is required
+
 Requires [Powershell Core](https://github.com/powershell/powershell).
 
 #### To install:

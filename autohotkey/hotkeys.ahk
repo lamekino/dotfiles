@@ -79,16 +79,6 @@ return
 #;::VolumeMixerWide()
 
 ;; Per-Program Keybinds ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Alacritty Keybinds
-#IfWinActive ahk_exe alacritty.exe
-; Enable the window's transparency and toggle the titlebar
-!F12::
-    ; TODO: fix this
-    ToggleMaximize()
-    WinSet, Style, ^0xC00000, A
-return
-#IfWinActive
-
 ; Windows Fax and Scan Keybinds
 #IfWinActive ahk_exe wfs.exe
 ; Create a new scan in Windows Fax and Scan

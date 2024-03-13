@@ -8,14 +8,14 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     group    = aug_tweaks,
     callback = function()
         local colors = {
-            ["Error"] = { fg = "#51202A", bg = "#FF0000" },
-            ["Warn"] = { fg = "#51412A", bg = "#FFA501" },
-            ["Info"] = { fg = "#1E535D", bg = "#00FFFF" },
-            ["Hint"] = { fg = "#1E205D", bg = "#0000FF" }
+            ["Error"] = { bg = "#51202A", fg = "#FF0000" },
+            ["Warn"] = { bg = "#51412A", fg = "#FFA501" },
+            ["Info"] = { bg = "#1E535D", fg = "#00FFFF" },
+            ["Hint"] = { bg = "#1E205D", fg = "#9999FF" }
         }
 
-        -- set up the number line to be highlighted with a color instead of using
-        -- text
+        -- set up the number line to be highlighted with a color instead of
+        -- using text
         for sign, highlight in pairs(colors) do
             vim.api.nvim_set_hl(0, "DiagnosticLineNr" .. sign, highlight)
 
@@ -39,38 +39,48 @@ local function set_tweaked_hl(group_name, tweaks)
     vim.api.nvim_set_hl(0, group_name, hl)
 end
 
+local function set_tweaks(group_names, new_colors)
+    for _, group in ipairs(group_names) do
+        set_tweaked_hl(group, new_colors)
+    end
+end
+
 vim.api.nvim_create_autocmd("Colorscheme", {
     desc     = "colorscheme highlight tweaks",
     group    = aug_tweaks,
     callback = function()
-        set_tweaked_hl("Normal", {
+        set_tweaks({ "Normal" }, {
             ["bg"] = "NONE"
         })
 
-        for _, ugly_border in ipairs({ "FloatBorder", "WinSeparator" }) do
-            set_tweaked_hl(ugly_border, {
-                ["fg"] = "#353535",
-                ["bg"] = "NONE"
-            })
-        end
+        set_tweaks({ "Comment", "String" }, {
+            ["italic"] = false
+        })
 
-        for _, ugly_italic in ipairs({ "Comment", "String" }) do
-            set_tweaked_hl(ugly_italic, {
-                ["italic"] = false
-            })
-        end
+        set_tweaks({ "FloatBorder", "WinSeparator" }, {
+            ["fg"] = "#353535",
+            ["bg"] = "NONE"
+        })
 
-        for _, ugly_column in ipairs({ "ColorColumn", "CursorLine" }) do
-            set_tweaked_hl(ugly_column, {
-                ["fg"] = "NONE",
-                ["bg"] = "#353535"
-            })
-        end
+        set_tweaks({ "ColorColumn", "CursorLine" }, {
+            ["fg"] = "NONE",
+            ["bg"] = "#353535"
+        })
 
-        vim.api.nvim_set_hl(0, "@parameter", {
+        set_tweaks({ "@text.todo", "Todo" }, {
+            ["fg"] = "NONE",
+            ["bg"] = "NONE"
+        })
+
+        set_tweaks({ "@parameter" }, {
             ["fg"] = "#ffaadb",
             ["bg"] = "NONE"
         })
+
+        set_tweaks({ "Function" }, {
+            ["fg"] = "#a5bbdd"
+        })
+
         -- match the window background with normal
         vim.o.winhl = "Normal:Normal,NormalNC:Normal"
     end
@@ -79,5 +89,5 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 -- set the colorscheme
 vim.o.background = "dark"
 pcall(function()
-    vim.cmd.colorscheme("catppuccin-mocha")
+    vim.cmd.colorscheme("catppuccin-macchiato")
 end)

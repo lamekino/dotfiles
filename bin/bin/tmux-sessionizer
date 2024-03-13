@@ -12,18 +12,21 @@ BANNER="\\ \\ \\ tmux sessionizer / / /"
 alias fuzzy_find="fzf --layout=reverse --preview-window hidden --height=100%"
 alias query_directory="zoxide query --list | fuzzy_find"
 
-display_banner() {
+display_banner() (
+    FLAGS="--gay -f future"
+
     clear
-    command -v 'toilet' >/dev/null 2>&1 && toilet --gay -f future "$BANNER"
-}
+    # shellcheck disable=SC2086 # we want $FLAGS to split
+    command -v 'toilet' >/dev/null 2>&1 && toilet $FLAGS "$BANNER"
+)
 
 tmux_new() (
     name="$1" path="$2" cmd="$3"
 
     # this check may seem redundant, but the session won't spawn without it
     if [ -n "$cmd" ]
-        then tmux new-session -ds "$name" -c "$path" "$cmd"
-        else tmux new-session -ds "$name" -c "$path"
+    then tmux new-session -ds "$name" -c "$path" "$cmd"
+    else tmux new-session -ds "$name" -c "$path"
     fi
 
     tmux switch-client -t "$name"

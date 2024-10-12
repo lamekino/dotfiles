@@ -1,62 +1,78 @@
 local M = {}
-local util = require("my.highlight.functions")
+local set = require("my.highlight.set")
 
-M.callback = function()
-    util.set_groups({ "Normal" }, {
+local function dark_mode_tweaks()
+    set.groups({ "Normal" }, {
         ["bg"] = "NONE"
     })
 
-    util.set_groups({ "Comment", "String" }, {
-        ["italic"] = false
-    })
-
-    util.set_groups({ "FloatBorder", "WinSeparator" }, {
+    set.groups({ "FloatBorder", "WinSeparator" }, {
         ["fg"] = "#353535",
         ["bg"] = "NONE"
     })
 
-    util.set_groups({ "ColorColumn", "CursorLine" }, {
+    set.groups({ "ColorColumn", "CursorLine" }, {
         ["fg"] = "NONE",
         ["bg"] = "#353535"
     })
 
-    util.set_groups({ "@text.todo", "Todo" }, {
-        ["fg"] = "NONE",
+    set.groups({ "StatusLine", "StatusLineNC" }, {
         ["bg"] = "NONE"
     })
 
-    util.set_groups({ "@parameter" }, {
-        ["fg"] = "#ffaadb",
-        ["bg"] = "NONE"
-    })
-
-    util.set_groups({ "Function" }, {
+    set.groups({ "Function" }, {
         ["fg"] = "#a5bbdd"
     })
 
-    util.set_groups({ "StatusLine", "StatusLineNC" }, {
+    set.groups({ "@parameter" }, {
+        ["fg"] = "#ffaadb",
         ["bg"] = "NONE"
     })
+end
 
+local function light_mode_tweaks()
+    -- needs terminal to be light!
+    set.groups({ "Normal" }, {
+        ["bg"] = "NONE"
+    })
+end
 
-    -- match the window background with normal
-    vim.o.winhl = "Normal:Normal,NormalNC:Normal"
+M.create_callback = function(colormode)
+    return function()
+        if colormode == "dark" then
+            dark_mode_tweaks()
+        else
+            light_mode_tweaks()
+        end
 
-    -- TODO: TELESCOPE DOES NOT WANNA BE TRANSPARENT
-    -- vim.o.winhl = weird {
-    --     "TelescopeNormal",
-    --     "TelescopeBorder",
-    --     "TelescopeSelectionCaret",
-    --     "TelescopeMatching",
-    --     "TelescopePromptNormal",
-    --     "TelescopePromptTitle",
-    --     "TelescopePromptPrefix",
-    --     "TelescopePromptBorder",
-    --     "TelescopePreviewTitle",
-    --     "TelescopePreviewBorder",
-    --     "TelescopeResultsTitle",
-    --     "TelescopeResultsBorder"
-    -- }
+        set.groups({ "Comment", "String" }, {
+            ["italic"] = false
+        })
+
+        set.groups({ "@text.todo", "Todo" }, {
+            ["fg"] = "NONE",
+            ["bg"] = "NONE"
+        })
+
+        -- match the window background with normal
+        vim.o.winhl = "Normal:Normal,NormalNC:Normal"
+
+        -- TODO: TELESCOPE DOES NOT WANNA BE TRANSPARENT
+        -- vim.o.winhl = weird {
+        --     "TelescopeNormal",
+        --     "TelescopeBorder",
+        --     "TelescopeSelectionCaret",
+        --     "TelescopeMatching",
+        --     "TelescopePromptNormal",
+        --     "TelescopePromptTitle",
+        --     "TelescopePromptPrefix",
+        --     "TelescopePromptBorder",
+        --     "TelescopePreviewTitle",
+        --     "TelescopePreviewBorder",
+        --     "TelescopeResultsTitle",
+        --     "TelescopeResultsBorder"
+        -- }
+    end
 end
 
 return M

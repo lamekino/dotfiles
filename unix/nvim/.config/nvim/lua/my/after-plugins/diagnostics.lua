@@ -7,7 +7,7 @@ vim.diagnostic.config {
 
     float            = {
         style         = "rounded",
-        border        = require("my.aesthetics.square_border"),
+        border        = require("my.aesthetic.square-border"),
         source        = "always",
         header        = "",
         prefix        = "",

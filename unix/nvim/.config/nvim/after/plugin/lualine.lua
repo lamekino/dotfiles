@@ -1,5 +1,7 @@
 local function theme_tweaks(theme)
-    local background = "#141414"
+    local is_dark = vim.o.background == "dark"
+    local background = is_dark and "#141414" or "#e2e2e2"
+
     local swap = theme.normal.a
 
     theme.normal.a = theme.visual.a
@@ -9,7 +11,7 @@ local function theme_tweaks(theme)
     for _, mode in ipairs(modes) do
         theme[mode].c = {
             ["bg"] = background,
-            ["fg"] = theme[mode].a.bg
+            ["fg"] = is_dark and theme[mode].a.bg or theme[mode].b.bg
         }
     end
 end
@@ -24,7 +26,10 @@ local mode_config = {
     "mode",
     draw_empty = true,
     padding = 0,
-    fmt = function() return "" end
+    fmt = function()
+        return ""
+        -- return " " .. string.upper(vim.fn.mode()) .. " "
+    end
 }
 
 local filename_config = {
@@ -58,7 +63,6 @@ local branch_config = {
     icons_enabled = true,
     icon = "*",
 }
-
 
 lualine.setup {
     options = {

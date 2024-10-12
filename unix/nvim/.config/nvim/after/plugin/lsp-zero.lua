@@ -26,8 +26,6 @@ zero.on_attach(function(client, bufnr)
 
     _ = client
 
-    my.keybinds.set(bufnr)
-
     require("lsp_signature").on_attach({
         bind = true,
         handler_opts = my.border,
@@ -43,6 +41,8 @@ zero.on_attach(function(client, bufnr)
     my.autofmt:disable("clangd")
     my.autofmt:disable("powershell_es")
     my.autofmt:disable("jdtls")
+
+    vim.api.nvim_create_user_command("CodeAction", vim.lsp.buf.code_action, {})
 
     vim.api.nvim_create_autocmd("BufWritePre", {
         desc = "autoformat with lsp",

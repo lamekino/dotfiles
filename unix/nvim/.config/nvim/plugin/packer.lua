@@ -1,13 +1,15 @@
-local packer = require("packer")
-local util = require("packer.util")
+local _, packer = pcall(require, "packer")
+local _, util = pcall(require, "packer.util")
 
--- Bootstrap on a clean install
 local install_path =
     vim.fn.stdpath("data")
     .. "/site/pack/packer/start/packer.nvim"
 
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    PACKER_BOOTSTRAP = vim.fn.system {
+local has_packer = vim.fn.empty(vim.fn.glob(install_path))
+
+-- download packer on initial run
+if not has_packer then
+    vim.fn.system {
         "git", "clone", "--depth", "1",
         "https://github.com/wbthomason/packer.nvim", install_path
     }
@@ -34,25 +36,38 @@ packer.init {
 }
 
 packer.startup(function(use)
-    -- the package manager
+    -- this package manager
     use { "wbthomason/packer.nvim" }
 
-    -- neat plugins (vim script)
+    -- swap surrounding parens/brackets/etc
     use { "tpope/vim-surround" }
+
+    -- explore file changes
     use { "mbbill/undotree" }
 
-    -- neat plugins (lua script)
+    -- keybindings for commenting
     use { "numToStr/Comment.nvim" }
-    use { "folke/todo-comments.nvim",
-        requires = "nvim-lua/plenary.nvim",
-    }
 
-    -- Fuzzy finding
-    use { "nvim-telescope/telescope.nvim",
-        requires = "nvim-lua/plenary.nvim"
-    }
+    -- status bar
+    use { "nvim-lualine/lualine.nvim" }
 
-    -- Git support
+    -- renders color codes
+    use { "norcalli/nvim-colorizer.lua" }
+
+    -- the colorscheme
+    use { "catppuccin/nvim", as = "catppuccin" }
+
+    -- highlights code messages
+    use { "folke/todo-comments.nvim", requires = "nvim-lua/plenary.nvim", }
+
+    -- fuzzy finder
+    use { "nvim-telescope/telescope.nvim", requires = "nvim-lua/plenary.nvim" }
+
+    -- syntax parser
+    use { "nvim-treesitter/nvim-treesitter", run = vim.cmd.TSUpdate }
+
+
+    -- git interface
     use { "TimUntersberger/neogit",
         config = function()
         end,
@@ -62,22 +77,17 @@ packer.startup(function(use)
         }
     }
 
-    -- All the lsp stuff
+    -- lsp + completion
     use {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v2.x',
         requires = {
-            -- LSP Support
-            { 'neovim/nvim-lspconfig' }, -- Required
+            { 'neovim/nvim-lspconfig' },
             {
                 'williamboman/mason.nvim',
-                run = function()
-                    pcall(vim.cmd, 'MasonUpdate')
-                end,
+                run = function() pcall(vim.cmd, 'MasonUpdate') end,
             },
             { 'williamboman/mason-lspconfig.nvim' },
-
-            -- Autocompletion
             { 'hrsh7th/nvim-cmp' },
             { 'hrsh7th/cmp-nvim-lsp' },
             { "hrsh7th/cmp-nvim-lsp" },
@@ -87,23 +97,12 @@ packer.startup(function(use)
             { "saadparwaiz1/cmp_luasnip" },
             { "ray-x/lsp_signature.nvim" },
             { 'L3MON4D3/LuaSnip' },
-
-            -- Java
-            { 'mfussenegger/nvim-jdtls' }
+            { 'mfussenegger/nvim-jdtls' } -- optional
         }
     }
 
-    -- treesitter
-    use { "nvim-treesitter/nvim-treesitter",
-        run = vim.cmd.TSUpdate
-    }
-
-    -- appearance stuff
-    use { "nvim-lualine/lualine.nvim" }
-    use { "norcalli/nvim-colorizer.lua" }
-    use { "catppuccin/nvim", as = "catppuccin" }
-
-    if PACKER_BOOTSTRAP then
+    -- sync the packages to finish setup
+    if not has_packer then
         packer.sync()
     end
 end)

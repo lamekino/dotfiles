@@ -2,6 +2,7 @@
 vim.o.number         = true
 vim.o.relativenumber = true
 vim.o.numberwidth    = 4
+
 -- editor settings
 vim.opt.colorcolumn  = "81"
 vim.o.confirm        = true
@@ -14,21 +15,26 @@ vim.o.list           = true
 vim.o.wrap           = false
 vim.o.listchars      = "tab:--,space:·,trail:×,nbsp:*,extends:$"
 vim.o.guicursor      = ""
+
 -- tab settings
 vim.o.expandtab      = true
 vim.o.tabstop        = 4
 vim.o.shiftwidth     = 4
 vim.o.softtabstop    = 4
+
 -- backup files
 vim.o.swapfile       = false
 vim.o.undofile       = true
 vim.o.undodir        = vim.fn.stdpath("cache") .. "/undodir"
+
 -- misc
 vim.o.termguicolors  = true
 vim.o.lazyredraw     = true
 vim.o.path           = vim.o.path .. "**"
 vim.o.encoding       = "utf-8"
 vim.o.fileformat     = "unix"
+vim.o.background     = "light"
+
 vim.api.nvim_create_autocmd("VimEnter", {
     desc = "gets misc options to set on startup",
     callback = function()

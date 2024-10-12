@@ -1,5 +1,4 @@
-unix/zsh/.config/zsh/.zhistory
-unix/zsh/.config/zsh/.zcompdump
-unix/zsh/.config/zsh/sources/local/*
+*.zhistory*
+*.zcompdump*
 *__packer_compiled.lua*
 unix/nvim/.config/nvim/spell/

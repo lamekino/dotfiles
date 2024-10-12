@@ -112,23 +112,6 @@ EXEC 1;38;5;106
 .vim             00;38;5;022
 .patch           01;38;5;222
 
-# Linux files
-.deb             01;38;5;001
-.rpm             01;38;5;004
-.so              01;38;5;029
-.ko              01;38;5;221
-.desktop         01;38;5;152
-
-# Windows files
-.msi             07;38;5;003
-.appx            07;38;5;221
-.exe             07;38;5;040
-.dll             07;38;5;034
-.ahk             07;38;5;028
-.ps1             07;38;5;033
-.lnk             07;38;5;152
-.ini             07;38;5;244
-
 # Project files
 *Makefile        0;38;5;243
 .mk              0;38;5;243
@@ -192,14 +175,6 @@ EXEC 1;38;5;106
 *FAQ             01;38;5;165
 *LEGACY          01;38;5;165
 *TODO            01;38;5;165
-
-# Files of special interest
-*rc              00;38;5;037
-*zshenv          00;38;5;037
-*dircolors       00;38;5;037
-.cfg             00;38;5;037
-.conf            00;38;5;037
-.torrent         01;38;5;114
 
 # "transient" files as logs and backups (dark gray)
 .log             00;38;5;239

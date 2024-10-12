@@ -35,7 +35,7 @@ export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 # Misc XDG tweaks
 export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
-export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+# export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 # Environment Variables
 # TODO: add milliseconds

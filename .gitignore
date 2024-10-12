@@ -1,4 +1,4 @@
 *.zhistory*
 *.zcompdump*
 *__packer_compiled.lua*
-unix/nvim/.config/nvim/spell/
+nvim/.config/nvim/spell/

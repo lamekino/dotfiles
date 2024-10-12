@@ -1,21 +1,17 @@
-dots 💾
+dotfiles 💾
 ---
 ![Screenshot](./images/screenshot.png?raw=true)
 
-### For Unix-likes:
-Requires ``stow``
+### To install:
 
-#### To install:
+
 ```sh
 $ git clone https://github.com/lamekino/dotfiles
 $ cd dotfiles
-$ ./unix/install.sh
+$ ./install.sh
 ```
 
-#### To uninstall:
+### To uninstall:
 ```sh
-$ ./unix/uninstall.sh
+$ ./uninstall.sh
 ```
-
-### For Windows:
-**Work in progress**

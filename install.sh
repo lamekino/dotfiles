@@ -1,11 +1,15 @@
 #!/bin/sh
 
-DOTFILE_DIR=$(dirname "$(realpath "$0")")
+SKIP_DIRS="
+windows
+"
+
+INSTALLER_ROOT=$(dirname "$(realpath "$0")")
 
 INSTALL_MSG="installing"
 UNINSTALL_MSG="uninstalling"
 
-CMD_INSTALL="stow -d '$DOTFILE_DIR' -t '$HOME'"
+CMD_INSTALL="stow -d '$INSTALLER_ROOT' -t '$HOME'"
 CMD_UNINSTALL="$CMD_INSTALL -D"
 
 FLAG_HELP="-h"
@@ -29,9 +33,13 @@ case "$1" in
     ;;
 esac
 
-for dot in "$DOTFILE_DIR"/*/; do
-    printf "%s: %s\n" "$msg" "$dot"
-    stow_cmd "$(basename "$dot")"
+for dot in "$INSTALLER_ROOT"/*/; do
+    config_name="$(basename "$dot")"
+
+    if ! (echo "$SKIP_DIRS" | grep -q "$config_name"); then
+        printf "%s: %s\n" "$msg" "$config_name"
+        stow_cmd "$config_name"
+    fi
 done
 
 if [ "$msg" = "$INSTALL_MSG" ] && ! [ -f ~/.zshenv ]; then

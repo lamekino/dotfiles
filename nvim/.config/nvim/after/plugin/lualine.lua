@@ -1,6 +1,6 @@
 local function theme_tweaks(theme)
     local is_dark = vim.o.background == "dark"
-    local background = is_dark and "#141414" or "#e2e2e2"
+    local background = is_dark and "#141414" or "#efefef"
 
     local swap = theme.normal.a
 

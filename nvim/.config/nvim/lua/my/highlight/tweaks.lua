@@ -35,6 +35,11 @@ local function light_mode_tweaks()
     set.groups({ "Normal" }, {
         ["bg"] = "NONE"
     })
+
+    set.groups({ "WinSeparator" }, {
+        ["fg"] = "#ffffff",
+        ["bg"] = "NONE"
+    })
 end
 
 M.create_callback = function(colormode)

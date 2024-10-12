@@ -1,17 +1,15 @@
-dotfiles 💾
+Dots 💾
 ---
-![Screenshot](./images/screenshot.png?raw=true)
+![Screenshot](./screenshot.png?raw=true)
 
-### To install:
-
-
+### Installing:
 ```sh
 $ git clone https://github.com/lamekino/dotfiles
 $ cd dotfiles
 $ ./install.sh
 ```
 
-### To uninstall:
+### Uninstalling:
 ```sh
-$ ./uninstall.sh
+$ ./install.sh -x
 ```

@@ -13,4 +13,4 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 })
 
 -- TODO: don't pass colorscheme name decide on colormode... maybe
-my.colorscheme("catppuccin-latte")
+my.set_colors(colormode)

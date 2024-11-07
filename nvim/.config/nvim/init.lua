@@ -4,7 +4,12 @@ vim.o.relativenumber = true
 vim.o.numberwidth    = 4
 
 -- editor settings
-vim.opt.colorcolumn  = "81"
+vim.o.encoding       = "utf-8"
+vim.o.fileformat     = "unix"
+vim.o.background     = os.getenv("VIM_COLORMODE") or "dark"
+vim.opt.colorcolumn  = "80"
+vim.o.listchars      = "tab:--,space:·,trail:×,nbsp:*,extends:$"
+vim.o.guicursor      = ""
 vim.o.confirm        = true
 vim.o.ignorecase     = true
 vim.o.hidden         = true
@@ -13,8 +18,6 @@ vim.o.splitbelow     = true
 vim.o.splitright     = true
 vim.o.list           = true
 vim.o.wrap           = false
-vim.o.listchars      = "tab:--,space:·,trail:×,nbsp:*,extends:$"
-vim.o.guicursor      = ""
 
 -- tab settings
 vim.o.expandtab      = true
@@ -31,9 +34,6 @@ vim.o.undodir        = vim.fn.stdpath("cache") .. "/undodir"
 vim.o.termguicolors  = true
 vim.o.lazyredraw     = true
 vim.o.path           = vim.o.path .. "**"
-vim.o.encoding       = "utf-8"
-vim.o.fileformat     = "unix"
-vim.o.background     = "light"
 
 vim.api.nvim_create_autocmd("VimEnter", {
     desc = "gets misc options to set on startup",
@@ -56,5 +56,5 @@ end
 
 -- global variables
 vim.g.netrw_winsize = 15
--- vim.g.netrw_liststyle = 3
 vim.g.netrw_banner  = false
+vim.g.mapleader     = " "

@@ -1,19 +1,24 @@
-[ -n "${DEBUG+1}" ] && zmodload zsh/zprof && set -xe
+# start profiling and logging if debug is set
+[ -n "${DEBUG+1}" ] && zmodload "zsh/zprof" && set -xe
 
+## shell options
 setopt COMPLETE_ALIASES
 setopt HIST_IGNORE_ALL_DUPS
 setopt INTERACTIVE_COMMENTS
 setopt PROMPT_SUBST
 
+## keybinds
 bindkey -v
 bindkey "^R" history-incremental-search-backward
 bindkey "^E" edit-command-line
 
+## tab config
 zstyle ":completion:*" menu select # use a menu selector
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # colorful menu
 zstyle ":completion:*" matcher-list "" \
     "m:{a-zA-Z}={A-Za-z}" "r:|=*" "l:|=* r:|=*" # case insensitive completion
 
+## aliases
 # general
 alias sudo="sudo " # makes aliases work with sudo
 alias \$=" " # copy paste from archwiki
@@ -23,18 +28,17 @@ alias jobs="jobs -l"
 alias js="jobs -l"
 alias pgrep="pgrep -l"
 alias vim="nvim"
-alias gvim="nvim-qt"
 alias ipython="ipython --no-confirm-exit"
 alias tmux="tmux -2"
 alias tree="tree -a"
 alias t="tree"
 alias td="tree -L"
-alias yy="xclip -selection clipboard"
 alias stop="kill -STOP"
 alias pyserver="python3 -m http.server"
 alias youtube-dl="yt-dlp"
 alias zsh_debug="time DEBUG=1 zsh -i -c exit"
 alias Z="zoxide"
+alias fs="dfc -T -p /dev 2>/dev/null"
 
 # files
 alias tmuxconf="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf"
@@ -124,6 +128,12 @@ Darwin)
     ;;
 esac
 
+## functions
+# enables rehash by sending zsh processes SIGUSR1
+# https://wiki.archlinux.org/title/Zsh#On-demand_rehash
+function TRAPUSR1() { rehash }
+
+# initializes autoloads
 function load_all_the_stuff_pls() {
     local dir_colors=$(dircolors $XDG_CONFIG_HOME/dircolors)
     (( ${+commands[zoxide]} )) && local z_init=$(zoxide init zsh)
@@ -152,8 +162,13 @@ function load_all_the_stuff_pls() {
 
     unfunction "$0"
 }
+
+## finishing up
+# load autoloads
 load_all_the_stuff_pls
 
+# finish profiling if in debug
 [ -n "${DEBUG+1}" ] && zprof
 
+# always return sucess
 return 0

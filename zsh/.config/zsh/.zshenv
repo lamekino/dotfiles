@@ -18,25 +18,6 @@ export CABAL_DIR="$XDG_DATA_HOME/cabal"
 export GHCUP_USE_XDG_DIRS=1
 export STACK_ROOT="$XDG_DATA_HOME/stack"
 
-# Java (custom jars for javac)
-export CLASSPATH="$XDG_DATA_HOME/jars/*:."
-
-# Go
-export GOPATH="$XDG_DATA_HOME/go"
-
-# Rust
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-
-# Node.js
-export npm_config_prefix="$HOME/.local"
-export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
-
-# Misc XDG tweaks
-export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
-export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
-# export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-
 # Environment Variables
 # TODO: add milliseconds
 PS4="%F{2}%D{%s} $PS4%f"
@@ -48,10 +29,4 @@ SAVEHIST=50000
 KEYTIMEOUT=5
 fpath=("$XDG_CONFIG_HOME/zsh_fpath" $fpath)
 
-export PATH="\
-$CABAL_DIR/bin:\
-$GOPATH/bin:\
-$CARGO_HOME/bin:\
-$HOME/bin:\
-$HOME/.local/bin:\
-$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"

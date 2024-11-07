@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SKIP_DIRS="
-windows
+OS-config
 "
 
 INSTALLER_ROOT=$(dirname "$(realpath "$0")")
@@ -42,7 +42,7 @@ esac
 for dot in "$INSTALLER_ROOT"/*/; do
     config_name="$(basename "$dot")"
 
-    if ! (echo "$SKIP_DIRS" | grep -q "$config_name"); then
+    if ! (echo "$SKIP_DIRS" | grep -q "^$config_name$"); then
         printf "%s: %s\n" "$msg" "$config_name"
         stow_cmd "$config_name"
     fi

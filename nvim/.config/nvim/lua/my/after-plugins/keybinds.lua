@@ -1,11 +1,16 @@
 local has_telescope, ts = pcall(require, "telescope.builtin")
 
 local function tsbuiltin(name)
-    if not has_telescope then
-        return function(...) end
+    local function fail(...)
+        _ = ...
+        error("keybind disabled: no telescope", 0)
     end
 
-    return ts[name]
+    if has_telescope then
+        return ts[name]
+    end
+
+    return fail
 end
 
 local function create_mapper(mode, opts)
@@ -21,8 +26,10 @@ local Z = {
     ["nlspmap"]  = create_mapper("n", { buffer = 0, noremap = true })
 }
 
-vim.g.mapleader = " "
+-- disable defaults
 Z.map('<Space>', '<Nop>')
+Z.map("<ScrollWheelLeft>", "<Nop>")
+Z.map("<ScrollWheelRight>", "<Nop>")
 
 -- copy to system clipboard
 Z.vnoremap("<C-y>", "\"+y")
@@ -87,9 +94,7 @@ Z.nnoremap("<Leader>g", ":Neogit<cr>")
 
 Z.nnoremap("<Leader>q", tsbuiltin("help_tags"))
 Z.nnoremap("<Leader>w", function()
-    tsbuiltin("man_pages") {
-        sections = { "ALL" }
-    }
+    tsbuiltin("man_pages")({ sections = { "ALL" } })
 end)
 
 Z.nnoremap("<Leader>u", ":UndotreeToggle<cr>")
@@ -109,7 +114,6 @@ Z.nnoremap("<Leader>k", ":cprev<cr>")
 
 -- lsp
 vim.api.nvim_create_autocmd("LspAttach", {
-    desc = "lsp keybinds",
     callback = function()
         -- jump to
         Z.nlspmap("gd", vim.lsp.buf.definition)

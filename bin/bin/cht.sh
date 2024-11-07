@@ -1,6 +1,8 @@
 #!/bin/sh
 
-alias default_pager="less -R"
+# https://superuser.com/a/380778
+alias filter_esc="perl -pe 's/\e\[[0-9;]*m(?:\e\[K)?//g'"
+alias default_pager="nvim +Man! -c 'set laststatus=0 ft=markdown'"
 alias fuzzy_find="fzf --no-preview"
 
 usage() {
@@ -28,7 +30,7 @@ pager() {
 
 view_page() {
     if [ -n "$1" ]
-        then request_page "$1" | pager
+        then request_page "$1" | filter_esc | pager
         else exit 1
     fi
 }

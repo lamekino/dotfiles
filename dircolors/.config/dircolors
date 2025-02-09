@@ -110,7 +110,6 @@ EXEC 1;38;5;106
 .lisp            00;38;5;064
 .scm             00;38;5;148
 .vim             00;38;5;022
-.patch           01;38;5;222
 
 # Project files
 *Makefile        0;38;5;243

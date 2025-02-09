@@ -10,7 +10,7 @@ neogit.setup {
 }
 
 local function cd_git_root()
-    local git_root = neogit.cli.git_root(vim.fn.getcwd())
+    local git_root = neogit.cli.worktree_root(vim.fn.getcwd())
 
     if git_root == nil or string.len(git_root) <= 0 then
         return

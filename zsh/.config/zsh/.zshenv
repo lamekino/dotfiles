@@ -1,9 +1,12 @@
 export BROWSER="/usr/bin/env firefox"
 export EDITOR="/usr/bin/env nvim"
 export VISUAL="$EDITOR"
+
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_DEFAULT_OPTS="-m --height 40% --border=none"
+
 export BAT_THEME="ansi"
+
 export MANPAGER='nvim -c "set laststatus=0" +Man!'
 
 # XDG Specification
@@ -12,14 +15,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 
-# Haskell
-export CABAL_CONFIG="$XDG_CONFIG_HOME/cabal/config"
-export CABAL_DIR="$XDG_DATA_HOME/cabal"
-export GHCUP_USE_XDG_DIRS=1
-export STACK_ROOT="$XDG_DATA_HOME/stack"
-
 # Environment Variables
-# TODO: add milliseconds
 PS4="%F{2}%D{%s} $PS4%f"
 ZDOTDIR=~/.config/zsh
 HISTORY_IGNORE='([bf]g *|cd ..*|l[alsh]#( *)#|less *|vim# *|pwd|z *|..*)'

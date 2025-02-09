@@ -1,52 +1,34 @@
-local function theme_tweaks(theme)
-    local is_dark = vim.o.background == "dark"
-    local background = is_dark and "#141414" or "#efefef"
-
-    local swap = theme.normal.a
-
-    theme.normal.a = theme.visual.a
-    theme.visual.a = swap
-
-    local modes = { "normal", "visual", "insert", "replace", "command" }
-    for _, mode in ipairs(modes) do
-        theme[mode].c = {
-            ["bg"] = background,
-            ["fg"] = is_dark and theme[mode].a.bg or theme[mode].b.bg
-        }
-    end
-end
-
 local okay, lualine = pcall(require, "lualine")
 if not okay then return end
 
-local okay, theme = pcall(require, "lualine.themes.catppuccin-macchiato")
-if okay then theme_tweaks(theme) end
+local my_theme = require("my.aesthetic.lualine-theme")
 
-local mode_config = {
+local function pad(tbl)
+    tbl["separator"] = " "
+    tbl["padding"] = 0
+
+    return tbl
+end
+
+local config_mode = {
     "mode",
     draw_empty = true,
     padding = 0,
     fmt = function()
         return ""
-        -- return " " .. string.upper(vim.fn.mode()) .. " "
     end
 }
 
-local filename_config = {
+local config_filename = pad({
     "filename",
-    path = 3,
-    separator = " ",
-    padding = 0,
-    fmt = function(s) return " " .. s end
-}
+    path = 3
+})
 
-local diff_config = {
-    "diff",
-    separator = " ",
-    padding = 0,
-}
+local config_diff = pad({
+    "diff"
+})
 
-local diags_config = {
+local config_diagnostics = pad({
     "diagnostics",
     symbols = {
         error = '*',
@@ -54,36 +36,45 @@ local diags_config = {
         info = '@',
         hint = '?'
     },
-    separator = " ",
-    padding = 0
-}
+})
 
-local branch_config = {
+local config_branch = pad({
     "branch",
-    icons_enabled = true,
-    icon = "*",
-}
+    color = { fg = '#32cd32', gui = 'italic' },
+    fmt = function(branch)
+        if branch == "" then
+            return ""
+        end
+
+        return "@" .. branch
+    end
+})
+
+local config_location = function()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return string.format("%d:%d", row, col)
+end
 
 lualine.setup {
     options = {
-        theme = theme,
+        theme = my_theme,
         icons_enabled = false,
         component_separators = {
-            left = "│",
+            left = "",
             right = "│"
         },
         section_separators = {
-            left = "▓▒░",
-            right = "░▒▓"
+            left = "▓▒░ ",
+            right = " ░▒▓"
         },
     },
 
     sections = {
-        lualine_a = { mode_config },
+        lualine_a = { config_mode },
         lualine_b = {},
-        lualine_c = { filename_config, diff_config, diags_config },
-        lualine_x = { branch_config },
+        lualine_c = { config_filename, config_diff, config_diagnostics },
+        lualine_x = { config_branch },
         lualine_y = {},
-        lualine_z = { "encoding", "fileformat", "filetype" },
+        lualine_z = { "encoding", "fileformat", config_location },
     }
 }

@@ -21,8 +21,6 @@ zstyle ":completion:*" matcher-list "" \
 ## aliases
 # general
 alias sudo="sudo " # makes aliases work with sudo
-alias \$=" " # copy paste from archwiki
-alias \@="sgpt" # terminal chatgpt
 alias dirs="dirs -v"
 alias jobs="jobs -l"
 alias js="jobs -l"
@@ -104,19 +102,21 @@ Linux)
         autoload -Uz wsl-x11-setup && wsl-x11-setup
     fi
 
-    if [ -f /etc/issue ]; then
-        read distro _ < /etc/issue
+    if [ -f /etc/os-release ]; then
+        distro=$( \
+            awk -F= 'NR == 1 { print $2 }' /etc/os-release \
+            | sed -e 's/"//g' -e 's/ Linux$//')
     fi
 
     case "$distro" in
     Arch)
-        if (( ${+commands[aura]} )); then
-            alias pacman="aura --hotedit --unsuppress"
-            alias aura="aura --hotedit --unsuppress"
-        fi
+        ;;
+    Fedora)
+        alias fix-docker="setenforce 0" # weird selinux stuff idk
         ;;
     *)
     esac
+
     unset distro
     ;;
 Darwin)

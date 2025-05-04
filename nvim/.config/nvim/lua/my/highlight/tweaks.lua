@@ -20,10 +20,6 @@ local function dark_mode_tweaks()
         ["bg"] = "NONE"
     })
 
-    set.groups({ "Function" }, {
-        ["fg"] = "#a5bbdd"
-    })
-
     set.groups({ "@parameter" }, {
         ["fg"] = "#ffaadb",
         ["bg"] = "NONE"

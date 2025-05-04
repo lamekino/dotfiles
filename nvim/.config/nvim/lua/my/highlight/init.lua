@@ -4,7 +4,7 @@ M.tweaks = require("my.highlight.tweaks")
 M.diagnostics = require("my.highlight.line-diagnostics")
 
 M.set_colors = function(colormode)
-    local name = "catppuccin-frappe"
+    local name = "catppuccin-mocha"
     if colormode == "light" then
         name = "catppuccin-latte"
     end

@@ -1,5 +1,5 @@
 local M = {}
-local set = require("my.highlight.set")
+local set = require("my.colorscheme.set")
 
 local function dark_mode_tweaks()
     set.groups({ "Normal" }, {

@@ -1,3 +1,8 @@
+-- install/load plugins
+require("my.plugins"):setup({
+    colormode = os.getenv("VIM_COLORMODE") or "dark",
+})
+
 -- line numbers
 vim.o.number         = true
 vim.o.relativenumber = true
@@ -6,7 +11,6 @@ vim.o.numberwidth    = 4
 -- editor settings
 vim.o.encoding       = "utf-8"
 vim.o.fileformat     = "unix"
-vim.o.background     = os.getenv("VIM_COLORMODE") or "dark"
 vim.opt.colorcolumn  = "80"
 vim.o.listchars      = "tab:--,space:·,trail:×,nbsp:*,extends:$"
 vim.o.guicursor      = ""

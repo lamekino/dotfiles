@@ -6,13 +6,9 @@ local schemes = {
 }
 
 M.tweaks = require("my.colorscheme.tweaks")
-M.diagnostics = require("my.colorscheme.line-diagnostics")
 
 function M.setup(colormode)
-    vim.api.nvim_create_autocmd("Colorscheme", {
-        group    = vim.api.nvim_create_augroup("LspDiagnosticLineNo", {}),
-        callback = M.diagnostics.create_callback(colormode)
-    })
+    require("my.colorscheme.diagnostics").setup(colormode)
 
     vim.api.nvim_create_autocmd("Colorscheme", {
         group    = vim.api.nvim_create_augroup("ColorschemeTweaks", {}),

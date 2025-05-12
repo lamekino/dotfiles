@@ -23,7 +23,7 @@ local Z = {
     ["map"]      = create_mapper("", { silent = true }),
     ["nnoremap"] = create_mapper("n", { noremap = true }),
     ["vnoremap"] = create_mapper("v", { noremap = true }),
-    ["nlspmap"]  = create_mapper("n", { buffer = 0, noremap = true })
+    ["nlspmap"]  = create_mapper("n", { buffer = 0, noremap = true }),
 }
 
 -- disable defaults
@@ -114,24 +114,30 @@ Z.nnoremap("<Leader>k", ":cprev<cr>")
 
 -- lsp
 vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function()
+    group = vim.api.nvim_create_augroup('MyLspKeybinds', { clear = true }),
+    callback = function(event)
+        local nnoremap = create_mapper("n", {
+            buffer = event.buf,
+            noremap = true
+        })
+
         -- jump to
-        Z.nlspmap("gd", vim.lsp.buf.definition)
-        Z.nlspmap("gt", vim.lsp.buf.type_definition)
-        Z.nlspmap("gi", vim.lsp.buf.implementation)
-        Z.nlspmap("gr", vim.lsp.buf.references)
+        nnoremap("gd", vim.lsp.buf.definition)
+        nnoremap("gt", vim.lsp.buf.type_definition)
+        nnoremap("gi", vim.lsp.buf.implementation)
+        nnoremap("gr", vim.lsp.buf.references)
 
         -- info
-        Z.nlspmap("K", vim.lsp.buf.hover)
-        Z.nlspmap("<C-k>", vim.lsp.buf.signature_help)
+        nnoremap("K", vim.lsp.buf.hover)
+        nnoremap("<C-k>", vim.lsp.buf.signature_help)
 
         -- edit
-        Z.nlspmap("<Leader>h", vim.lsp.buf.code_action)
-        Z.nlspmap("<Leader>r", vim.lsp.buf.rename)
+        nnoremap("<Leader>h", vim.lsp.buf.code_action)
+        nnoremap("<Leader>r", vim.lsp.buf.rename)
 
         -- diagnostic
-        Z.nlspmap("<Leader>l", vim.diagnostic.setloclist)
-        Z.nlspmap("<C-n>", vim.diagnostic.goto_next)
-        Z.nlspmap("<C-p>", vim.diagnostic.goto_prev)
+        nnoremap("<Leader>l", vim.diagnostic.setloclist)
+        nnoremap("<C-n>", vim.diagnostic.goto_next)
+        nnoremap("<C-p>", vim.diagnostic.goto_prev)
     end
 })

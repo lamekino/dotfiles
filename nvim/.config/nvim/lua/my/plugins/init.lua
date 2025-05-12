@@ -19,30 +19,75 @@ function M.plugins(cfg)
         "mbbill/undotree",
 
         -- keybindings for commenting
-        "numToStr/Comment.nvim",
+        {
+            "numToStr/Comment.nvim",
+            opts = {}
+        },
 
         -- status bar
-        "nvim-lualine/lualine.nvim",
+        {
+            "nvim-lualine/lualine.nvim",
+            config = function()
+                require("my.plugins.config.lualine").setup()
+            end
+        },
 
         -- renders color codes
-        "norcalli/nvim-colorizer.lua",
+        {
+            "norcalli/nvim-colorizer.lua",
+            config = function()
+                require("colorizer").setup(nil, {
+                    '*',
+                    names = false,
+                })
+            end
+        },
 
         -- highlights code messages
         {
             "folke/todo-comments.nvim",
-            dependencies = "nvim-lua/plenary.nvim"
+            dependencies = "nvim-lua/plenary.nvim",
+            config = function()
+                require("todo-comments").setup {
+                    signs = false,
+                    highlight = {
+                        before = "",
+                        keyword = "fg",
+                        after = "",
+                    }
+                }
+            end
         },
 
         -- fuzzy finder
         {
             "nvim-telescope/telescope.nvim",
-            dependencies = "nvim-lua/plenary.nvim"
+            dependencies = "nvim-lua/plenary.nvim",
+            opts = {
+                defaults = {
+                    layout_strategy = "horizontal",
+                },
+                pickers = {
+                    find_files = {
+                        theme = "ivy"
+                    },
+                    git_files = {
+                        hidden = true,
+                    },
+                    live_grep = {
+                        hidden = true,
+                    },
+                }
+            }
         },
 
         -- syntax parser
         {
             "nvim-treesitter/nvim-treesitter",
-            build = vim.cmd.TSUpdate
+            build = vim.cmd.TSUpdate,
+            config = function()
+                require("my.plugins.config.treesitter"):setup()
+            end
         },
 
 
@@ -52,13 +97,10 @@ function M.plugins(cfg)
             dependencies = {
                 "nvim-lua/plenary.nvim",
                 "sindrets/diffview.nvim"
-            }
-        },
-
-        -- lsp manager
-        {
-            'williamboman/mason.nvim',
-            build = 'MasonUpdate'
+            },
+            config = function()
+                require("my.plugins.config.neogit").setup()
+            end
         },
 
         -- lsp + completion
@@ -68,6 +110,7 @@ function M.plugins(cfg)
             'VonHeikemen/lsp-zero.nvim',
             branch = 'v2.x',
             dependencies = {
+                { 'williamboman/mason.nvim' },
                 { 'neovim/nvim-lspconfig' },
                 { 'williamboman/mason-lspconfig.nvim' },
                 { 'hrsh7th/nvim-cmp' },
@@ -84,37 +127,16 @@ function M.plugins(cfg)
     }
 end
 
-local function bootstrap()
-    local repo = "https://github.com/folke/lazy.nvim.git"
-    local path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
-    if not (vim.uv or vim.loop).fs_stat(path) then
-        local git_output = vim.fn.system({
-            "git", "clone", "--filter=blob:none", "--branch=stable", repo, path
-        })
-
-        if vim.v.shell_error ~= 0 then
-            vim.api.nvim_echo({
-                { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-                { git_output,                     "WarningMsg" }
-            }, true, {})
-
-            vim.fn.getchar()
-            return false
-        end
-    end
-
-    vim.opt.rtp:prepend(path)
-    return true
-end
-
 function M:setup(cfg)
     -- this is required to be set here
     vim.g.mapleader = " "
     vim.g.maplocalleader = "\\"
 
-    if bootstrap() then
-        require("lazy").setup(self.plugins(cfg))
+    if require("my.plugins.bootstrap").run() then
+        local plugins = self.plugins(cfg)
+        plugins.ui = require("my.plugins.ui")
+
+        require("lazy").setup(plugins)
     end
 end
 

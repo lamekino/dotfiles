@@ -18,16 +18,15 @@ local function create_signs(colormode)
 
     for sign, highlight in pairs(colors) do
         local lvl = vim.diagnostic.severity[string.upper(sign)]
-        local use_hl = highlight
+        local use = highlight
 
+        -- swap bg/fg in lightmode
         if colormode == "light" then
-            local swap = highlight.fg
-            highlight.fg = highlight.bg
-            highlight.bg = swap
+            use.fg, use.bg = use.bg, use.fg
         end
 
-        vim.api.nvim_set_hl(0, "DiagnosticSign" .. sign, highlight)
-        vim.api.nvim_set_hl(0, "DiagnosticLineNr" .. sign, highlight)
+        vim.api.nvim_set_hl(0, "DiagnosticSign" .. sign, use)
+        vim.api.nvim_set_hl(0, "DiagnosticLineNr" .. sign, use)
 
         sign_config.text[lvl] = ""
         sign_config.linehl[lvl] = "NONE"

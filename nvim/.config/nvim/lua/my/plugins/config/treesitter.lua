@@ -1,5 +1,4 @@
 local M = {}
-local treesitter = require("nvim-treesitter.configs")
 
 M.config = {
     sync_install = false,
@@ -24,7 +23,7 @@ M.config = {
 
 
 function M:setup()
-    treesitter.setup(self.config)
+    require("nvim-treesitter.configs").setup(self.config)
 end
 
 return M

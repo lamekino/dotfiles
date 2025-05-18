@@ -1,4 +1,5 @@
 local has_telescope, ts = pcall(require, "telescope.builtin")
+local has_luasnip, ls = pcall(require, "luasnip")
 
 local function tsbuiltin(name)
     local function fail(...)
@@ -6,11 +7,7 @@ local function tsbuiltin(name)
         error("keybind disabled: no telescope", 0)
     end
 
-    if has_telescope then
-        return ts[name]
-    end
-
-    return fail
+    return has_telescope and ts[name] or fail
 end
 
 local function create_mapper(mode, opts)
@@ -19,98 +16,120 @@ local function create_mapper(mode, opts)
     end
 end
 
-local Z = {
+local global = {
     ["map"]      = create_mapper("", { silent = true }),
+    ["imap"]     = create_mapper("i", { silent = true }),
     ["nnoremap"] = create_mapper("n", { noremap = true }),
     ["vnoremap"] = create_mapper("v", { noremap = true }),
-    ["nlspmap"]  = create_mapper("n", { buffer = 0, noremap = true }),
 }
 
 -- disable defaults
-Z.map('<Space>', '<Nop>')
-Z.map("<ScrollWheelLeft>", "<Nop>")
-Z.map("<ScrollWheelRight>", "<Nop>")
+global.map('<Space>', '<Nop>')
+global.map("<ScrollWheelLeft>", "<Nop>")
+global.map("<ScrollWheelRight>", "<Nop>")
 
 -- copy to system clipboard
-Z.vnoremap("<C-y>", "\"+y")
+global.vnoremap("<C-y>", "\"+y")
 
 -- search multiple files
-Z.nnoremap("?", ":lvimgrep '' **" .. string.rep("<Left>", 4))
+global.nnoremap("?", ":lvimgrep '' **" .. string.rep("<Left>", 4))
 
 -- move to end of line on line concat
-Z.nnoremap("J", "J$")
+global.nnoremap("J", "J$")
 
 -- move blocks of text around
-Z.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
-Z.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
+global.vnoremap("<C-j>", ":m '>+1<cr>gv=gv")
+global.vnoremap("<C-k>", ":m '<-2<cr>gv=gv")
 
 -- recenter view on pgup/pgdn
-Z.nnoremap("<C-d>", "<C-d>zz")
-Z.nnoremap("<C-u>", "<C-u>zz")
+global.nnoremap("<C-d>", "<C-d>zz")
+global.nnoremap("<C-u>", "<C-u>zz")
 
 -- buffer navigation
-Z.map("s", "<Nop>")
-Z.nnoremap("sn", ":bn<cr>")
-Z.nnoremap("sp", ":bp<cr>")
-Z.nnoremap("sd", ":bd<cr>")
-Z.nnoremap("ss", ":enew<cr>")
-Z.nnoremap("sv", ":vsp<cr>")
-Z.nnoremap("sh", ":sp<cr>")
+global.map("s", "<Nop>")
+global.nnoremap("sn", ":bn<cr>")
+global.nnoremap("sp", ":bp<cr>")
+global.nnoremap("sd", ":bd<cr>")
+global.nnoremap("ss", ":enew<cr>")
+global.nnoremap("sv", ":vsp<cr>")
+global.nnoremap("sh", ":sp<cr>")
 
 -- disable search highlight
-Z.nnoremap("<Leader>;", ":noh<cr>")
+global.nnoremap("<Leader>;", ":noh<cr>")
 
 -- search from beginning of line
-Z.nnoremap("<Leader>`", "/^\\(\\s*\\)")
+global.nnoremap("<Leader>`", "/^\\(\\s*\\)")
 
 -- directory navigation
-Z.nnoremap("<Leader>1", [[
+global.nnoremap("<Leader>1", [[
 <cmd>GitRootCd
 <cmd>pwd
 ]])
-Z.nnoremap("<Leader>2", [[
+
+global.nnoremap("<Leader>2", [[
 <cmd>cd %:p:h
 <cmd>pwd
 ]])
-Z.nnoremap("<Leader>3", [[
+
+global.nnoremap("<Leader>3", [[
 <cmd>cd ..
 <cmd>pwd
 ]])
-Z.nnoremap("<Leader>4", [[
+
+global.nnoremap("<Leader>4", [[
 <cmd>cd -
 <cmd>pwd
 ]])
-Z.nnoremap("<Leader>0", string.format([[
+
+global.nnoremap("<Leader>0", string.format([[
 <cmd>cd %s
 <cmd>pwd
 ]], vim.fn.stdpath("config")))
 
 -- plugins
-Z.nnoremap("<Leader>a", ":make<cr>")
-Z.nnoremap("<Leader>s", tsbuiltin("buffers"))
-Z.nnoremap("<Leader>d", ":Lex <C-r>=expand('%:p:h')<cr><cr>")
-Z.nnoremap("<Leader>f", tsbuiltin("find_files"))
-Z.nnoremap("<Leader>g", ":Neogit<cr>")
+global.nnoremap("<Leader>a", ":make<cr>")
+global.nnoremap("<Leader>s", tsbuiltin("buffers"))
+global.nnoremap("<Leader>d", ":Lex <C-r>=expand('%:p:h')<cr><cr>")
+global.nnoremap("<Leader>f", tsbuiltin("find_files"))
+global.nnoremap("<Leader>g", ":Neogit<cr>")
 
-Z.nnoremap("<Leader>q", tsbuiltin("help_tags"))
-Z.nnoremap("<Leader>w", function()
-    tsbuiltin("man_pages")({ sections = { "ALL" } })
+global.nnoremap("<Leader>q", tsbuiltin("help_tags"))
+global.nnoremap("<Leader>w", function()
+    tsbuiltin("man_pages")({ sections = { "global" } })
 end)
 
-Z.nnoremap("<Leader>u", ":UndotreeToggle<cr>")
+global.nnoremap("<Leader>u", ":UndotreeToggle<cr>")
 
 -- close menu
-Z.nnoremap("<Leader><Leader>", ":cclose | lclose<cr>")
+global.nnoremap("<Leader><Leader>", ":cclose | lclose<cr>")
 
 -- location list
-Z.nnoremap("<Leader>v", ":lwindow<cr>")
-Z.nnoremap("<C-j>", ":lnext<cr>")
-Z.nnoremap("<C-k>", ":lprev<cr>")
+global.nnoremap("<Leader>v", ":lwindow<cr>")
+global.nnoremap("<C-j>", ":lnext<cr>")
+global.nnoremap("<C-k>", ":lprev<cr>")
 
 -- quickfix list
-Z.nnoremap("<Leader>c", ":cwindow<cr>")
-Z.nnoremap("<Leader>j", ":cnext<cr>")
-Z.nnoremap("<Leader>k", ":cprev<cr>")
+global.nnoremap("<Leader>c", ":cwindow<cr>")
+global.nnoremap("<Leader>j", ":cnext<cr>")
+global.nnoremap("<Leader>k", ":cprev<cr>")
+
+-- luasnip
+if has_luasnip then
+    local snip_expand = create_mapper("i", {silent = true})
+    local snip_move = create_mapper({"i", "s"}, {silent = true})
+
+    global.imap("<C-k>", function() ls.expand() end)
+
+    snip_move("<C-f>", function() ls.jump(1) end)
+    snip_move("<C-b>", function() ls.jump(-1) end)
+    snip_move("<C-e>",
+        function()
+            if ls.choice_active() then
+                ls.change_choice(1)
+            end
+        end
+    )
+end
 
 -- lsp
 vim.api.nvim_create_autocmd("LspAttach", {

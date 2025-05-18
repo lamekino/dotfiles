@@ -3,25 +3,30 @@ require("my.plugins"):setup({
     colormode = os.getenv("VIM_COLORMODE") or "dark",
 })
 
+-- start lsp
+require("my.lspconfig").setup()
+
 -- line numbers
 vim.o.number         = true
 vim.o.relativenumber = true
-vim.o.numberwidth    = 4
+vim.o.numberwidth    = 5
 
--- editor settings
-vim.o.encoding       = "utf-8"
-vim.o.fileformat     = "unix"
+-- ui
+vim.o.guicursor      = ""
 vim.opt.colorcolumn  = "80"
 vim.o.listchars      = "tab:--,space:·,trail:×,nbsp:*,extends:$"
-vim.o.guicursor      = ""
-vim.o.confirm        = true
-vim.o.ignorecase     = true
-vim.o.hidden         = true
+vim.o.list           = true
 vim.o.cursorline     = true
 vim.o.splitbelow     = true
 vim.o.splitright     = true
-vim.o.list           = true
 vim.o.wrap           = false
+
+-- buffer
+vim.o.hidden         = true
+vim.o.confirm        = true
+
+-- search
+vim.o.ignorecase     = true
 
 -- tab settings
 vim.o.expandtab      = true

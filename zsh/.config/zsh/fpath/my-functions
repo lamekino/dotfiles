@@ -8,11 +8,7 @@ function up() {
 
 # jumps back n dirs if $1 exists 1 otherwise
 function ..() {
-    cd $(up "$1") || return
-}
-
-function pup() {
-    pushd $(up "$1") || return
+    cd $(up "$1") &>/dev/null || return
 }
 
 # uses regex to search history uses the whole argv and basically globs it
@@ -20,6 +16,7 @@ function h()  {
     args=$(sed 's/ /.*/g' <<< ".*$@.*")
     history 1 | grep -E "$args"
 }
+
 alias hgrep="h"
 
 # mkdir and cd into it
@@ -43,8 +40,9 @@ function stalk() {
 }
 
 function tada {
-    if tmux ls 2>/dev/null | grep -q home
-    then tmux a -t home
-    else tmux new -s home -c "$HOME"
+    if tmux ls 2>/dev/null | grep -q home; then
+        tmux a -t home
+    else
+        tmux new -s home -c "$HOME"
     fi
 }

@@ -1,9 +1,0 @@
-# vim:ft=zsh
-
-function wsl-display-var() {
-    printf "%s:0" \
-        "$(ip route show default | sed -n 's/.*via \([^ ]\+\).*$/\1/p')"
-
-}
-
-export DISPLAY="$(wsl-display-var)"

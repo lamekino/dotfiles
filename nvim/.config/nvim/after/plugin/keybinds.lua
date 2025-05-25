@@ -1,14 +1,22 @@
 local has_telescope, ts = pcall(require, "telescope.builtin")
 local has_luasnip, ls = pcall(require, "luasnip")
 
-local function tsbuiltin(name)
-    local function fail(...)
-        _ = ...
-        error("keybind disabled: no telescope", 0)
+local function fail(...)
+    _ = ...
+    error("keybind disabled: no telescope", 0)
+end
+
+local function tswrap(name, opts)
+    if opts == nil then
+        return ts[name]
     end
 
-    return has_telescope and ts[name] or fail
+    return function()
+        return ts[name](opts)
+    end
 end
+
+local tsbuiltin = has_telescope and tswrap or fail
 
 local function create_mapper(mode, opts)
     return function(keys, func)
@@ -24,7 +32,7 @@ local global = {
 }
 
 -- disable defaults
-global.map('<Space>', '<Nop>')
+global.map("<Space>", "<Nop>")
 global.map("<ScrollWheelLeft>", "<Nop>")
 global.map("<ScrollWheelRight>", "<Nop>")
 
@@ -94,10 +102,7 @@ global.nnoremap("<Leader>f", tsbuiltin("find_files"))
 global.nnoremap("<Leader>g", ":Neogit<cr>")
 
 global.nnoremap("<Leader>q", tsbuiltin("help_tags"))
-global.nnoremap("<Leader>w", function()
-    tsbuiltin("man_pages")({ sections = { "global" } })
-end)
-
+global.nnoremap("<Leader>w", tsbuiltin("man_pages", { sections = { "ALL" } }))
 global.nnoremap("<Leader>u", ":UndotreeToggle<cr>")
 
 -- close menu
@@ -115,8 +120,7 @@ global.nnoremap("<Leader>k", ":cprev<cr>")
 
 -- luasnip
 if has_luasnip then
-    local snip_expand = create_mapper("i", {silent = true})
-    local snip_move = create_mapper({"i", "s"}, {silent = true})
+    local snip_move = create_mapper({ "i", "s" }, { silent = true })
 
     global.imap("<C-k>", function() ls.expand() end)
 
@@ -133,7 +137,7 @@ end
 
 -- lsp
 vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup('MyLspKeybinds', { clear = true }),
+    group = vim.api.nvim_create_augroup("MyLspKeybinds", { clear = true }),
     callback = function(event)
         local nnoremap = create_mapper("n", {
             buffer = event.buf,

@@ -29,7 +29,8 @@ function M.setup()
     }
 
     for _, lang in ipairs(languages) do
-        local has_config, init = pcall(require, "my.snippets." .. lang)
+        local has_config, init =
+            pcall(require, "my.snippets.filetype." .. lang)
 
         if has_config then
             ls.add_snippets(lang, init(ctx))
@@ -37,7 +38,6 @@ function M.setup()
             error("no luasnip config for " .. lang)
         end
     end
-
 end
 
 return M

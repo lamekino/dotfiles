@@ -17,11 +17,11 @@ export BAT_THEME="ansi"
 
 export YDOTOOL_SOCKET="/tmp/.ydotool_socket"
 
-PS4="%F{2}%D{%s} $PS4%f"
+PS4="%F{2}%D %* $PS4%f"
 HISTORY_IGNORE='([bf]g *|cd ..*|l[alsh]#( *)#|less *|vim# *|pwd|z *|..*)'
 HISTFILE="$XDG_CACHE_HOME/zhistory"
 HISTSIZE=50000
 SAVEHIST=50000
 KEYTIMEOUT=5
 ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-fpath=("$ZDOTDIR/fpath" $fpath)
+fpath=("$ZDOTDIR" $fpath)

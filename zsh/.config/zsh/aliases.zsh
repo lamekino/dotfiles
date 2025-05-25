@@ -22,7 +22,6 @@ alias vi="nvim -u NONE"
 
 # config edits
 alias tmux.conf="$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf"
-alias zshrc="$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc"
 alias zshenv="$EDITOR $XDG_CONFIG_HOME/zsh/.zshenv"
 
 # curl/wget utils

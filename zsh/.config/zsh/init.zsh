@@ -2,10 +2,10 @@
 
 # autoloaded scripts to be run
 local -a autoloads=(
-    "my-prompt"
-    "my-functions"
-    "my-opts"
-    "my-aliases"
+    "prompt.zsh"
+    "functions.zsh"
+    "opts.zsh"
+    "aliases.zsh"
 )
 
 # files to be sourced into zsh

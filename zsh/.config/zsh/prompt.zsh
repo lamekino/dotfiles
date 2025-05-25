@@ -74,7 +74,7 @@ function prompt-tip {
         printer " " "$PROMPT_COLOR_TIP" '%#'
         ;;
     vicmd)
-        printer " " "$PROMPT_COLOR_TIP" ']'
+        printer " " "$PROMPT_COLOR_TIP" '|'
         ;;
     esac
 }
@@ -117,8 +117,8 @@ function my-prompt-render {
     prompt-git-branch
     prompt-shell-mods
     prompt-err-level
-    prompt-dir-count
     prompt-job-count
+    prompt-dir-count
     prompt-tip
 }
 

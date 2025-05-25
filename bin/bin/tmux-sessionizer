@@ -7,7 +7,7 @@ MODE_FIND="zoxide"
 MODE_DIR="explicit-path"
 MODE_CMD="program"
 
-BANNER="\\ \\ \\ tmux sessionizer / / /"
+BANNER='\ \ \ tmux sessionizer / / /'
 
 alias fuzzy_find="fzf --layout=reverse --preview-window hidden --height=100%"
 alias query_directory="zoxide query --list | fuzzy_find"
@@ -24,27 +24,22 @@ tmux_new() (
     name="$1" path="$2" cmd="$3"
 
     # this check may seem redundant, but the session won't spawn without it
-    if [ -n "$cmd" ]
-    then tmux new-session -ds "$name" -c "$path" "$cmd"
-    else tmux new-session -ds "$name" -c "$path"
+    if [ -n "$cmd" ]; then
+        tmux new-session -ds "$name" -c "$path" "$cmd"
+    else
+        tmux new-session -ds "$name" -c "$path"
     fi
 
     tmux switch-client -t "$name"
 )
 
-matches_regex() (
-    string="$1" pattern="$2"
-
-    expr "$string" :  "$pattern" > /dev/null
-)
-
 prompt_user() (
     msg="$1"
-    recv=""
+    out=""
 
     printf "%s: " "$msg" 1>&2
-    read -r recv
-    echo "$recv"
+    read -r out
+    echo "$out"
 )
 
 confirm_session() (
@@ -61,20 +56,18 @@ confirm_session() (
 
     confirmation=$(prompt_user "Is this OK? [Y/n]")
 
-    # return value
-    ! matches_regex "$confirmation" "^(n|N)+"
+    ! expr "$confirmation" : "^(n|N)+" > /dev/null
 )
 
 # main program
-mode="$1"
 working_path="" program="" name=""
 
 display_banner
-while [ -z "$name" ]; do
+until [ -n "$name" ]; do
     name=$(prompt_user "New session name")
 done
 
-case "$mode" in
+case "$1" in
 "$MODE_FIND") working_path=$(query_directory) ;;
 "$MODE_DIR")  working_path=$(prompt_user "Starting directory") ;;
 "$MODE_CMD")  program=$(prompt_user "Command to run") ;;

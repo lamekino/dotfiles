@@ -14,7 +14,7 @@ local function myevents(wt)
                 -- _ = window:spawn_tab(env)
 
                 if gui then
-                    gui:maximize()
+                    -- gui:maximize()
                 end
             end)
     }
@@ -30,13 +30,14 @@ return function(cfg, wt)
     cfg.use_fancy_tab_bar = false
 
     -- m.enable_wayland = false
-    -- m.window_decorations = "RESIZE"
+    -- cfg.window_decorations = "RESIZE"
     cfg.window_close_confirmation = 'NeverPrompt'
 
+    local pad = 8
     cfg.window_padding = {
-        left = 8,
-        right = 8,
-        top = 8,
-        bottom = 8
+        left = pad,
+        right = pad,
+        top = pad,
+        bottom = pad
     }
 end

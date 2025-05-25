@@ -1,16 +1,16 @@
 local font_config = {
     plex = {
-        family = "IBM Plex Mono Text",
-        weight = "Regular",
-        size = 17.5,
-        width = 0.95,
+        family = "IBM Plex Mono",
+        weight = "Medium",
+        size = 17.0,
+        width = 0.90,
         height = 1.00
     },
 
     juila = {
         family = "Julia Mono",
         weight = "Medium",
-        size = 17.5,
+        size = 17.0,
         width = 0.95,
         height = 1.10
     }
@@ -28,7 +28,10 @@ return function(cfg, wt)
             family = font.family,
             weight = font.weight
         },
-        { family = "Noto Sans Mono CJK JP" },
+        {
+            family = "Noto Sans Mono CJK JP",
+            weight = "Regular"
+        },
     })
 
     cfg.font_rules = {

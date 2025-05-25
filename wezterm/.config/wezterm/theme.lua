@@ -1,4 +1,4 @@
-local colormode = "dark"
+local colormode = "light"
 
 local light_opacity = 0.87
 local light_tweaks = {}

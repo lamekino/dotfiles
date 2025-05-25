@@ -9,7 +9,7 @@ return function(cfg, wt)
             key = ' ',
             mods = 'SHIFT',
             action = wt.action.Nop
-        }
+        },
     }
 
     cfg.mouse_bindings = {

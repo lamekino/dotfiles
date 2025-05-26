@@ -1,5 +1,3 @@
-# vim:ft=zsh
-
 function up() {
     N="$1"
     [ -z "$N" ] && N=1

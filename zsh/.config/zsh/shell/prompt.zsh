@@ -1,8 +1,6 @@
-# vim:ft=zsh
-
 PROMPT="" # if set, this string will be above the first shown line (scroll up)
 
-export PROMPT_SEPARATOR=':'
+export PROMPT_SEP=':'
 
 export PROMPT_SIGN_MODS='&'
 export PROMPT_SIGN_DIRS='~'
@@ -20,7 +18,7 @@ export PROMPT_COLOR_PWD=140
 export PROMPT_COLOR_TIP=15
 
 function printer { printf '%%F{%s}%s%%f%s' "$2" "$3" "$1" }
-function renderer { printer "$PROMPT_SEPARATOR" "$1" "$2" }
+function renderer { printer "$PROMPT_SEP" "$1" "$2" }
 
 function my-prompt-config {
     local -a signs=(
@@ -42,26 +40,26 @@ function my-prompt-config {
     )
 
 
+    for sign in "PROMPT_SEP" ${signs[@]}; do
+        printf "%-24s = '%s'\n" "$sign" "${(P)sign}"
+    done
+
     for color in ${colors[@]}; do
         printf "%-24s = %-5s \e[48;5;%sm     \e[0m\n" \
             "$color" "${(P)color}" "${(P)color}"
-    done
-
-    for sign in "PROMPT_SEPARATOR" ${signs[@]}; do
-        printf "%-24s = '%s'\n" "$sign" "${(P)sign}"
     done
 }
 
 function prompt-job-count {
     printer \
-        "%(1j.$PROMPT_SEPARATOR.)" \
+        "%(1j.$PROMPT_SEP.)" \
         "$PROMPT_COLOR_JOB_COUNT" \
         "%(1j.${PROMPT_SIGN_JOBS}%j.)"
 }
 
 function prompt-err-level {
     printer \
-        "%(?..$PROMPT_SEPARATOR)" \
+        "%(?..$PROMPT_SEP)" \
         "$PROMPT_COLOR_ERR_LVL" \
         "%(?..${PROMPT_SIGN_ERR}%?)"
 }

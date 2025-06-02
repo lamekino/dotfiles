@@ -7,15 +7,6 @@ local disable_autoformat = {
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup('MyLspOnAttach', { clear = true }),
     callback = function(event)
-        local handlers = vim.lsp.handlers
-
-        -- set the borders for windows
-        handlers["textDocument/hover"] =
-            vim.lsp.with(handlers.hover, border)
-
-        handlers["textDocument/signatureHelp"] =
-            vim.lsp.with(handlers.signature_help, border)
-
         -- create a command for codeactions
         vim.api.nvim_create_user_command("CodeAction",
             vim.lsp.buf.code_action, {})
@@ -27,7 +18,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
             callback = function()
                 vim.lsp.buf.format {
                     filter = function(c)
-                        return disable_autoformat[c.name] == nil
+                        for _, x in ipairs(disable_autoformat) do
+                            if x == c.name then
+                                return false
+                            end
+                        end
+
+                        return true
                     end
                 }
             end

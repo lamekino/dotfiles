@@ -1,7 +1,3 @@
-# initialize tab completion
-autoload -Uz compinit
-compinit
-
 # load edit-command-line widget
 autoload -Uz edit-command-line
 zle -N edit-command-line

@@ -3,14 +3,14 @@ local font_config = {
         family = "IBM Plex Mono",
         weight = "Medium",
         size = 17.0,
-        width = 0.90,
+        width = 0.95,
         height = 1.00
     },
 
     juila = {
         family = "Julia Mono",
         weight = "Medium",
-        size = 17.0,
+        size = 15.5,
         width = 0.95,
         height = 1.10
     }

@@ -1,4 +1,4 @@
-local function myevents(wt)
+local function my_events(wt)
     return {
         ["format-window-title"] =
             (function()
@@ -7,31 +7,20 @@ local function myevents(wt)
         ["gui-startup"] =
             (function(cmd)
                 local env = cmd or {}
+                local _, pane, _ = wt.mux.spawn_window(env)
 
-                local _, _, window = wt.mux.spawn_window(env)
-                local gui = window:gui_window()
-
-                -- _ = window:spawn_tab(env)
-
-                if gui then
-                    -- gui:maximize()
-                end
+                pane:send_text("\n") -- skip set title prompt (zshrc)
             end)
     }
 end
 
 return function(cfg, wt)
-    for evname, callback in pairs(myevents(wt)) do
-        wt.on(evname, callback)
-    end
-
-    -- cfg.enable_tab_bar = false
-    cfg.hide_tab_bar_if_only_one_tab = true
+    cfg.tab_bar_at_bottom = true
     cfg.use_fancy_tab_bar = false
-
-    -- m.enable_wayland = false
-    -- cfg.window_decorations = "RESIZE"
     cfg.window_close_confirmation = 'NeverPrompt'
+    -- cfg.hide_tab_bar_if_only_one_tab = true
+    -- cfg.enable_tab_bar = false
+    -- cfg.enable_wayland = false
 
     local pad = 8
     cfg.window_padding = {
@@ -40,4 +29,8 @@ return function(cfg, wt)
         top = pad,
         bottom = pad
     }
+
+    for evname, callback in pairs(my_events(wt)) do
+        wt.on(evname, callback)
+    end
 end

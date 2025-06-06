@@ -1,4 +1,3 @@
-# this file gets included on linux hosts
 alias grep='grep --color=auto'
 alias diff='diff --color=always'
 alias ls='LC_ALL=C ls -pk --color=auto --group-directories-first'

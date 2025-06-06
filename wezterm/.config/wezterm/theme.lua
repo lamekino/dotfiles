@@ -1,6 +1,6 @@
 local colormode = "light"
 
-local light_opacity = 0.87
+local light_opacity = 0.88
 local light_tweaks = {}
 
 local dark_opacity = 0.85
@@ -21,7 +21,7 @@ return function(cfg, wt)
     local builtins = wt.get_builtin_color_schemes()
 
     local light_theme = builtins["Catppuccin Latte"]
-    local dark_theme = builtins["Catppuccin Mocha"]
+    local dark_theme = builtins["Jellybeans"]
 
     local callback = {
         ["light"] = set_theme(cfg, light_theme, light_tweaks, light_opacity),

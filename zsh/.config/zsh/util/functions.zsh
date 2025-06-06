@@ -44,3 +44,11 @@ function tada {
         tmux new -s home -c "$HOME"
     fi
 }
+
+function haha {
+    if tmux ls 2>/dev/null | grep -q home; then
+        tmux a -t hacks
+    else
+        tmux new -s hacks -c "/mnt/hacker"
+    fi
+}

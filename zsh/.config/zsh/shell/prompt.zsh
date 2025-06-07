@@ -98,7 +98,8 @@ function my-prompt-render {
 
     if [ -n "$branch" ]; then
         function prompt-git-branch {
-            local changes=$(git status --short 2>/dev/null | wc -l)
+            # xargs trims whitespace
+            local changes=$(git status --short 2>/dev/null | wc -l | xargs)
 
             if [ $changes -eq 0 ]; then
                 renderer \

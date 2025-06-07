@@ -39,12 +39,12 @@ done
 local -a evals=()
 
 # initizalize zoxide
-if (( ${+commands[zoxide]} )); then
+if command -v zoxide &>/dev/null; then
     evals+=("$(zoxide init zsh)")
 fi
 
 # initialize dircolors
-if [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
+if command -v dircolors &>/dev/null && [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
     evals+=("$(dircolors "$XDG_CONFIG_HOME/dircolors")")
 fi
 

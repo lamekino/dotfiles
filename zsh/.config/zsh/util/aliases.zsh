@@ -9,6 +9,7 @@ alias tmux="tmux -2"
 alias tree="tree -a"
 alias t="tree -F"
 alias td="tree -F -L"
+alias hd="hexdump -C"
 alias stop="kill -STOP"
 alias youtube-dl="yt-dlp" # rip
 alias Z="zoxide"

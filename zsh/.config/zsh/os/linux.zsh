@@ -4,7 +4,6 @@ alias ls='LC_ALL=C ls -pk --color=auto --group-directories-first'
 alias ll='ls -l'
 alias la='ls -a'
 alias open='xdg-open'
-alias hd="hexdump -C"
 
 # check if in wsl
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then

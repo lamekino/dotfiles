@@ -10,7 +10,7 @@ MODE_CMD="program"
 BANNER='\ \ \ tmux sessionizer / / /'
 
 alias fuzzy_find="fzf --layout=reverse --preview-window hidden --height=100%"
-alias query_directory="zoxide query --list | fuzzy_find"
+alias search_recent_files="zoxide query --list | fuzzy_find"
 
 display_banner() (
     FLAGS="--gay -f future"
@@ -33,7 +33,7 @@ tmux_new() (
     tmux switch-client -t "$name"
 )
 
-prompt_user() (
+prompt_input() (
     msg="$1"
     out=""
 
@@ -42,7 +42,7 @@ prompt_user() (
     echo "$out"
 )
 
-confirm_session() (
+confirm() (
     name="$1" path="$2" cmd="$3"
     confirmation=""
 
@@ -54,30 +54,41 @@ confirm_session() (
     printf "* Session path: %s\n" "$path"
     printf "* Session command: '%s'\n" "$cmd"
 
-    confirmation=$(prompt_user "Is this OK? [Y/n]")
+    confirmation=$(prompt_input "Is this OK? [Y/n]")
 
-    ! expr "$confirmation" : "^(n|N)+" > /dev/null
+    if [ "$confirmation" = "n" ] || [ confirmation = "N" ]; then
+        return 1
+    fi
+
+    return 0
 )
 
-# main program
-working_path="" program="" name=""
+main() (
+    working_path="" program="" name=""
 
-display_banner
-until [ -n "$name" ]; do
-    name=$(prompt_user "New session name")
-done
+    display_banner
 
-case "$1" in
-"$MODE_FIND") working_path=$(query_directory) ;;
-"$MODE_DIR")  working_path=$(prompt_user "Starting directory") ;;
-"$MODE_CMD")  program=$(prompt_user "Command to run") ;;
-*) exit 1 ;;
-esac
+    name=$(prompt_input "New session name")
 
-if [ -z "$working_path" ]; then
-    working_path="$HOME"
-fi
+    case "$1" in
+    "$MODE_FIND") working_path=$(search_recent_files) ;;
+    "$MODE_DIR") working_path=$(prompt_input "Starting directory") ;;
+    "$MODE_CMD") program=$(prompt_input "Command to run") ;;
+    *)
+        echo "Invalid argument: '$1'"
+        return 1
+        ;;
+    esac
 
-if confirm_session "$name" "$working_path" "$program"; then
-    tmux_new "$name" "$working_path" "$program"
-fi
+    if [ -z "$working_path" ]; then
+        working_path="$HOME"
+    fi
+
+    if [ -n "$name" ] && confirm "$name" "$working_path" "$program"; then
+        tmux_new "$name" "$working_path" "$program"
+    else
+        return 1
+    fi
+)
+
+main "$1"

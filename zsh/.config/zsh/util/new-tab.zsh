@@ -9,9 +9,10 @@ local default_title= # skips prompting if set
 function set-tab-title() {
     local set_title="$1"
     local has_title=0
-    local parent="$(ps -o comm -p $(ps -o ppid\= $$) | tail -n +2)"
+    local ppid="$(ps -o ppid\= $$)"
 
-    if grep -q "$terminal$" <<< "$parent"; then
+    # grep for the terminal in the ppid's command name
+    if ps -o comm -p "$ppid" | tail -n +2 | grep -q "$terminal$"; then
         has_title=1
     fi
 
@@ -25,5 +26,9 @@ function set-tab-title() {
         eval "$titlecmd "$set_title""
     fi
 }
+
+if [ -z "$default_title" ]; then
+    set-tab-title "untitled"
+fi
 
 set-tab-title "$default_title"

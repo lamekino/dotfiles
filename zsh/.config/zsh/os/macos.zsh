@@ -1,5 +1,9 @@
-# this file gets included on macos hosts... which i haven't used since 2017.
 export CLICOLOR=1
+
+# https://superuser.com/a/417152
+export GREP_OPTIONS='--color=auto';
+export GREP_COLOR='1;35;40'
+
 alias ls='ls -pk'
 alias ll='ls -pkl'
 alias la='ls -pkla'

@@ -18,7 +18,7 @@ alias neofetch="fastfetch --config neofetch" # rip ;-;
 alias vi="nvim -u NONE"
 
 # wezterm
-alias wez-rename="wezterm cli set-tab-title"
+alias tab-title="wezterm cli set-tab-title"
 
 # zsh config
 alias zsh-debug="time DEBUG=1 zsh -i -c exit"

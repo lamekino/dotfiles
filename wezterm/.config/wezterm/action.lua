@@ -12,6 +12,18 @@ return function(cfg, wt)
         },
     }
 
+    -- fix macos cmdkeys -> altkeys
+    for i = 0, 9 do
+        table.insert(cfg.keys, {
+            mods = 'SUPER',
+            key = tostring(i),
+            action = wt.action.SendKey({
+                mods = 'ALT',
+                key = tostring(i)
+            })
+        })
+    end
+
     cfg.mouse_bindings = {
         {
             event = { Down = { streak = 1, button = 'Right' } },

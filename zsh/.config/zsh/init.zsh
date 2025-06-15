@@ -2,7 +2,7 @@
 # autoloaded scripts to be run
 #
 local -a autoloads=(
-    "compinit" # for tab completion
+    "compinit -d '$XDG_CACHE_HOME/zcompdump'" # for tab completion
     "shell/opts.zsh"
     "shell/prompt.zsh"
     "shell/bindkey.zsh"
@@ -19,8 +19,8 @@ esac
 
 # load and run functions
 for func in "${autoloads[@]}"; do
-    autoload -Uz "$func"
-    "$func"
+    autoload -Uz "$(echo "$func" | cut -d' ' -f1)"
+    eval "$func"
 done
 
 #

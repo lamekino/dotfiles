@@ -4,14 +4,6 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 
-# zsh config
-PS4="%F{2}%D %* $PS4%f"
-HISTORY_IGNORE='([bf]g *|cd ..*|l[alsh]#( *)#|less *|vim# *|pwd|z *|..*)'
-HISTFILE="$XDG_CACHE_HOME/zhistory"
-HISTSIZE=50000
-SAVEHIST=50000
-KEYTIMEOUT=5
-
 # shell resources
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"

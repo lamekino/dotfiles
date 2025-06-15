@@ -1,4 +1,4 @@
-local function generate_configs(wt)
+local function my_fonts(wt)
     local is_macos =
         wt.target_triple == "aarch64-apple-darwin" or
         wt.target_triple == "x86_64-apple-darwin"
@@ -31,7 +31,7 @@ local function fallback(family, weight)
 end
 
 return function(cfg, wt)
-    local font = generate_configs(wt).juila
+    local font = my_fonts(wt).juila
 
     cfg.font_size = font.size
     cfg.cell_width = font.width

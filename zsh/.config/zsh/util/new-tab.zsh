@@ -8,7 +8,7 @@ local prompttext="tab title?"
 local promptcolor=140
 
 local has_terminal=0
-local shell_parent="$(ps -o ppid\= $$)"
+local shell_parent="$(ps -o ppid\= $$ | xargs)" # xargs = trim string
 
 # grep for the terminal name in the ppid's command name
 if ps -o comm -p "$shell_parent" | tail -n +2 | grep -q "$terminal$"; then

@@ -10,9 +10,6 @@ local promptcolor=140
 local has_terminal=0
 local shell_parent="$(ps -o ppid\= $$)"
 
-# set the default if ctrl-c is pressed
-trap "$titlecmd '$fallback_title'; trap -; return" INT TERM
-
 # grep for the terminal name in the ppid's command name
 if ps -o comm -p "$shell_parent" | tail -n +2 | grep -q "$terminal$"; then
     has_terminal=1
@@ -24,10 +21,6 @@ if (( has_terminal )) && [ -z "$set_title" ]; then
     clear
 fi
 
-if (( has_terminal )); then
-    # set default if ctrl-d is pressed
-    [ -z "$set_title" ] && set_title="$fallback_title"
+if (( has_terminal )) && [ -n "$set_title" ]; then
     eval "$titlecmd '$set_title'"
 fi
-
-trap - # reset trap handlers

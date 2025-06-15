@@ -8,11 +8,22 @@ local function my_events(wt)
             end),
         ["format-tab-title"] = -- (tab, tabs, panes, config, hover, max_width)
             (function(tab, ...)
+                local has_title = tab.tab_title ~= ""
+
                 return string.format(
                     " %d: %s ",
-                    tab.tab_index + 1, tab.tab_title
+                    tab.tab_index + 1,
+                    has_title and tab.tab_title or "untitled"
                 )
             end),
+        ["gui-startup"] =
+            (function(cmd)
+                local env = cmd or {}
+                local _, pane, _ = wt.mux.spawn_window(env)
+
+                -- BUG: this doesn't work with more than one window
+                pane:send_text("\n")
+            end)
     }
 end
 

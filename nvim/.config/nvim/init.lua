@@ -1,6 +1,6 @@
 -- install/load plugins
 require("my.plugins"):setup({
-    colormode = os.getenv("VIM_COLORMODE") or "dark",
+    colormode = os.getenv("VIM_COLORMODE") or "light",
 })
 
 -- start lsp

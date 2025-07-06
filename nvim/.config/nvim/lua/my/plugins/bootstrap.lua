@@ -1,6 +1,6 @@
 local M = {}
 
-function M.run()
+function M.start()
     local repo = "https://github.com/folke/lazy.nvim.git"
     local path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 

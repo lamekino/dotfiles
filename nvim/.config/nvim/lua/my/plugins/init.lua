@@ -1,8 +1,27 @@
 local M = {}
 
-function M.plugins(cfg)
+local my_icons = {
+    cmd = "⌘",
+    config = "🛠",
+    event = "📅",
+    ft = "📂",
+    init = "⚙",
+    keys = "🗝",
+    plugin = "🔌",
+    runtime = "💻",
+    require = "🌙",
+    source = "📄",
+    start = "🚀",
+    task = "📌",
+    lazy = "💤 ",
+}
+
+local function my_plugin_configs(cfg)
     return {
-        -- the colorscheme
+        -- lazy config
+        ui = { icons = my_icons, },
+
+        -- colorscheme
         {
             "catppuccin/nvim",
             name = "catppuccin",
@@ -63,22 +82,9 @@ function M.plugins(cfg)
         {
             "nvim-telescope/telescope.nvim",
             dependencies = "nvim-lua/plenary.nvim",
-            opts = {
-                defaults = {
-                    layout_strategy = "horizontal",
-                },
-                pickers = {
-                    find_files = {
-                        theme = "ivy"
-                    },
-                    git_files = {
-                        hidden = true,
-                    },
-                    live_grep = {
-                        hidden = true,
-                    },
-                }
-            }
+            config = function()
+                require("my.plugins.config.telescope").setup()
+            end
         },
 
         -- syntax parser
@@ -143,18 +149,13 @@ function M.plugins(cfg)
     }
 end
 
-function M:setup(cfg)
-    -- this is required to be set here
+function M.setup(cfg)
+    -- these are required to be set here
     vim.g.mapleader = " "
     vim.g.maplocalleader = "\\"
 
-    local is_installed = require("my.plugins.bootstrap").run()
-
-    if is_installed then
-        local plugins = self.plugins(cfg)
-        plugins.ui = require("my.plugins.ui")
-
-        require("lazy").setup(plugins)
+    if require("my.plugins.bootstrap").start() then
+        require("lazy").setup(my_plugin_configs(cfg))
     end
 end
 

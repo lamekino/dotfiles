@@ -9,8 +9,7 @@ local function cd_git_root()
     end
 
     if string.len(vim.fn.chdir(git_root)) <= 0 then
-        vim.api.nvim_err_writeln("error: could not change to git root: "
-            .. git_root)
+        error("error: could not change to git root: " .. git_root)
     end
 end
 

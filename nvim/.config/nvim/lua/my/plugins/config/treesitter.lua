@@ -3,20 +3,12 @@ local M = {}
 M.config = {
     sync_install = false,
     ensure_installed = {
-        "java",
-        "c",
-        "cpp",
-        "bash",
-        "python",
-        "haskell",
-        "lua",
-        "vim",
-        "vimdoc",
-        "markdown"
+        "bash", "c", "cpp", "haskell", "java", "lua", "markdown", "python",
+        "vim", "vimdoc",
     },
     highlight = {
         enable = true,
-        -- disable = { "markdown" },
+        disable = {},
         additional_vim_regex_highlighting = false,
     }
 }

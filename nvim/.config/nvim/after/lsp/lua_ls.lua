@@ -2,7 +2,7 @@ return {
     settings = {
         Lua = {
             runtime = {
-                version = 'LuaJIT',
+                version = "LuaJIT",
             },
             workspace = {
                 checkThirdParty = false,
@@ -12,8 +12,16 @@ return {
                 }
             },
             diagnostics = {
-                globals = { 'vim' },
+                globals = { "vim" },
             },
+            format = {
+                defaultConfig = {
+                    quote_style = "double",
+                    align_continuous_assign_statement = "false",
+                    align_continuous_rect_table_field = "false",
+                    align_array_table = "false",
+                }
+            }
         },
     },
 }

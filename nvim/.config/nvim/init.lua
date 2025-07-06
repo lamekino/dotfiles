@@ -1,48 +1,49 @@
 -- install/load plugins
-require("my.plugins"):setup({
-    colormode = os.getenv("VIM_COLORMODE") or "light",
+require("my.plugins").setup({
+    colormode = os.getenv("VIM_COLORMODE") or "dark",
 })
 
 -- start lsp
 require("my.lspconfig").setup()
 
 -- line numbers
-vim.o.number         = true
+vim.o.number = true
 vim.o.relativenumber = true
-vim.o.numberwidth    = 5
+vim.o.numberwidth = 5
 
 -- ui
-vim.o.guicursor      = ""
-vim.opt.colorcolumn  = "80"
-vim.o.listchars      = "tab:--,space:·,trail:×,nbsp:*,extends:$"
-vim.o.list           = true
-vim.o.cursorline     = true
-vim.o.splitbelow     = true
-vim.o.splitright     = true
-vim.o.wrap           = false
+vim.o.guicursor = ""
+vim.opt.colorcolumn = "80"
+vim.o.winborder = "single"
+vim.o.listchars = "tab:--,space:·,trail:×,nbsp:*,extends:$"
+vim.o.list = true
+vim.o.cursorline = true
+vim.o.splitbelow = true
+vim.o.splitright = true
+vim.o.wrap = false
 
 -- buffer
-vim.o.hidden         = true
-vim.o.confirm        = true
+vim.o.hidden = true
+vim.o.confirm = true
 
 -- search
-vim.o.ignorecase     = true
+vim.o.ignorecase = true
 
 -- tab settings
-vim.o.expandtab      = true
-vim.o.tabstop        = 4
-vim.o.shiftwidth     = 4
-vim.o.softtabstop    = 4
+vim.o.expandtab = true
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 4
 
 -- backup files
-vim.o.swapfile       = false
-vim.o.undofile       = true
-vim.o.undodir        = vim.fn.stdpath("cache") .. "/undodir"
+vim.o.swapfile = false
+vim.o.undofile = true
+vim.o.undodir = vim.fn.stdpath("cache") .. "/undodir"
 
 -- misc
-vim.o.termguicolors  = true
-vim.o.lazyredraw     = true
-vim.o.path           = vim.o.path .. "**"
+vim.o.termguicolors = true
+vim.o.lazyredraw = true
+vim.o.path = vim.o.path .. "**"
 
 vim.api.nvim_create_autocmd("VimEnter", {
     desc = "gets misc options to set on startup",
@@ -65,5 +66,5 @@ end
 
 -- global variables
 vim.g.netrw_winsize = 15
-vim.g.netrw_banner  = false
-vim.g.mapleader     = " "
+vim.g.netrw_banner = false
+vim.g.mapleader = " "

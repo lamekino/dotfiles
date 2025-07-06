@@ -10,17 +10,7 @@ end
 local M = {}
 
 function M.setup()
-    local languages = { "lua" }
-
-    local ctx = {
-        s = ls.s,
-        i = ls.insert_node,
-        t = ls.text_node,
-        c = ls.choice_node,
-        rep = extras.rep,
-        fmt = extras_fmt.fmt,
-        fmta = extras_fmt.fmta
-    }
+    local ls_configs = { "lua" }
 
     ls.config.set_config {
         history = true,
@@ -28,14 +18,22 @@ function M.setup()
         enable_autosnippets = true
     }
 
-    for _, lang in ipairs(languages) do
-        local has_config, init =
-            pcall(require, "my.snippets.filetype." .. lang)
+    for _, config in ipairs(ls_configs) do
+        local module = "my.snippets.filetype." .. config
+        local has_config, init_from_context = pcall(require, module)
 
-        if has_config then
-            ls.add_snippets(lang, init(ctx))
+        if not has_config then
+            error("no luasnip config for " .. config)
         else
-            error("no luasnip config for " .. lang)
+            init_from_context({
+                s = ls.s,
+                i = ls.insert_node,
+                t = ls.text_node,
+                c = ls.choice_node,
+                rep = extras.rep,
+                fmt = extras_fmt.fmt,
+                fmta = extras_fmt.fmta
+            })
         end
     end
 end

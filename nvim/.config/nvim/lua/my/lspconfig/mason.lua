@@ -6,8 +6,8 @@ vim.lsp.config("*", { capabilities = lsp_capabilities })
 
 local install_by_default = {
     ["lua_ls"] = true,
-    ["clangd"] = vim.fn.executable("unzip") ~= 0, -- clangd installer dependency
-    ["pylsp"] = true,                             -- FIXME: requires venv
+    ["clangd"] = vim.fn.executable("unzip") ~= 0,  -- clangd installer dependency
+    ["pylsp"] = vim.fn.executable("python3") ~= 0, -- FIXME: requires venv
     ["jdtls"] = vim.fn.executable("java") ~= 0,
     ["hls"] = vim.fn.executable("ghcup") ~= 0,
     ["powershell_es"] = vim.fn.has("wsl") + vim.fn.has("win32") ~= 0

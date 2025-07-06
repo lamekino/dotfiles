@@ -1,10 +1,13 @@
+COLORMODE = os.getenv("VIM_COLORMODE") or "dark"
+
 -- install/load plugins
-require("my.plugins").setup({
-    colormode = os.getenv("VIM_COLORMODE") or "dark",
-})
+require("my.plugins").setup({ colormode = COLORMODE })
 
 -- start lsp
 require("my.lspconfig").setup()
+
+-- configure diagnostics
+require("my.diagnostics").setup(COLORMODE)
 
 -- line numbers
 vim.o.number = true

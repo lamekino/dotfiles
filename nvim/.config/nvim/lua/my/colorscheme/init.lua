@@ -8,10 +8,8 @@ M.colorschemes = {
 }
 
 function M.setup(colormode)
-    require("my.colorscheme.diagnostics").setup(colormode)
-
     vim.api.nvim_create_autocmd("Colorscheme", {
-        group    = vim.api.nvim_create_augroup("ColorschemeTweaks", {}),
+        group = vim.api.nvim_create_augroup("ColorschemeTweaks", {}),
         callback = M.tweaks.create_callback(colormode)
     })
 

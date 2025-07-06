@@ -4,11 +4,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 
-# shell resources
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+# shell
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-
-# shell utils
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 export BROWSER="/usr/bin/env firefox"
 export EDITOR="/usr/bin/env nvim"
 export VISUAL="$EDITOR"
@@ -29,3 +27,7 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_ROOT="/opt/homebrew"
 
 [ -d "$HOMEBREW_ROOT" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# disbale $ZDOTDIR/.zsh_session on macOS
+# https://apple.stackexchange.com/a/427568
+SHELL_SESSIONS_DISABLE=1

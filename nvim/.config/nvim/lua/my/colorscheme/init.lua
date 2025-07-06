@@ -1,11 +1,11 @@
 local M = {}
 
-local schemes = {
+M.tweaks = require("my.colorscheme.tweaks")
+
+M.colorschemes = {
     ["dark"] = "catppuccin-mocha",
     ["light"] = "catppuccin-latte"
 }
-
-M.tweaks = require("my.colorscheme.tweaks")
 
 function M.setup(colormode)
     require("my.colorscheme.diagnostics").setup(colormode)
@@ -15,7 +15,7 @@ function M.setup(colormode)
         callback = M.tweaks.create_callback(colormode)
     })
 
-    local ok = pcall(function(cs) vim.cmd.colorscheme(cs) end, schemes[colormode])
+    _ = pcall(vim.cmd.colorscheme, M.colorschemes[colormode])
     vim.o.background = colormode
 end
 

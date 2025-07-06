@@ -40,10 +40,14 @@ end
 
 M.create_callback = function(colormode)
     return function()
-        if colormode == "dark" then
-            dark_mode_tweaks()
-        else
-            light_mode_tweaks()
+        local mode_tweaks = {
+            ["dark"] = dark_mode_tweaks,
+            ["light"] = light_mode_tweaks,
+
+        }
+
+        if mode_tweaks[colormode] ~= nil then
+            mode_tweaks[colormode]()
         end
 
         set.groups({ "Comment", "String" }, {

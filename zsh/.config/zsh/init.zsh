@@ -1,7 +1,11 @@
 #
 # files to be sourced into zsh
 #
-local -a sources=("$HOME/.ghcup/env" "$PWD/venv/bin/activate")
+local -a sources=(
+    "$HOME/.ghcup/env"
+    "$PWD/venv/bin/activate"
+)
+
 for s in "${sources[@]}"; do
     if [ -f "$s" ]; then
         source "$s"
@@ -19,8 +23,10 @@ if command -v zoxide &>/dev/null; then
 fi
 
 # initialize dircolors
-if command -v dircolors &>/dev/null && [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
-    evals+=("$(dircolors "$XDG_CONFIG_HOME/dircolors")")
+if command -v dircolors &>/dev/null; then
+    if [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
+        evals+=("$(dircolors "$XDG_CONFIG_HOME/dircolors")")
+    fi
 fi
 
 for e in "${evals[@]}"; do
@@ -31,7 +37,7 @@ done
 # autoloaded scripts to be run
 #
 local -a autoloads=(
-    "compinit -d '$XDG_CACHE_HOME/zcompdump'" # for tab completion
+    "compinit -d '$ZSH_COMPDUMP'" # for tab completion
     "shell/opts.zsh"
     "shell/prompt.zsh"
     "shell/bindkey.zsh"
@@ -41,14 +47,13 @@ local -a autoloads=(
 )
 
 # include os-specific files
-case $(uname -s) in
+case "$(uname -s)" in
 Linux) autoloads+="os/linux.zsh" ;;
 Darwin) autoloads+="os/macos.zsh" ;;
 esac
 
 # load and run functions
-for func in "${autoloads[@]}"; do
-    autoload -Uz "$(echo "$func" | cut -d' ' -f1)"
-    eval "$func"
+for funcname in "${autoloads[@]}"; do
+    autoload -Uz "$(cut -d' ' -f1 <<< "$funcname")"
+    eval "$funcname"
 done
-

@@ -11,7 +11,7 @@ function ..() {
 
 # uses regex to search history uses the whole argv and basically globs it
 function h()  {
-    args=$(sed 's/ /.*/g' <<< ".*$@.*")
+    args=$(sed 's/ / .*/g' <<< ".*$@.*")
     history 1 | grep -E "$args"
 }
 
@@ -37,18 +37,12 @@ function stalk() {
     echo "$1" | entr -c "$1"
 }
 
+alias ta="tmux a"
+
 function tada {
     if tmux ls 2>/dev/null | grep -q home; then
         tmux a -t home
     else
         tmux new -s home -c "$HOME"
-    fi
-}
-
-function haha {
-    if tmux ls 2>/dev/null | grep -q home; then
-        tmux a -t hacks
-    else
-        tmux new -s hacks -c "/mnt/hacker"
     fi
 }

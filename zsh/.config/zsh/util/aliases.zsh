@@ -17,6 +17,10 @@ alias fs="dfc -T -p /dev 2>/dev/null"
 alias neofetch="fastfetch --config neofetch" # rip ;-;
 alias vi="nvim -u NONE"
 
+if ! (( $+commands[python] )); then
+    alias python="python3"
+fi
+
 # wezterm
 alias tab-title="wezterm cli set-tab-title"
 

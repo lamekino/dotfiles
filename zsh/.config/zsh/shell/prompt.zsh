@@ -15,6 +15,7 @@ PROMPT_COLOR_DIR_STACK=164
 PROMPT_COLOR_GIT_CLEAN=10
 PROMPT_COLOR_GIT_DIRTY=168
 PROMPT_COLOR_PWD=140
+PROMPT_COLOR_PWD_SSH=208
 PROMPT_COLOR_TIP=15
 
 function printer { printf '%%F{%s}%s%%f%s' "$2" "$3" "$1" }
@@ -36,6 +37,7 @@ function my-prompt-config {
         "PROMPT_COLOR_GIT_CLEAN"
         "PROMPT_COLOR_GIT_DIRTY"
         "PROMPT_COLOR_PWD"
+        "PROMPT_COLOR_PWD_SSH"
         "PROMPT_COLOR_TIP"
     )
 
@@ -84,7 +86,7 @@ function my-prompt-render {
     function prompt-dir-count { : }
     function prompt-git-branch { : }
 
-    if [ -n "$VIRTUAL_ENV"  ]; then
+    if [ -f "$VIRTUAL_ENV"  ]; then
         function prompt-shell-mods {
             renderer "$PROMPT_COLOR_SHELL_MODS" "${PROMPT_SIGN_MODS}venv"
         }
@@ -111,6 +113,10 @@ function my-prompt-render {
                     "${PROMPT_SIGN_GIT}${branch}+${changes}"
             fi
         }
+    fi
+
+    if [ -n "$SSH_CONNECTION" ]; then
+        PROMPT_COLOR_PWD="$PROMPT_COLOR_PWD_SSH"
     fi
 
     prompt-git-branch

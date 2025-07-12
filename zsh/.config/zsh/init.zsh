@@ -1,18 +1,4 @@
 #
-# files to be sourced into zsh
-#
-local -a sources=(
-    "$HOME/.ghcup/env"
-    "$PWD/venv/bin/activate"
-)
-
-for s in "${sources[@]}"; do
-    if [ -f "$s" ]; then
-        source "$s"
-    fi
-done
-
-#
 # utils which need to be eval'd to initialize
 #
 local -a evals=()

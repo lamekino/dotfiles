@@ -47,7 +47,3 @@ for dot in "$INSTALLER_ROOT"/*/; do
         stow_cmd "$config_name"
     fi
 done
-
-if [ "$msg" = "$MSG_INSTALL" ] && ! [ -f ~/.zshenv ]; then
-    printf ". ~/.config/zsh/.zshenv\n" > ~/.zshenv
-fi

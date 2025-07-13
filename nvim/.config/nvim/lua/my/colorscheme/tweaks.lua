@@ -1,6 +1,24 @@
 local M = {}
 local set = require("my.colorscheme.set")
 
+local function light_mode_tweaks()
+    -- this should be in init.lua, and might have a ascii default instead
+    vim.opt.fillchars = {
+        vert = "|",
+        horiz = "-",
+        horizup = "+",
+        horizdown = "+",
+        vertleft = "+",
+        vertright = "+",
+        verthoriz = "+",
+    }
+
+    set.groups({ "WinSeparator" }, {
+        ["fg"] = "NONE",
+        ["bg"] = vim.api.nvim_get_hl(0, { name = "ColorColumn" }).bg,
+    })
+end
+
 local function dark_mode_tweaks()
     set.groups({ "Normal" }, {
         ["bg"] = "NONE"
@@ -26,18 +44,6 @@ local function dark_mode_tweaks()
     })
 end
 
-local function light_mode_tweaks()
-    -- needs terminal to be light!
-    set.groups({ "Normal" }, {
-        ["bg"] = "NONE"
-    })
-
-    set.groups({ "WinSeparator" }, {
-        ["fg"] = "#ffffff",
-        ["bg"] = "NONE"
-    })
-end
-
 M.create_callback = function(colormode)
     return function()
         local mode_tweaks = {
@@ -50,6 +56,8 @@ M.create_callback = function(colormode)
             mode_tweaks[colormode]()
         end
 
+        set.groups({ "Normal" }, { ["bg"] = "NONE" })
+
         set.groups({ "Comment", "String" }, {
             ["italic"] = false
         })
@@ -61,22 +69,6 @@ M.create_callback = function(colormode)
 
         -- match the window background with normal
         vim.o.winhl = "Normal:Normal,NormalNC:Normal"
-
-        -- TODO: TELESCOPE DOES NOT WANNA BE TRANSPARENT
-        -- vim.o.winhl = weird {
-        --     "TelescopeNormal",
-        --     "TelescopeBorder",
-        --     "TelescopeSelectionCaret",
-        --     "TelescopeMatching",
-        --     "TelescopePromptNormal",
-        --     "TelescopePromptTitle",
-        --     "TelescopePromptPrefix",
-        --     "TelescopePromptBorder",
-        --     "TelescopePreviewTitle",
-        --     "TelescopePreviewBorder",
-        --     "TelescopeResultsTitle",
-        --     "TelescopeResultsBorder"
-        -- }
     end
 end
 

@@ -109,17 +109,23 @@ local function my_plugin_configs(cfg)
             end
         },
 
-        -- language servers
-        {
-            -- config
+        -- lsp config
+	{
             "neovim/nvim-lspconfig",
-            "mason-org/mason.nvim",
-            "mason-org/mason-lspconfig.nvim",
-            -- utils
             "ray-x/lsp_signature.nvim",
             "mfussenegger/nvim-jdtls",
-            config = function()
+	    config = function()
                 require("my.lspconfig").setup()
+	    end
+	},
+
+	-- lsp manager
+        {
+            -- config
+            "mason-org/mason.nvim",
+            "mason-org/mason-lspconfig.nvim",
+            config = function()
+		require("my.plugins.config.mason")
             end
         },
 

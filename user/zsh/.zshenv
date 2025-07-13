@@ -6,4 +6,4 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 if [ -r "$ZDOTDIR/.zshenv" ]; then
     source ~/.config/zsh/.zshenv
-else
+fi

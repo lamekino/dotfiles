@@ -1,5 +1,3 @@
-local border = require("my.aesthetic.square-border")
-
 local autoformat = {
     disabled = { "clangd", "powershell_es", "jtdls" },
 }
@@ -17,7 +15,7 @@ function autoformat:filter_callback()
 end
 
 vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup('MyLspOnAttach', { clear = true }),
+    group = vim.api.nvim_create_augroup("MyLspOnAttach", { clear = true }),
     callback = function(_)
         vim.api.nvim_create_user_command(
             "CodeAction",

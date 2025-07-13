@@ -1,8 +1,8 @@
 local M = {}
 
 function M.setup()
-    require("my.lspconfig.diagnostics")
-    require("my.lspconfig.mason")
+    local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+    vim.lsp.config("*", { capabilities = lsp_capabilities })
     require("my.lspconfig.on_attach")
 end
 

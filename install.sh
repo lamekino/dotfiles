@@ -1,19 +1,17 @@
 #!/bin/sh
 
-SKIP_DIRS="
-OS-config
-"
+INSTALLER_DIR="$(dirname "$(realpath "$0")")/user"
+CMD_INSTALL="stow -v -d '$INSTALLER_DIR' -t '$HOME'"
 
-INSTALLER_ROOT=$(dirname "$(realpath "$0")")
+COLOR_ARROW=32
+COLOR_MSG=34
+COLOR_CMD=33
 
 FLAG_HELP="-h"
 FLAG_UNINSTALL="-x"
 
-MSG_INSTALL="installing"
-MSG_UNINSTALL="uninstalling"
-
-CMD_INSTALL="stow -d '$INSTALLER_ROOT' -t '$HOME'"
-CMD_UNINSTALL="$CMD_INSTALL -D"
+MSG_INSTALL="Installing"
+MSG_UNINSTALL="Uninstalling"
 
 case "$1" in
 "$FLAG_HELP")
@@ -25,11 +23,10 @@ case "$1" in
     ;;
 "$FLAG_UNINSTALL")
     msg="$MSG_UNINSTALL"
-    alias stow_cmd="$CMD_UNINSTALL"
+    CMD_INSTALL="$CMD_INSTALL -D"
     ;;
 "")
     msg="$MSG_INSTALL"
-    alias stow_cmd="$CMD_INSTALL"
     ;;
 *)
     printf "unknown option: %s\n" "$1"
@@ -39,11 +36,15 @@ case "$1" in
     ;;
 esac
 
-for dot in "$INSTALLER_ROOT"/*/; do
+for dot in "$INSTALLER_DIR"/*/; do
     config_name="$(basename "$dot")"
 
     if ! (echo "$SKIP_DIRS" | grep -q "^$config_name$"); then
-        printf "%s: %s\n" "$msg" "$config_name"
-        stow_cmd "$config_name"
+        printf "\033[%sm==> \033[1;%sm%s %s...\033[0m\n" \
+            "$COLOR_ARROW" "$COLOR_MSG" "$msg" "$config_name"
+
+        printf "\033[%sm" "$COLOR_CMD"
+        sh -xc "$CMD_INSTALL $config_name"
+        printf "\033[0m"
     fi
 done

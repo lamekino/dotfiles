@@ -1,6 +1,6 @@
 .DS_STORE
-lazy-lock.json
-*nvim*spell
+user/nvim/.config/nvim/lazy-lock.json
+user/nvim/.config/nvim/spell/
 
 *history*
 *zcompdump*

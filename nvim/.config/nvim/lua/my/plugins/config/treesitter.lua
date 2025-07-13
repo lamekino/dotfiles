@@ -1,10 +1,9 @@
 local M = {}
 
 M.config = {
-    sync_install = false,
     ensure_installed = {
-        "bash", "c", "cpp", "haskell", "java", "lua", "markdown", "python",
-        "vim", "vimdoc",
+        "bash", "c", "cpp", "haskell", "java", "lua", "make", "markdown",
+        "python", "vim", "vimdoc"
     },
     highlight = {
         enable = true,

@@ -10,7 +10,7 @@ function M(cfg, wt)
     cfg.enable_csi_u_key_encoding = true
     cfg.warn_about_missing_glyphs = false
     cfg.hyperlink_rules = wt.default_hyperlink_rules()
-    cfg.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' } -- disable lignatures
+    cfg.harfbuzz_features = { "calt=0", "clig=0", "liga=0" } -- disable lignatures
     cfg.automatically_reload_config = false
 end
 

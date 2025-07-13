@@ -2,8 +2,8 @@ function M(cfg, _)
     -- window
     local padding = 8
 
-    cfg.window_close_confirmation = 'NeverPrompt'
-    cfg.window_decorations = 'RESIZE'
+    cfg.window_close_confirmation = "NeverPrompt"
+    cfg.window_decorations = "RESIZE"
     cfg.window_padding = {
         left = padding,
         right = padding,

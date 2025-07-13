@@ -1,7 +1,28 @@
 local M = {}
 
-local lualine = require("lualine")
-local my_theme = require("my.aesthetic.lualine-theme")
+local function my_theme()
+    local okay, theme = pcall(require, "lualine.themes.catppuccin-macchiato")
+    if not okay then
+        error("Could not load lualine theme")
+        return nil
+    end
+
+    local is_dark = vim.o.background == "dark"
+    local background = is_dark and "#141414" or "#efefef"
+
+    -- swap normal and visual mode
+    theme.normal.a, theme.visual.a = theme.visual.a, theme.normal.a
+
+    local modes = { "normal", "visual", "insert", "replace", "command" }
+    for _, mode in ipairs(modes) do
+        theme[mode].c = {
+            ["bg"] = background,
+            ["fg"] = is_dark and theme[mode].a.bg or theme[mode].b.bg
+        }
+    end
+
+    return theme
+end
 
 local function pad(tbl)
     tbl["separator"] = " "
@@ -31,16 +52,16 @@ local __show_diff = pad({
 local __show_diagnostics = pad({
     "diagnostics",
     symbols = {
-        error = '*',
-        warn = '!',
-        info = '@',
-        hint = '?'
+        error = "*",
+        warn = "!",
+        info = "@",
+        hint = "?"
     },
 })
 
 local __show_branch = pad({
     "branch",
-    color = { fg = '#32cd32', gui = 'italic' },
+    color = { fg = "#32cd32", gui = "italic" },
     fmt = function(branch)
         if branch == "" then
             return ""
@@ -56,9 +77,9 @@ local __show_location = function()
 end
 
 function M.setup()
-    lualine.setup({
+    require("lualine").setup({
         options = {
-            theme = my_theme,
+            theme = my_theme(),
             icons_enabled = false,
             component_separators = {
                 left = "",

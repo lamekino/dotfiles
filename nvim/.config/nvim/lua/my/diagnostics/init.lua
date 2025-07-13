@@ -1,8 +1,6 @@
 local M = {}
 
 function M.setup(colormode)
-    require("my.diagnostics.hover")
-
     vim.diagnostic.config {
         virtual_text = false,
         signs = require("my.diagnostics.signs"):create_signs(colormode),
@@ -12,14 +10,22 @@ function M.setup(colormode)
 
         float = {
             style = "rounded",
-            border = require("my.aesthetic.square-border"),
-            source = "always",
+            border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
+            source = true,
             header = "",
             prefix = "",
             focusable = false,
             severity_sort = true
         },
     }
+
+    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+        callback = function()
+            if vim.fn.mode() ~= "i" then
+                vim.diagnostic.open_float(nil, { focus = false })
+            end
+        end
+    })
 end
 
 return M

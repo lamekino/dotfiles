@@ -13,7 +13,9 @@ printf "Select your project's gitignore:\n"
 selection=$(curl -s $GH_API_GITIGNORE_URL | jq_filter | fzf)
 [ -z "$selection" ] && exit 1
 
-curl -s "$GH_RAW_GITIGNORE_URL/$selection" > .gitignore
+echo ".DS_STORE" >> .gitignore
+curl -s "$GH_RAW_GITIGNORE_URL/$selection" >> .gitignore
+
 printf "Initialize repo?
  [d = default, '%s'/y = yes/n = no, don't add files/q = quit] " \
     "$DEFAULT_INITIAL_COMMIT_MSG"

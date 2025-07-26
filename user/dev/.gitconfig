@@ -1,0 +1,11 @@
+[user]
+	name = "lamekino"
+	email = "79169033+lamekino@users.noreply.github.com"
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/env gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/env gh auth git-credential
+[alias]
+	root = rev-parse --show-toplevel

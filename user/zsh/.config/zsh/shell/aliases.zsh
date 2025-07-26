@@ -26,13 +26,6 @@ alias tab-title="wezterm cli set-tab-title"
 
 # zsh config
 alias zsh-debug="time DEBUG=1 zsh -i -c exit"
-alias zsh-rc="$EDITOR $ZDOTDIR/.zshrc"
-alias zsh-env="$EDITOR $ZDOTDIR/.zshenv"
-alias zsh-aliases="$EDITOR $ZDOTDIR/aliases.zsh"
-alias zsh-functions="$EDITOR $ZDOTDIR/functions.zsh"
-alias zsh-init="$EDITOR $ZDOTDIR/init.zsh"
-alias zsh-opts="$EDITOR $ZDOTDIR/opts.zsh"
-alias zsh-prompt="$EDITOR $ZDOTDIR/prompt.zsh"
 
 # curl/wget utils
 alias ipecho="printf 'Public IP: %s\n' \$(curl -s http://ipecho.net/plain)"

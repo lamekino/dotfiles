@@ -19,6 +19,7 @@ export YDOTOOL_SOCKET="/tmp/.ydotool_socket"
 
 # homebrew
 export HOMEBREW_NO_ENV_HINTS=1
+
 HOMEBREW_ROOT="/opt/homebrew"
 
 if [ -x "$HOMEBREW_ROOT/bin/brew" ]; then

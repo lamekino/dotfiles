@@ -5,6 +5,13 @@ alias ll='ls -l'
 alias la='ls -a'
 alias open='xdg-open'
 
+# load dircolors if it exists
+if command -v dircolors &>/dev/null; then
+    if [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
+        eval "$(dircolors "$XDG_CONFIG_HOME/dircolors")"
+    fi
+fi
+
 # check if in wsl
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
     if (( WSL_USE_X11 )); then

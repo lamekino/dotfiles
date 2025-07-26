@@ -1,45 +1,27 @@
-#
-# utils which need to be eval'd to initialize
-#
-local -a evals=()
-
-# initizalize zoxide
 if command -v zoxide &>/dev/null; then
-    evals+=("$(zoxide init zsh)")
+    eval "$(zoxide init zsh)"
 fi
 
-# initialize dircolors
-if command -v dircolors &>/dev/null; then
-    if [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
-        evals+=("$(dircolors "$XDG_CONFIG_HOME/dircolors")")
-    fi
-fi
-
-for e in "${evals[@]}"; do
-    eval "$e"
-done
-
-#
-# autoloaded scripts to be run
-#
 local -a autoloads=(
-    "compinit -d '$ZSH_COMPDUMP'" # for tab completion
+    "compinit -d '$ZSH_COMPDUMP'"
     "shell/opts.zsh"
     "shell/prompt.zsh"
     "shell/bindkey.zsh"
-    "util/aliases.zsh"
+    "shell/aliases.zsh"
     "util/functions.zsh"
     "util/new-tab.zsh"
 )
 
-# include os-specific files
 case "$(uname -s)" in
 Linux) autoloads+="os/linux.zsh" ;;
 Darwin) autoloads+="os/macos.zsh" ;;
 esac
 
-# load and run functions
 for funcname in "${autoloads[@]}"; do
     autoload -Uz "$(cut -d' ' -f1 <<< "$funcname")"
     eval "$funcname"
 done
+
+# show hidden files in tab completion
+# https://unix.stackexchange.com/a/308322
+_comp_options+=(globdots)

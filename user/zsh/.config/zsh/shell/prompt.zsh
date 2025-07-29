@@ -1,6 +1,6 @@
 PROMPT= # if set, this will be above the first shown line (scroll up)
 
-PROMPT_SEPARATOR=":" # separates elements added with _append_prompt
+PROMPT_SEPARATOR=":" # separates elements added with _put_widget
 
 typeset -gA PROMPT_SIGNS # holds the current prompt symbols
 typeset -gA PROMPT_SIGNS_INIT=( # default/reset symbols
@@ -15,7 +15,8 @@ typeset -gA PROMPT_COLORS # holds the current prompt colors
 typeset -gA PROMPT_COLORS_INIT=( # default/reset colors
     ["COLOR_ERROR"]=1
     ["COLOR_JOBS"]=166
-    ["COLOR_MODS"]=14
+    ["COLOR_VENV"]=14
+    ["COLOR_SSH"]=208
     ["COLOR_DIRS"]=38
     ["COLOR_GIT_CLEAN"]=34
     ["COLOR_GIT_DIRTY"]=162
@@ -23,30 +24,36 @@ typeset -gA PROMPT_COLORS_INIT=( # default/reset colors
     ["COLOR_TIP"]=15
 )
 
+# prompt info toggles
+[ -r "${VIRTUAL_ENV-}" ] && PROMPT_HAS_VENV=1
+[ -n "${SSH_CONNECTION-}" ] && PROMPT_HAS_SSH=1
+
+(( PROMPT_HAS_SSH )) && PROMPT_SSH_HOST="$(hostname -s)" # short hostname
+
 #
 # internal functions
 #
 
-function _write_prompt {
+function _put_text {
     typeset -g PROMPT_COLORS
-    PROMPT="$PROMPT%F{${PROMPT_COLORS[$1]}}$3%f$2"
+    PROMPT="$PROMPT%F{${PROMPT_COLORS[$1]}}$2%f$3"
 }
 
-function _append_prompt {
+function _put_widget {
     typeset -g PROMPT_COLORS
     PROMPT="$PROMPT%F{${PROMPT_COLORS[$1]}}$2%f$PROMPT_SEPARATOR"
 }
 
 function _prompt_jobs {
-    _write_prompt COLOR_JOBS \
-        "%(1j.$PROMPT_SEPARATOR.)" \
-        "%(1j.${PROMPT_SIGNS[SIGN_JOBS]}%j.)"
+    _put_text COLOR_JOBS \
+        "%(1j.${PROMPT_SIGNS[SIGN_JOBS]}%j.)" \
+        "%(1j.$PROMPT_SEPARATOR.)"
 }
 
 function _prompt_error {
-    _write_prompt COLOR_ERROR \
-        "%(?..$PROMPT_SEPARATOR)" \
-        "%(?..${PROMPT_SIGNS[SIGN_ERROR]}%?)"
+    _put_text COLOR_ERROR \
+        "%(?..${PROMPT_SIGNS[SIGN_ERROR]}%?)" \
+        "%(?..$PROMPT_SEPARATOR)"
 }
 
 function _prompt_tip {
@@ -54,19 +61,20 @@ function _prompt_tip {
 
     [ "$KEYMAP" = "vicmd" ] && tip="|"
 
-    _write_prompt COLOR_PWD "" "%~"
-    _write_prompt COLOR_TIP " " "$tip"
+    _put_text COLOR_PWD "%~" ""
+    _put_text COLOR_TIP "$tip" " "
 }
 
 function _prompt_dirs {
     local dirs_count="${1-0}"
 
-    (( dirs_count < 2 )) && return
-    _append_prompt COLOR_DIRS "${PROMPT_SIGNS[SIGN_DIRS]}${dirs_count}"
+    (( dirs_count < 2 )) && return 1
+
+    _put_widget COLOR_DIRS "${PROMPT_SIGNS[SIGN_DIRS]}${dirs_count}"
 }
 
 function _prompt_git {
-    [ -z "${1-}" ] && return
+    [ -z "${1-}" ] && return 1
 
     local git_branch="$1"
     local git_color=COLOR_GIT_CLEAN
@@ -80,32 +88,30 @@ function _prompt_git {
         git_str="${git_str}+${git_changes}"
     fi
 
-    _append_prompt "$git_color" "$git_str"
+    _put_widget "$git_color" "$git_str"
 }
 
-function _prompt_venv {
-    [ -f "${VIRTUAL_ENV-}" ] || return
+function _prompt_mod {
+    local cond="$1" name="$2" color="$3"
 
-    _append_prompt COLOR_MODS "${PROMPT_SIGNS[SIGN_MODS]}venv"
-}
+    ! (( cond )) && return 1
 
-function _build_prompt {
-    local dirs_count="$1" git_branch="$2"
-
-    PROMPT=
-    _prompt_git "$git_branch"
-    _prompt_venv
-    _prompt_error
-    _prompt_jobs
-    _prompt_dirs "$dirs_count"
-    _prompt_tip
+    _put_widget "$color" "${PROMPT_SIGNS[SIGN_MODS]}$name"
 }
 
 function _render_prompt {
     local dirs_count="$(dirs -v | wc -l | xargs)"
     local git_branch="$(git branch --show-current 2>/dev/null)"
 
-    _build_prompt "$dirs_count" "$git_branch"
+    PROMPT=
+    _prompt_git "$git_branch"
+    _prompt_mod "$PROMPT_HAS_SSH" "$PROMPT_SSH_HOST" COLOR_SSH
+    _prompt_mod "$PROMPT_HAS_VENV" "venv" COLOR_VENV
+    _prompt_error
+    _prompt_jobs
+    _prompt_dirs "$dirs_count"
+    _prompt_tip
+
     zle reset-prompt
 }
 
@@ -114,17 +120,17 @@ function _render_prompt {
 #
 
 function prompt-reset-colors {
-    set -A PROMPT_SIGNS ${(kv)PROMPT_SIGNS_INIT}
+    typeset -g PROMPT_COLORS_INIT
     set -A PROMPT_COLORS ${(kv)PROMPT_COLORS_INIT}
+}
 
-    # tweaks
-    [ -n "$SSH_CONNECTION" ] && PROMPT_COLORS[COLOR_PWD]=208
-
-    return 0
+function prompt-reset-signs {
+    typeset -g PROMPT_SIGNS_INIT
+    set -A PROMPT_SIGNS ${(kv)PROMPT_SIGNS_INIT}
 }
 
 function prompt-config-show {
-    printf "%-32s = '%s'\n" PROMPT_SEPARATOR "$PROMPT_DEFAULT_SEP"
+    printf "%-32s = '%s'\n" PROMPT_SEPARATOR "$PROMPT_SEPARATOR"
 
     for name sign in ${(kv)PROMPT_SIGNS}; do
         printf "%-32s = '%s'\n" "PROMPT_SIGNS[$name]" "$sign"
@@ -142,6 +148,7 @@ function prompt-config-show {
 #
 
 prompt-reset-colors
+prompt-reset-signs
 
 function zle-line-init { _render_prompt }
 zle -N zle-line-init

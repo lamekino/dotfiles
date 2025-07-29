@@ -16,6 +16,7 @@ alias Z="zoxide"
 alias fs="dfc -T -p /dev 2>/dev/null"
 alias neofetch="fastfetch --config neofetch" # rip ;-;
 alias vi="nvim -u NONE"
+alias lp="lookpath2"
 
 if ! (( $+commands[python] )); then
     alias python="python3"

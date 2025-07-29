@@ -1,13 +1,16 @@
 local mason = require("mason")
 local masonlsp = require("mason-lspconfig")
 
+local function has(...) return vim.fn.has(...) ~= 0 end
+local function exe(...) return vim.fn.executable(...) ~= 0 end
+
 local install_by_default = {
     ["lua_ls"] = true,
-    ["clangd"] = vim.fn.executable("unzip") ~= 0,  -- clangd installer dependency
-    ["pylsp"] = vim.fn.executable("python3") ~= 0, -- FIXME: requires venv
-    ["jdtls"] = vim.fn.executable("java") ~= 0,
-    ["hls"] = vim.fn.executable("ghcup") ~= 0,
-    ["powershell_es"] = vim.fn.has("wsl") + vim.fn.has("win32") ~= 0
+    ["clangd"] = exe("unzip"),
+    ["pylsp"] = exe("python3"), -- FIXME: requires venv
+    ["hls"] = exe("ghcup"),
+    ["jdtls"] = exe("java") and not has("macunix"),
+    ["powershell_es"] = has("wsl") or has("win32")
 }
 
 local ensure_installed = {}

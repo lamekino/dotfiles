@@ -1,55 +1,62 @@
 local M = {}
 
-local function my_theme()
-    local okay, theme = pcall(require, "lualine.themes.catppuccin-macchiato")
-    if not okay then
-        error("Could not load lualine theme")
-        return nil
-    end
+local dark_bg = "#141414"
+local light_bg = "#efefef"
 
+local my_theme = (function(theme)
     local is_dark = vim.o.background == "dark"
-    local background = is_dark and "#141414" or "#efefef"
+    local background = is_dark and dark_bg or light_bg
 
-    -- swap normal and visual mode
-    theme.normal.a, theme.visual.a = theme.visual.a, theme.normal.a
+    local _1st, _2nd = theme.normal, theme.visual
+    _1st.a, _2nd.a = _2nd.a, _1st.a
 
-    local modes = { "normal", "visual", "insert", "replace", "command" }
-    for _, mode in ipairs(modes) do
+    for _, mode in ipairs({
+        "normal", "visual", "insert", "replace", "command"
+    }) do
         theme[mode].c = {
             ["bg"] = background,
             ["fg"] = is_dark and theme[mode].a.bg or theme[mode].b.bg
         }
+        theme[mode].z = {
+            ["bg"] = theme[mode].a.bg,
+            ["fg"] = light_bg
+        }
     end
 
     return theme
-end
+end)
 
-local function pad(tbl)
-    tbl["separator"] = " "
-    tbl["padding"] = 0
-
+local italic = (function(tbl)
+    tbl.color = tbl.color or {}
+    tbl.color.gui = "italic"
     return tbl
-end
+end)
 
-local __show_mode = {
-    "mode",
-    draw_empty = true,
-    padding = 0,
-    fmt = function()
-        return ""
+local light_text = (function(tbl)
+    tbl.color = tbl.color or {}
+    tbl.color.fg = light_bg
+    return tbl
+end)
+
+local fixed = (function(tbl)
+    tbl.separator = " "
+    tbl.padding = 0
+    return tbl
+end)
+
+-- left
+local show_branch = fixed(italic(light_text({
+    "branch",
+    fmt = function(branch)
+        local text = branch ~= "" and branch or ""
+        return string.format(" ✦%s ", text)
     end
-}
+})))
 
-local __show_filename = pad({
-    "filename",
-    path = 3
-})
-
-local __show_diff = pad({
-    "diff"
-})
-
-local __show_diagnostics = pad({
+-- middle
+local show_filename = fixed({ "filename", path = 3 })
+local show_diff = fixed({ "diff" })
+local show_diagnostics = fixed({
     "diagnostics",
     symbols = {
         error = "*",
@@ -59,27 +66,26 @@ local __show_diagnostics = pad({
     },
 })
 
-local __show_branch = pad({
-    "branch",
-    color = { fg = "#32cd32", gui = "italic" },
-    fmt = function(branch)
-        if branch == "" then
-            return ""
-        end
-
-        return "@" .. branch
+-- right
+local show_encoding = italic(light_text({ "encoding" }))
+local show_format = italic(light_text({ "fileformat" }))
+local show_location = italic(light_text({
+    "mode", -- updates on cursor move, and i don't use it ¯\_(ツ)_/¯
+    fmt = function()
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return string.format("%d:%d", row, col)
     end
-})
+}))
 
-local __show_location = function()
-    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return string.format("%d:%d", row, col)
-end
+M.setup = (function()
+    local okay, theme = pcall(require, "lualine.themes.catppuccin-macchiato")
+    if not okay then
+        return error("Could not load lualine theme")
+    end
 
-function M.setup()
     require("lualine").setup({
         options = {
-            theme = my_theme(),
+            theme = my_theme(theme),
             icons_enabled = false,
             component_separators = {
                 left = "",
@@ -92,22 +98,14 @@ function M.setup()
         },
 
         sections = {
-            lualine_a = { __show_mode },
+            lualine_a = { show_branch },
             lualine_b = {},
-            lualine_c = {
-                __show_filename,
-                __show_diff,
-                __show_diagnostics
-            },
-            lualine_x = { __show_branch },
+            lualine_c = { show_filename, show_diff, show_diagnostics },
+            lualine_x = {},
             lualine_y = {},
-            lualine_z = {
-                "encoding",
-                "fileformat",
-                __show_location
-            },
+            lualine_z = { show_encoding, show_format, show_location },
         }
     })
-end
+end)
 
 return M

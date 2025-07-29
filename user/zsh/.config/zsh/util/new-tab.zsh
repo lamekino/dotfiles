@@ -9,6 +9,10 @@ local promptcolor=140
 local has_terminal=0
 local parent_pid="$(ps -o ppid\= $$ | xargs)" # xargs = trim string
 
+if [ -n "${TMUX-}" ]; then
+    return
+fi
+
 # grep for the terminal name in the ppid's command name
 if ps -o comm -p "$parent_pid" | tail -n +2 | grep -q "$terminal$"; then
     has_terminal=1

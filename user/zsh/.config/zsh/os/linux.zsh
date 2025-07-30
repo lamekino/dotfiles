@@ -5,13 +5,6 @@ alias ll='ls -l'
 alias la='ls -a'
 alias open='xdg-open'
 
-# load dircolors if it exists
-if command -v dircolors &>/dev/null; then
-    if [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
-        eval "$(dircolors "$XDG_CONFIG_HOME/dircolors")"
-    fi
-fi
-
 # check if in wsl
 if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
     if (( WSL_USE_X11 )); then
@@ -24,10 +17,11 @@ if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
 fi
 
 # detect distro
-case "$(cat /etc/os-release 2>/dev/null | grep '^ID=' | cut -d= -f2)" in
+case "$(awk -F= '/^ID=/{print $2}' /etc/os-release)" in
 ubuntu)
     alias bat="batcat"
+    alias apt-outdated="sh -c 'apt update && apt list --upgradable'"
     ;;
 arch)
     ;;
-esac
+esac 2>/dev/null

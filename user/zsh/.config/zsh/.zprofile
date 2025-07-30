@@ -1,5 +1,3 @@
-[ -n "${DEBUG+1}" ] && zmodload "zsh/zprof" && set -xe
-
 # environment
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 export BROWSER="/usr/bin/env firefox"
@@ -19,11 +17,20 @@ export YDOTOOL_SOCKET="/tmp/.ydotool_socket"
 
 # homebrew
 export HOMEBREW_NO_ENV_HINTS=1
-
 HOMEBREW_ROOT="/opt/homebrew"
 
-if [ -x "$HOMEBREW_ROOT/bin/brew" ]; then
-    eval "$("$HOMEBREW_ROOT"/bin/brew shellenv)"
+if [ -x "$homebrew_root/bin/brew" ]; then
+    eval "$("$HOMEBREW_ROOT/bin/brew" shellenv)"
+fi
+
+# zoxide
+if [ -n "${commands[zoxide]}" ]; then
+    eval "$(zoxide init zsh)"
+fi
+
+# dircolors
+if [ -n "${commands[dircolors]}" ] && [ -f "$XDG_CONFIG_HOME/dircolors" ]; then
+    eval "$(dircolors "$XDG_CONFIG_HOME/dircolors")"
 fi
 
 # ghcup
@@ -35,5 +42,3 @@ fi
 if [ -r "$PWD/venv/bin/activate" ]; then
     source "$PWD/venv/bin/activate"
 fi
-
-[ -n "${DEBUG+1}" ] && zprof || return 0

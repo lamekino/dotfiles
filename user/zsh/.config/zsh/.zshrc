@@ -1,4 +1,4 @@
-[ -n "${DEBUG+1}" ] && zmodload "zsh/zprof" && set -xeuo pipefail
+[ -n "${DEBUG+1}" ] && zmodload "zsh/zprof" && set -xuo pipefail
 
 KEYTIMEOUT=5
 HISTSIZE=50000

@@ -1,7 +1,3 @@
-if command -v zoxide &>/dev/null; then
-    eval "$(zoxide init zsh)"
-fi
-
 local -a autoloads=(
     "compinit -d '$ZSH_COMPDUMP'"
     "shell/opts.zsh"

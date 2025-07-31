@@ -1,5 +1,5 @@
 # environment
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$PATH"
 export BROWSER="/usr/bin/env firefox"
 export EDITOR="/usr/bin/env nvim"
 export VISUAL="$EDITOR"
@@ -21,6 +21,10 @@ HOMEBREW_ROOT="/opt/homebrew"
 
 if [ -x "$homebrew_root/bin/brew" ]; then
     eval "$("$HOMEBREW_ROOT/bin/brew" shellenv)"
+fi
+
+if [ -d "$HOMEBREW_ROOT/opt/openjdk/bin" ]; then
+    PATH="$HOMEBREW_ROOT/opt/openjdk/bin:$PATH"
 fi
 
 # zoxide

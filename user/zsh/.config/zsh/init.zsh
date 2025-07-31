@@ -1,21 +1,22 @@
-local -a autoloads=(
-    "compinit -d '$ZSH_COMPDUMP'"
-    "shell/opts.zsh"
-    "shell/prompt.zsh"
-    "shell/bindkey.zsh"
-    "shell/aliases.zsh"
-    "util/functions.zsh"
-    "util/new-tab.zsh"
+local -A autoloads=(
+    ["compinit -d '$ZSH_COMPDUMP'"]=1
+    ["fpath/shell/opts.zsh"]=1
+    ["fpath/shell/prompt.zsh"]=1
+    ["fpath/shell/bindkey.zsh"]=1
+    ["fpath/shell/aliases.zsh"]=1
+    ["fpath/util/functions.zsh"]=1
+    ["fpath/util/new-tab.zsh"]=1
 )
 
 case "$(uname -s)" in
-Linux) autoloads+="os/linux.zsh" ;;
-Darwin) autoloads+="os/macos.zsh" ;;
+Linux) autoloads[fpath/os/linux.zsh]=1 ;;
+Darwin) autoloads[fpath/os/macos.zsh]=1 ;;
 esac
 
-for funcname in "${autoloads[@]}"; do
-    autoload -Uz "$(cut -d' ' -f1 <<< "$funcname")"
-    eval "$funcname"
+for loadname enabled in ${(kv)autoloads}; do
+    (( enabled )) || continue
+    autoload -Uz "$(cut -d' ' -f1 <<< "$loadname")"
+    eval "$loadname"
 done
 
 # show hidden files in tab completion

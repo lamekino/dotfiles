@@ -16,7 +16,7 @@ vim.o.numberwidth = 5
 
 -- ui
 vim.o.guicursor = ""
-vim.opt.colorcolumn = "80"
+vim.o.colorcolumn = "80"
 vim.o.winborder = "single"
 vim.o.listchars = "tab:│ ,space:·,trail:×,nbsp:*,extends:$"
 vim.o.list = true
@@ -24,13 +24,18 @@ vim.o.cursorline = true
 vim.o.splitbelow = true
 vim.o.splitright = true
 vim.o.wrap = false
+vim.o.pumblend = 100
 
 -- buffer
 vim.o.hidden = true
 vim.o.confirm = true
+vim.o.autoread = true
 
 -- search
 vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.incsearch = true
+vim.o.iskeyword = vim.o.iskeyword .. ",-" -- include hypens in keywords
 
 -- tab settings
 vim.o.expandtab = true
@@ -48,6 +53,11 @@ vim.o.termguicolors = true
 vim.o.lazyredraw = true
 vim.o.path = vim.o.path .. "**"
 
+-- global variables
+vim.g.netrw_winsize = 15
+vim.g.netrw_banner = false
+vim.g.mapleader = " "
+
 -- mouse support in normal and visual
 if vim.fn.has("mouse") then
     vim.o.mouse = "vn"
@@ -58,11 +68,6 @@ end
 if vim.fn.has("nvim-0.7.2") then
     vim.o.laststatus = 3
 end
-
--- global variables
-vim.g.netrw_winsize = 15
-vim.g.netrw_banner = false
-vim.g.mapleader = " "
 
 -- set values on vim startup
 vim.api.nvim_create_autocmd("VimEnter", {

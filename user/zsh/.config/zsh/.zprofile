@@ -5,26 +5,17 @@ export EDITOR="/usr/bin/env nvim"
 export VISUAL="$EDITOR"
 export MANPAGER='nvim -c "set laststatus=0" +Man!'
 
-# fzf
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-export FZF_DEFAULT_OPTS="-m --height 40% --border=none"
-
-# bat
-export BAT_THEME="ansi"
-
-# ydotool
-export YDOTOOL_SOCKET="/tmp/.ydotool_socket"
-
-# homebrew
+# homebrew (NOTE: this inits the $PATH on macOS and needs to be set for zoxide,
+# etc to be loaded AFTER in the zsh config)
 export HOMEBREW_NO_ENV_HINTS=1
 HOMEBREW_ROOT="/opt/homebrew"
 
-if [ -x "$homebrew_root/bin/brew" ]; then
-    eval "$("$HOMEBREW_ROOT/bin/brew" shellenv)"
+if [ -d "$HOMEBREW_ROOT/opt/openjdk/bin" ]; then
+    export PATH="$HOMEBREW_ROOT/opt/openjdk/bin:$PATH"
 fi
 
-if [ -d "$HOMEBREW_ROOT/opt/openjdk/bin" ]; then
-    PATH="$HOMEBREW_ROOT/opt/openjdk/bin:$PATH"
+if [ -x "$HOMEBREW_ROOT/bin/brew" ]; then
+    eval "$("$HOMEBREW_ROOT/bin/brew" shellenv zsh)"
 fi
 
 # zoxide
@@ -46,3 +37,16 @@ fi
 if [ -r "$PWD/venv/bin/activate" ]; then
     source "$PWD/venv/bin/activate"
 fi
+
+# my stuff
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+
+# fzf
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_DEFAULT_OPTS="-m --height 40% --border=none"
+
+# bat
+export BAT_THEME="ansi"
+
+# ydotool
+export YDOTOOL_SOCKET="/tmp/.ydotool_socket"

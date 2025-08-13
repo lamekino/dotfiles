@@ -8,7 +8,7 @@ export BAT_THEME="ansi"
 export YDOTOOL_SOCKET="/tmp/.ydotool_socket"
 export HOMEBREW_NO_ENV_HINTS=1
 
-function { # loads homebrew (needs to run first)
+function { # loads homebrew (this needs to run first)
     local brewroot="/opt/homebrew"
     local openjdk="$brewroot/opt/openjdk"
 
@@ -29,31 +29,30 @@ function { # loads dircolors if available
     local use_dircolors=1
     [ -n "${commands[dircolors]}" ] || use_dircolors=0
     [ -f "$XDG_CONFIG_HOME/dircolors" ] || use_dircolors=0
-
-    if (( use_dircolors )); then
-        eval "$(dircolors "$XDG_CONFIG_HOME/dircolors")"
-    fi
+    (( use_dircolors )) && eval "$(dircolors "$XDG_CONFIG_HOME/dircolors")"
 
 }
 
 function { # inits ghcup
-    local ghcup="$HOME/.ghcup"
-    [ -r "$ghcup/env" ] && source "$ghcup/env"
+    local srcfile="$HOME/.ghcup/env"
+    [ -r "$srcfile" ] && source "$srcfile"
 }
 
 function { # inits python venv
-    local venv="$PWD/venv"
-    [ -r "$venv/bin/activate" ] && source "$venv/bin/activate"
+    local srcfile="$PWD/venv/bin/activate"
+    [ -r "$srcfile" ] && source "$srcfile"
 }
 
-function { # prepends dirs to $PATH
-    local -a prepend=("$HOME/bin" "$HOME/.local/bin")
-    local cursor=${#prepend}
+function { # adds ~/bin to $PATH
+    case ":$PATH:" in
+    *:"$HOME/bin":*) ;;
+    *) export PATH="$HOME/bin:$PATH" ;;
+    esac
+}
 
-    while (( cursor-- )); do
-        case "$PATH" in
-        *"${prepend[cursor]}"*) ;;
-        *) export PATH="${prepend[cursor]}:$PATH" ;;
-        esac
-    done
+function { # adds ~/.local/bin to $PATH
+    case ":$PATH:" in
+    *:"$HOME/.local/bin":*) ;;
+    *) export PATH="$HOME/.local/bin:$PATH" ;;
+    esac
 }

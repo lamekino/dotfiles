@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if ! command -v zenity &>/dev/null; then
+    notify-send "$0" "Install zenity to use this script!"
+    exit 1
+fi
+
+if ! command -v ydotool &>/dev/null; then
+    notify-send "$0" "Install ydotool to use this script!"
+    exit 1
+fi
+
+ydotool key "$(
+    zenity \
+        --list \
+        --title="Send function key:" \
+        --column="Keys" \
+        $(seq -f "F%.0f" 1 24)
+)"

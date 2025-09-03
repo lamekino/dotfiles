@@ -1,4 +1,5 @@
 local window_title = "WezTerm"
+local initial_tab_title = "localhost"
 local default_tab_title = "untitled"
 
 local function my_events(wt)
@@ -23,7 +24,7 @@ local function my_events(wt)
 
                 -- set the default tab title when loading zshrc
                 -- BUG: this doesn't work with more than one window
-                pane:send_text("\n")
+                pane:send_text(string.format("%s\n", initial_tab_title))
             end)
     }
 end

@@ -7,6 +7,8 @@ function M(cfg, wt)
 
     -- terminal settings
     cfg.audible_bell = "Disabled"
+    cfg.exit_behavior = "Hold"
+    cfg.exit_behavior_messaging = "Terse"
     cfg.enable_csi_u_key_encoding = true
     cfg.warn_about_missing_glyphs = false
     cfg.hyperlink_rules = wt.default_hyperlink_rules()

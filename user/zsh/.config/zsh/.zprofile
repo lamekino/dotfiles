@@ -8,17 +8,22 @@ export BAT_THEME="ansi"
 export YDOTOOL_SOCKET="/tmp/.ydotool_socket"
 export HOMEBREW_NO_ENV_HINTS=1
 
+# BUG: ~/.local/bin, ~/bin, ghcup dirs, brew's openjdk get added to the *end* of
+# $PATH for some reason even if brew and other sources are removed. this might
+# just be zsh and macOS being weird.
+
 function { # loads homebrew (this needs to run first)
     local brewroot="/opt/homebrew"
     local openjdk="$brewroot/opt/openjdk"
+
+    if [ -x "$brewroot/bin/brew" ]; then
+        eval "$("$brewroot/bin/brew" shellenv zsh)"
+    fi
 
     if [ -d "$openjdk/bin" ]; then
         export PATH="$openjdk/bin:$PATH"
     fi
 
-    if [ -x "$brewroot/bin/brew" ]; then
-        eval "$("$brewroot/bin/brew" shellenv zsh)"
-    fi
 }
 
 function { # loads zoxide

@@ -1,50 +1,26 @@
 local M = {}
 local set = require("my.colorscheme.set")
+local colors = require("my.colorscheme.colors")
 
-local function light_mode_tweaks()
-    -- this should be in init.lua, and might have a ascii default instead
-    vim.opt.fillchars = {
-        vert = "|",
-        horiz = "-",
-        horizup = "+",
-        horizdown = "+",
-        vertleft = "+",
-        vertright = "+",
-        verthoriz = "+",
-    }
-
+local light_mode_tweaks = (function()
     set.groups({ "WinSeparator" }, {
-        ["fg"] = "NONE",
-        ["bg"] = vim.api.nvim_get_hl(0, { name = "ColorColumn" }).bg,
+        fg = "NONE",
+        bg = colors.light.bg
     })
-end
+end)
 
-local function dark_mode_tweaks()
-    set.groups({ "Normal" }, {
-        ["bg"] = "NONE"
-    })
+local dark_mode_tweaks = (function()
+    -- set.groups({ "Function" }, {
+    --     fg = "#FFE188",
+    --     bg = "NONE",
+    -- })
+    --
+    -- set.groups({ "SpecialComment" }, {
+    --     link = "MatchParen"
+    -- })
+end)
 
-    set.groups({ "FloatBorder", "WinSeparator" }, {
-        ["fg"] = "#353535",
-        ["bg"] = "NONE"
-    })
-
-    set.groups({ "ColorColumn", "CursorLine" }, {
-        ["fg"] = "NONE",
-        ["bg"] = "#353535"
-    })
-
-    set.groups({ "StatusLine", "StatusLineNC" }, {
-        ["bg"] = "NONE"
-    })
-
-    set.groups({ "@parameter" }, {
-        ["fg"] = "#ffaadb",
-        ["bg"] = "NONE"
-    })
-end
-
-M.create_callback = function(colormode)
+M.create_callback = (function(colormode)
     return function()
         local mode_tweaks = {
             ["dark"] = dark_mode_tweaks,
@@ -55,8 +31,6 @@ M.create_callback = function(colormode)
         if mode_tweaks[colormode] ~= nil then
             mode_tweaks[colormode]()
         end
-
-        set.groups({ "Normal" }, { ["bg"] = "NONE" })
 
         set.groups({ "Comment", "String" }, {
             ["italic"] = false
@@ -70,6 +44,6 @@ M.create_callback = function(colormode)
         -- match the window background with normal
         vim.o.winhl = "Normal:Normal,NormalNC:Normal"
     end
-end
+end)
 
 return M

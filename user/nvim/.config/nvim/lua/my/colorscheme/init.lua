@@ -3,7 +3,8 @@ local M = {}
 M.tweaks = require("my.colorscheme.tweaks")
 
 M.colorschemes = {
-    ["dark"] = "catppuccin-mocha",
+    -- ["dark"] = "catppuccin-mocha",
+    ["dark"] = "jellybeans",
     ["light"] = "catppuccin-latte"
 }
 

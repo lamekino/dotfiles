@@ -31,6 +31,12 @@ local function my_plugin_configs(cfg)
             end
         },
 
+        {
+            "wtfox/jellybeans.nvim",
+            lazy = false,
+            priority = 1000
+        },
+
         -- swap surrounding parens/brackets/etc
         "tpope/vim-surround",
 
@@ -56,7 +62,7 @@ local function my_plugin_configs(cfg)
             "norcalli/nvim-colorizer.lua",
             config = function()
                 require("colorizer").setup(nil, {
-                    '*',
+                    "*",
                     names = false,
                 })
             end
@@ -110,21 +116,21 @@ local function my_plugin_configs(cfg)
         },
 
         -- lsp config
-    {
+        {
             "neovim/nvim-lspconfig",
             "ray-x/lsp_signature.nvim",
             "mfussenegger/nvim-jdtls",
             config = function()
                 require("my.lspconfig").setup()
             end
-    },
+        },
 
-    -- lsp manager
+        -- lsp manager
         {
             -- config
             "mason-org/mason.nvim",
 
-            dependencies = {"mason-org/mason-lspconfig.nvim"},
+            dependencies = { "mason-org/mason-lspconfig.nvim" },
             config = function()
                 require("my.plugins.config.mason")
             end

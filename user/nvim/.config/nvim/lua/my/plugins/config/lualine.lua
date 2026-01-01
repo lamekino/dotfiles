@@ -1,12 +1,13 @@
 local M = {}
 
-local dark_bg = "#141414"
-local light_bg = "#efefef"
+local colors = require("my.colorscheme.colors")
+
+local is_dark = vim.o.background == "dark"
+local background = is_dark and colors.dark.bg or colors.light.bg
+local theme_name = "catppuccin-macchiato"
 
 local my_theme = (function(theme)
-    local is_dark = vim.o.background == "dark"
-    local background = is_dark and dark_bg or light_bg
-
+    -- swap visual and normal modes' color for light mode
     local _1st, _2nd = theme.normal, theme.visual
     _1st.a, _2nd.a = _2nd.a, _1st.a
 
@@ -19,7 +20,7 @@ local my_theme = (function(theme)
         }
         theme[mode].z = {
             ["bg"] = theme[mode].a.bg,
-            ["fg"] = light_bg
+            ["fg"] = background
         }
     end
 
@@ -32,9 +33,9 @@ local italic = (function(tbl)
     return tbl
 end)
 
-local light_text = (function(tbl)
+local colormode_text = (function(tbl)
     tbl.color = tbl.color or {}
-    tbl.color.fg = light_bg
+    tbl.color.fg = is_dark and colors.dark.bg or colors.light.bg
     return tbl
 end)
 
@@ -45,11 +46,10 @@ local fixed = (function(tbl)
 end)
 
 -- left
-local show_branch = fixed(italic(light_text({
+local show_branch = fixed(italic(colormode_text({
     "branch",
     fmt = function(branch)
-        local text = branch ~= "" and branch or ""
-        return string.format(" ✦%s ", text)
+        return string.format(" *%s ", branch)
     end
 })))
 
@@ -67,10 +67,10 @@ local show_diagnostics = fixed({
 })
 
 -- right
-local show_encoding = italic(light_text({ "encoding" }))
-local show_format = italic(light_text({ "fileformat" }))
-local show_location = italic(light_text({
-    "mode", -- updates on cursor move, and i don't use it ¯\_(ツ)_/¯
+local show_encoding = italic(colormode_text({ "encoding" }))
+local show_format = italic(colormode_text({ "fileformat" }))
+local show_location = italic(colormode_text({
+    "mode", -- updates on cursor move and i don't use it ¯\_(ツ)_/¯
     fmt = function()
         local row, col = unpack(vim.api.nvim_win_get_cursor(0))
         return string.format("%d:%d", row, col)
@@ -78,7 +78,7 @@ local show_location = italic(light_text({
 }))
 
 M.setup = (function()
-    local okay, theme = pcall(require, "lualine.themes.catppuccin-macchiato")
+    local okay, theme = pcall(require, "lualine.themes." .. theme_name)
     if not okay then
         return error("Could not load lualine theme")
     end

@@ -16,21 +16,17 @@ typeset -gA PROMPT_SIGNS_INIT=( # default/reset symbols
 typeset -gA PROMPT_COLORS # holds the current prompt colors
 typeset -gA PROMPT_COLORS_INIT=( # default/reset colors
     ["COLOR_ERROR"]=1
-    ["COLOR_JOBS"]=166
-    ["COLOR_VENV"]=14
-    ["COLOR_SSH"]=208
-    ["COLOR_DIRS"]=38
-    ["COLOR_GIT_CLEAN"]=34
-    ["COLOR_GIT_DIRTY"]=162
-    ["COLOR_PWD"]=99
+    ["COLOR_JOBS"]=12
+    ["COLOR_MOD_VENV"]=14
+    ["COLOR_DIRS"]=5
+    ["COLOR_GIT_CLEAN"]=10
+    ["COLOR_GIT_DIRTY"]=9
+    ["COLOR_PWD"]=3
     ["COLOR_TIP"]=15
 )
 
 # prompt info toggles
 [ -r "${VIRTUAL_ENV-}" ] && PROMPT_HAS_VENV=1
-[ -n "${SSH_CONNECTION-}" ] && PROMPT_HAS_SSH=1
-
-(( PROMPT_HAS_SSH )) && PROMPT_SSH_HOST="$(hostname -s)" # short hostname
 
 #
 # internal functions
@@ -99,8 +95,7 @@ function prompt-add-mod {
 function prompt-render {
     PROMPT=
     prompt-add-git
-    prompt-add-mod "$PROMPT_HAS_SSH" "$PROMPT_SSH_HOST" COLOR_SSH
-    prompt-add-mod "$PROMPT_HAS_VENV" "venv" COLOR_VENV
+    prompt-add-mod "$PROMPT_HAS_VENV" "venv" COLOR_MOD_VENV
     prompt-add-error
     prompt-add-jobs
     prompt-add-dirs

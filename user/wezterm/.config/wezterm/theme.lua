@@ -1,12 +1,12 @@
-local colormode = "light"
+local colormode = "dark"
 
-local light_opacity = 0.91
-local light_tweaks = {}
+local light_opacity = 0.89
+local light_tweaks = { background = "#FFFFFF", foreground = "#404040" }
 
-local dark_opacity = 0.85
+local dark_opacity = 0.90
 local dark_tweaks = {}
 
-local function set_theme(cfg, theme, tweaks, opacity)
+local set_theme = (function(cfg, theme, tweaks, opacity)
     return function()
         for k, v in pairs(tweaks) do
             theme[k] = v
@@ -15,9 +15,9 @@ local function set_theme(cfg, theme, tweaks, opacity)
         cfg.window_background_opacity = opacity
         cfg.colors = theme
     end
-end
+end)
 
-function M(cfg, wt)
+local M = (function(cfg, wt)
     local builtins = wt.get_builtin_color_schemes()
 
     local light_theme = builtins["Catppuccin Latte"]
@@ -36,6 +36,6 @@ function M(cfg, wt)
     cfg.set_environment_variables["VIM_COLORMODE"] = colormode
 
     callback[colormode]()
-end
+end)
 
 return M

@@ -1,0 +1,44 @@
+#!/bin/zsh
+# Fixes glitchy behavior in macOS 26.1 w/ fullscreen applications messing up
+# the shell.
+
+WALLPAPER_PATH="${WALLPAPER_PATH:-}"
+
+# restarts the main shell for macOS, this should fix lag
+# https://apple.stackexchange.com/a/208172
+function restart-dock-shell() {
+    echo "Restarting Dock..."
+    killall -KILL Dock
+    sleep 0.5
+}
+
+# resets the wallpaper to some value, this should fix flickering
+# https://apple.stackexchange.com/a/348454
+function restart-wallpaper() {
+    if ! [ -r "$WALLPAPER_PATH" ]; then
+        echo "No wallpaper defined, skipping wallpaper fix..."
+        return
+    fi
+
+
+    echo "Reseting desktop wallpaper to ${WALLPAPER_PATH=}..."
+    osascript -e "
+    tell application \"System Events\"
+        tell every desktop
+            set picture to \"$WALLPAPER_PATH\"
+        end tell
+    end tell"
+    sleep 0.5
+}
+
+case "$(uname)" in
+Darwin) ;;
+*)
+    echo "Unsupported OS! This script is only meant to be run on macOS."
+    exit 1
+    ;;
+esac
+
+restart-dock-shell
+restart-wallpaper
+echo "Done!"

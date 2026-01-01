@@ -7,19 +7,23 @@ export FZF_DEFAULT_OPTS="-m --height 40% --border=none"
 export BAT_THEME="ansi"
 export YDOTOOL_SOCKET="/tmp/.ydotool_socket"
 export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_DOWNLOAD_CONCURRENCY=8
 
 # BUG: ~/.local/bin, ~/bin, ghcup dirs, brew's openjdk get added to the *end* of
 # $PATH for some reason even if brew and other sources are removed. this might
 # just be zsh and macOS being weird.
 
 function { # loads homebrew (this needs to run first)
-    local brewroot="/opt/homebrew"
-    local openjdk="$brewroot/opt/openjdk"
+    case "$CPUTYPE" in
+    arm64) local brewroot="/opt/homebrew";;
+    x86_64) local brewroot="/usr/local";;
+    esac
 
     if [ -x "$brewroot/bin/brew" ]; then
         eval "$("$brewroot/bin/brew" shellenv zsh)"
     fi
 
+    local openjdk="$brewroot/opt/openjdk"
     if [ -d "$openjdk/bin" ]; then
         export PATH="$openjdk/bin:$PATH"
     fi

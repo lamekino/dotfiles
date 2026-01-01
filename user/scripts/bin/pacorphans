@@ -1,5 +1,0 @@
-#!/bin/sh
-# lists all the orphans on the system (using aura) and displays a description
-
-aura -O \
-    | xargs -r -I {} sh -c "pacman -Qi {} | sed -n '1p;3p' && echo"
